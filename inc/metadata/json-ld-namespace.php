@@ -89,7 +89,7 @@ function transform_context() : array {
 		if ( $data['hierarchical'] ?? true ) {
 			$meta['@type'] = 'WebPage';
 		} else {
-			$meta['@type'] = 'BlogPosting';
+			$meta['@type'] = 'Article';
 		}
 
 		$meta['headline'] = $data['title'] ?? get_the_title( $data['object_id'] );

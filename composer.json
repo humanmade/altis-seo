@@ -9,5 +9,16 @@
             "email": "hello@humanmade.com"
         }
     ],
-    "require": {}
+    "require": {
+        "humanmade/wp-seo": "0.14.0",
+        "humanmade/hm-redirects": "0.4.2",
+        "humanmade/amp": "1.0.2",
+        "humanmade/facebook-instant-articles-wp": "4.2.0",
+        "humanmade/msm-sitemap": "1.4.1"
+    },
+    "autoload": {
+        "files": [
+            "load.php"
+        ]
+    }
 }

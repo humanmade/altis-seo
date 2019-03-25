@@ -35,6 +35,10 @@ function bootstrap( Module $module ) {
 	}
 }
 
+function get_bool_callback( bool $condition ) {
+	return $condition ? '__return_true' : '__return_false';
+}
+
 function load_redirects() {
 	require_once ROOT_DIR . '/vendor/humanmade/hm-redirects/hm-redirects.php';
 }
@@ -45,22 +49,16 @@ function load_sitemaps() {
 
 function load_metadata() {
 	require_once ROOT_DIR . '/vendor/humanmade/wp-seo/wp-seo.php';
-	require_once __DIR__ . '/metadata/namespace.php';
+	require_once ROOT_DIR . '/vendor/humanmade/meta-tags/plugin.php';
 
-	if ( get_config()['modules']['seo']['metadata']['twitter'] ?? false ) {
-		require_once __DIR__ . '/metadata/twitter-namespace.php';
-		Metadata\Twitter\bootstrap();
-	}
+	// Enable / disable plugin features.
+	add_filter( 'hm.metatags.twitter', get_bool_callback( get_config()['modules']['seo']['metadata']['twitter'] ?? false ) );
+	add_filter( 'hm.metatags.opengraph', get_bool_callback( get_config()['modules']['seo']['metadata']['opengraph'] ?? false ) );
+	add_filter( 'hm.metatags.json_ld', get_bool_callback( get_config()['modules']['seo']['metadata']['json_ld'] ?? false ) );
 
-	if ( get_config()['modules']['seo']['metadata']['opengraph'] ?? false ) {
-		require_once __DIR__ . '/metadata/opengraph-namespace.php';
-		Metadata\Opengraph\bootstrap();
-	}
-
-	if ( get_config()['modules']['seo']['metadata']['json-ld'] ?? false ) {
-		require_once __DIR__ . '/metadata/json-ld-namespace.php';
-		Metadata\JSONLD\bootstrap();
-	}
+	// Set plugin values from config.
+	add_filter( 'hm.metatags.fallback_image', get_config()['modules']['seo']['metadata']['fallback_image'] ?? [] );
+	add_filter( 'hm.metatags.social_urls', get_config()['modules']['seo']['metadata']['social_urls'] ?? [] );
 }
 
 function load_amp() {

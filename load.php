@@ -17,7 +17,6 @@ add_action( 'hm-platform.modules.init', function () {
 			'opengraph' => true,
 			'twitter' => true,
 			'json_ld' => true,
-			'logo' => false,
 			'fallback_image' => false,
 			'social_urls' => [
 				'google' => '',

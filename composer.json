@@ -15,7 +15,7 @@
         "humanmade/amp-wp": "1.0.2",
         "humanmade/facebook-instant-articles-wp": "4.2.0",
         "humanmade/msm-sitemap": "1.4.1",
-        "humanmade/meta-tags": "dev-master"
+        "humanmade/meta-tags": "0.1.0"
     },
     "autoload": {
         "files": [

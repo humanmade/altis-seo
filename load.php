@@ -5,20 +5,22 @@
  * @package hm-platform/seo
  */
 
-namespace HM\Platform;
+namespace HM\Platform\SEO;
+
+use function HM\Platform\register_module;
 
 require_once __DIR__ . '/inc/namespace.php';
 
 add_action( 'hm-platform.modules.init', function () {
 	register_module( 'seo', __DIR__, 'SEO', [
-		'enabled' => false,
-		'redirects' => false,
+		'enabled' => true,
+		'redirects' => true,
 		'metadata' => [
 			'opengraph' => true,
 			'twitter' => true,
-			'json_ld' => true,
-			'fallback_image' => false,
-			'social_urls' => [
+			'json-ld' => true,
+			'fallback-image' => false,
+			'social-urls' => [
 				'google' => '',
 				'facebook' => '',
 				'twitter' => '',
@@ -31,8 +33,8 @@ add_action( 'hm-platform.modules.init', function () {
 				'tumblr' => '',
 			],
 		],
-		'sitemap' => true,
+		'xml-sitemaps' => true,
 		'amp' => false,
-		'fbia' => false,
+		'facebook-instant-articles' => false,
 	], __NAMESPACE__ . '\\SEO\\bootstrap' );
 } );

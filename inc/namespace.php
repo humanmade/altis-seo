@@ -33,6 +33,9 @@ function bootstrap( Module $module ) {
 	if ( $settings['fbia'] ) {
 		add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_instant_articles' );
 	}
+
+	// Read robots.txt file into robots.txt route handled by WP.
+	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
 }
 
 function get_bool_callback( bool $condition ) {
@@ -67,4 +70,18 @@ function load_amp() {
 
 function load_instant_articles() {
 	require_once ROOT_DIR . '/vendor/humanmade/wp-native-articles/wp-native-articles.php';
+}
+
+/**
+ * Add robots.txt content if file is present.
+ *
+ * @param string $output
+ * @return string
+ */
+function robots_txt( string $output ) : string {
+	if ( file_exists( ROOT_DIR . '/robots.txt' ) ) {
+		$output .= "\n" . file_get_contents( ROOT_DIR . '/robots.txt' ) . "\n";
+	}
+
+	return $output;
 }

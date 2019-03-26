@@ -12,7 +12,7 @@ use function HM\Platform\register_module;
 require_once __DIR__ . '/inc/namespace.php';
 
 add_action( 'hm-platform.modules.init', function () {
-	register_module( 'seo', __DIR__, 'SEO', [
+	$default_settings = [
 		'enabled' => true,
 		'redirects' => true,
 		'metadata' => [
@@ -36,5 +36,6 @@ add_action( 'hm-platform.modules.init', function () {
 		'xml-sitemaps' => true,
 		'amp' => false,
 		'facebook-instant-articles' => false,
-	], __NAMESPACE__ . '\\SEO\\bootstrap' );
+	];
+	register_module( 'seo', __DIR__, 'SEO', $default_settings, __NAMESPACE__ . '\\SEO\\bootstrap' );
 } );

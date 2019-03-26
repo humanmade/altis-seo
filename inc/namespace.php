@@ -34,11 +34,11 @@ function bootstrap( Module $module ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_instant_articles' );
 	}
 
-	// Read robots.txt file into robots.txt route handled by WP.
+	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
 }
 
-function get_bool_callback( bool $condition ) : string {
+function get_bool_callback( bool $condition ) : callable {
 	return $condition ? '__return_true' : '__return_false';
 }
 
@@ -57,13 +57,17 @@ function load_metadata() {
 	$config = get_config()['modules']['seo']['metadata'] ?? [];
 
 	// Enable / disable plugin features.
-	add_filter( 'hm.metatags.twitter', get_bool_callback( $config['twitter'] ?? false ) );
-	add_filter( 'hm.metatags.opengraph', get_bool_callback( $config['opengraph'] ?? false ) );
-	add_filter( 'hm.metatags.json_ld', get_bool_callback( $config['json-ld'] ?? false ) );
+	add_filter( 'hm.metatags.twitter', get_bool_callback( $config['twitter'] ?? true ) );
+	add_filter( 'hm.metatags.opengraph', get_bool_callback( $config['opengraph'] ?? true ) );
+	add_filter( 'hm.metatags.json_ld', get_bool_callback( $config['json-ld'] ?? true ) );
 
 	// Set plugin values from config.
-	add_filter( 'hm.metatags.fallback_image', $config['fallback-image'] ?? [] );
-	add_filter( 'hm.metatags.social_urls', $config['social-urls'] ?? [] );
+	add_filter( 'hm.metatags.fallback_image', function () use ( $config ) {
+		return $config['fallback-image'] ?? '';
+	} );
+	add_filter( 'hm.metatags.social_urls', function () use ( $config ) {
+		return $config['social-urls'] ?? [];
+	} );
 }
 
 function load_amp() {

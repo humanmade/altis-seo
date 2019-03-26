@@ -37,5 +37,5 @@ add_action( 'hm-platform.modules.init', function () {
 		'amp' => false,
 		'facebook-instant-articles' => false,
 	];
-	register_module( 'seo', __DIR__, 'SEO', $default_settings, __NAMESPACE__ . '\\SEO\\bootstrap' );
+	register_module( 'seo', __DIR__, 'SEO', $default_settings, __NAMESPACE__ . '\\bootstrap' );
 } );

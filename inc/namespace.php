@@ -81,8 +81,8 @@ function load_instant_articles() {
  * @return string
  */
 function robots_txt( string $output ) : string {
-	if ( file_exists( ROOT_DIR . '/robots.txt' ) ) {
-		$output .= "\n" . file_get_contents( ROOT_DIR . '/robots.txt' ) . "\n";
+	if ( file_exists( ROOT_DIR . '/config/robots.txt' ) ) {
+		$output .= "\n" . file_get_contents( ROOT_DIR . '/config/robots.txt' ) . "\n";
 	}
 
 	return $output;

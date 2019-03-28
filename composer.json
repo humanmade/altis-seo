@@ -11,11 +11,11 @@
     ],
     "require": {
         "humanmade/wp-seo": "0.14.0",
-        "humanmade/hm-redirects": "0.4.2",
+        "humanmade/hm-redirects": "0.5.0",
         "humanmade/amp": "1.0.4+hm",
         "humanmade/facebook-instant-articles-wp": "4.2.1+hm",
         "humanmade/msm-sitemap": "1.4.1",
-        "humanmade/meta-tags": "0.1.2"
+        "humanmade/meta-tags": "0.1.3"
     },
     "autoload": {
         "files": [

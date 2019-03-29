@@ -8,9 +8,11 @@ Activating AMP will automatically make AMP versions of your content available. Y
 
 By default your standard theme will just work however _the default behaviour is to remove any scripts_ so you will need to ensure your site degrades gracefully without JavaScript enabled.
 
-The AMP component is provided by the [AMP for WP plugin](https://github.com/humanmade/amp-wp), full [documentation for the plugin can be found here](https://amp-wp.org/documentation/getting-started/).
+The AMP component is provided by the [AMP plugin](https://github.com/humanmade/amp-wp), full [documentation for the plugin can be found here](https://amp-wp.org/documentation/getting-started/).
 
 ## Native mode vs Paired mode vs Classic mode
+
+The following modes can be set from the CMS admin under the AMP menu item.
 
 **Native mode** will override your default content URLs with the AMP version of the page. Validation errors are fixed automatically.
 

@@ -11,7 +11,7 @@ This component is powered by the [official Facebook Instant Articles plugin](htt
 
 ## Configuration
 
-Configuration is managed via the CMS admin interface. Follow the wizard to complete the setup before moving onto customising how your content will be transformed and displayed.
+Configuration is managed via the CMS admin under the Instant Articles menu item. Follow the wizard to complete the setup before moving onto customising how your content will be transformed and displayed.
 
 ## Content Transformation
 

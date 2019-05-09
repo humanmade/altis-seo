@@ -2,14 +2,14 @@
 /**
  * SEO module functions.
  *
- * @package hm-platform/seo
+ * @package altis/seo
  */
 
-namespace HM\Platform\SEO;
+namespace Altis\SEO;
 
-use const HM\Platform\ROOT_DIR;
-use function HM\Platform\get_config;
-use HM\Platform\Module;
+use const Altis\ROOT_DIR;
+use function Altis\get_config;
+use Altis\Module;
 
 function bootstrap( Module $module ) {
 	$settings = $module->get_settings();

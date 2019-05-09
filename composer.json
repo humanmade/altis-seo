@@ -1,6 +1,6 @@
 {
     "name": "humanmade/seo",
-    "description": "Platform SEO Module",
+    "description": "SEO module for Altis",
     "type": "package",
     "license": "GPL-2.0-or-later",
     "authors": [

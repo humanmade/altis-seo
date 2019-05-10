@@ -15,23 +15,23 @@ function bootstrap( Module $module ) {
 	$settings = $module->get_settings();
 
 	if ( $settings['redirects'] ) {
-		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_redirects' );
+		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_redirects', 0 );
 	}
 
 	if ( $settings['xml-sitemaps'] ) {
-		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_sitemaps' );
+		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_sitemaps', 0 );
 	}
 
 	if ( $settings['metadata'] ) {
-		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_metadata' );
+		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_metadata', 0 );
 	}
 
 	if ( $settings['amp'] ) {
-		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_amp' );
+		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_amp', 0 );
 	}
 
 	if ( $settings['facebook-instant-articles'] ) {
-		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_instant_articles' );
+		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_instant_articles', 0 );
 	}
 
 	// Read config/robots.txt file into robots.txt route handled by WP.

@@ -9,7 +9,7 @@ The following JSON is the default configuration for the module and can be overri
 ```json
 {
 	"extra": {
-		"hm-platform": {
+		"altis": {
 			"modules": {
 				"seo": {
 					"enabled": true,
@@ -49,7 +49,7 @@ Depending on your needs you may wish to install [Yoast SEO](https://yoast.com/wo
 ```json
 {
 	"extra": {
-		"hm-platform": {
+		"altis": {
 			"modules": {
 				"seo": {
 					"enabled": true,

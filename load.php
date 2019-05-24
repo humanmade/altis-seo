@@ -5,7 +5,7 @@
  * @package altis/seo
  */
 
-namespace Altis\SEO;
+namespace Altis\SEO; // @codingStandardsIgnoreLine
 
 use function Altis\register_module;
 

@@ -7,9 +7,9 @@
 
 namespace Altis\SEO;
 
+use Altis\Module;
 use const Altis\ROOT_DIR;
 use function Altis\get_config;
-use Altis\Module;
 
 function bootstrap( Module $module ) {
 	$settings = $module->get_settings();
@@ -86,6 +86,7 @@ function load_instant_articles() {
  */
 function robots_txt( string $output ) : string {
 	if ( file_exists( ROOT_DIR . '/config/robots.txt' ) ) {
+		// @codingStandardsIgnoreLine
 		$output .= "\n" . file_get_contents( ROOT_DIR . '/config/robots.txt' ) . "\n";
 	}
 

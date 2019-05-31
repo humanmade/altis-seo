@@ -34,6 +34,10 @@ function bootstrap( Module $module ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_instant_articles', 0 );
 	}
 
+	if ( $settings['site-verification'] ) {
+		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\Site_Verification\\bootstrap' );
+	}
+
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
 }

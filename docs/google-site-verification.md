@@ -26,6 +26,13 @@ Copy the meta tag from this screen, and enter it into the "Google Search Console
 Save this, and click "Verify" in Search Console. Your domain should now be verified in the console.
 
 
+### Disabling the settings UI
+
+With no verification tag entered, the site verification setting will have no effect on your site. If you're managing verification elsewhere, you may want to disable the setting UI as well.
+
+This can be entirely disabled by setting `modules.seo.site-verification` to `false`.
+
+
 ## Verifying via Domain method (DNS)
 
 Verifying via the Domain method allows your whole domain and all subdomains to be verified at once. This needs to be done via your DNS records.

@@ -1,8 +1,10 @@
 # Google Site Verification
 
-To use the [Google Search Console](https://search.google.com/search-console/about) for your site, you need to verify your site with Google. Altis includes built-in support for verifying your sites via the "HTML tag" method.
+To use the [Google Search Console](https://search.google.com/search-console/about) for your site, you need to verify your site with Google.
 
-You can also use the "Domain" method (DNS) if you want to verify your site and all subdomains.
+Altis includes built-in support for verifying your sites via the "HTML tag" method. Note that this process needs to be completed for each subdomain site if you have [multiple sites](docs://guides/multiple-sites.md).
+
+If you have many sites, you may want to use the "Domain" (DNS) verification instead.
 
 
 ## Verifying via HTML tags
@@ -22,8 +24,6 @@ Copy the meta tag from this screen, and enter it into the "Google Search Console
 ![Screenshot of setting field](./gsv-setting.png)
 
 Save this, and click "Verify" in Search Console. Your domain should now be verified in the console.
-
-Note that this process needs to be completed for each subdomain site if you have [multiple sites](docs://guides/multiple-sites.md). If you have many sites, you may want to use the domain verification instead.
 
 
 ## Verifying via Domain method (DNS)

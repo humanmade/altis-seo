@@ -13,15 +13,15 @@ First, open the [Search Console](https://search.google.com/search-console/owners
 
 In the modal window that appears, enter your site's domain into the "URL prefix" section.
 
-![Screenshot of verification type window](./gsv-type-url.png)
+![Screenshot of verification type window](./assets/gsv-type-url.png)
 
 Select "Continue". In the next window, select the "HTML tag" verification method.
 
-![Screenshot of verification method window](./gsv-select-method.png)
+![Screenshot of verification method window](./assets/gsv-select-method.png)
 
 Copy the meta tag from this screen, and enter it into the "Google Search Console verification meta tag" setting on the [Reading settings](internal://admin/options-reading.php) page.
 
-![Screenshot of setting field](./gsv-setting.png)
+![Screenshot of setting field](./assets/gsv-setting.png)
 
 Save this, and click "Verify" in Search Console. Your domain should now be verified in the console.
 
@@ -41,11 +41,11 @@ First, open the [Search Console](https://search.google.com/search-console/owners
 
 In the modal window that appears, enter your site's domain into the "Domain" section.
 
-![Screenshot of verification type window](./gsv-type-domain.png)
+![Screenshot of verification type window](./assets/gsv-type-domain.png)
 
 Select "Continue". In the next window, copy the TXT record.
 
-![Screenshot of DNS record window](./gsv-dns-record.png)
+![Screenshot of DNS record window](./assets/gsv-dns-record.png)
 
 If your domain's DNS is managed by Altis Cloud, contact support and provide this record along with the domain you entered.
 

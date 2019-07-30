@@ -1,5 +1,7 @@
 # SEO
 
+![](./assets/banner-seo.png)
+
 The SEO module provides a suite of tools for enhancing and managing your networks visibility to search engines and social platforms including Facebook and Twitter.
 
 ## Configuration

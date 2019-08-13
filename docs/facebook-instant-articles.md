@@ -1,17 +1,17 @@
 # Facebook Instant Articles
 
-Facebook Instant Articles enables publishers to monetise and make content available natively within Facebook's website and apps using a custom feed.
+Facebook Instant Articles enables publishers to monetize and make content available natively within Facebook's website and apps using a custom feed.
 
 This component is powered by the [official Facebook Instant Articles plugin](https://github.com/humanmade/facebook-instant-articles-wp).
 
 ## Pre-requisites
 
-* A Facebook page for your organisation
+* A Facebook page for your organization
 * A Facebook App
 
 ## Configuration
 
-Configuration is managed via the CMS admin under the Instant Articles menu item. Follow the wizard to complete the setup before moving onto customising how your content will be transformed and displayed.
+Configuration is managed via the CMS admin under the Instant Articles menu item. Follow the wizard to complete the setup before moving onto customizing how your content will be transformed and displayed.
 
 ## Content Transformation
 
@@ -37,4 +37,4 @@ add_filter( 'instant_articles_transformer_rules_loaded', function ( Transformer 
 } );
 ```
 
-See the [documentation for the `Transformer` class and creating custom rule classes](https://developers.facebook.com/docs/instant-articles/sdk/transformer) and the [Instant Articles PHP SDK github repository](https://github.com/facebook/facebook-instant-articles-sdk-php) for more information.
+See the [documentation for the `Transformer` class and creating custom rule classes](https://developers.facebook.com/docs/instant-articles/sdk/transformer) and the [Instant Articles PHP SDK GitHub repository](https://github.com/facebook/facebook-instant-articles-sdk-php) for more information.

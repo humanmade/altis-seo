@@ -8,7 +8,7 @@ The sitemaps follow the specification detailed on https://www.sitemaps.org/ and 
 
 The sitemaps are automatically listed in the site's [./robots-txt.md](robots.txt) file so you don't need to manually submit them to the [Google Search Console](https://search.google.com/search-console/) but you can resubmit them there and get diagnostic information there at any time.
 
-It is necessary to [verify the site with Google Search Console](https://support.google.com/webmasters/answer/9008080?hl=en) before you can access information about your site's search results performance. It is recommended to use the HTML file upload solution by comitting the file to your project's root directory.
+It is necessary to [verify the site with Google Search Console](https://support.google.com/webmasters/answer/9008080?hl=en) before you can access information about your site's search results performance. It is recommended to use the HTML file upload solution by committing the file to your project's root directory.
 
 ## Indexing content by year
 

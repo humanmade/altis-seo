@@ -20,7 +20,11 @@
     },
     "autoload": {
         "files": [
-            "load.php"
+            "inc/namespace.php",
+            "inc/site_verification/namespace.php"
         ]
+    },
+    "extra": {
+        "altis": {}
     }
 }

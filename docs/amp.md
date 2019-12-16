@@ -1,12 +1,14 @@
 # AMP
 
-Google's Accelerated Mobile Pages project takes your content and delivers it via their infrastructure optimized for mobile devices and slower internet connections.
+The [AMP project](https://amp.dev/) takes your content and delivers it via their infrastructure optimized for mobile devices and slower internet connections.
 
 Web pages with AMP versions may also be highlighted in Google search results pages in a richer format than a regular search result listing.
 
 Activating AMP will automatically make AMP versions of your content available. You can choose which content types to generate AMP versions for through the CMS admin and also opt-out on a per-post basis.
 
 By default your standard theme will just work however _the default behavior is to remove any scripts_ so you will need to ensure your site degrades gracefully without JavaScript enabled.
+
+AMP now allows for some JavaScript experience via [amp-script](https://amp.dev/documentation/guides-and-tutorials/develop/custom-javascript/).
 
 The AMP component is provided by the [AMP plugin](https://github.com/humanmade/amp-wp), full [documentation for the plugin can be found here](https://amp-wp.org/documentation/getting-started/).
 

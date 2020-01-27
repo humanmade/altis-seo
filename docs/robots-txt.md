@@ -1,6 +1,6 @@
 # Robots.txt
 
-The SEO module will read a custom `robots.txt` file from `/config/robots.txt` in your project's root directory.
+The SEO module will read a custom `robots.txt` file from `/.config/robots.txt` in your project's root directory.
 
 The `robots.txt` file is a standard for providing instructions to various bots that may visit your site. There is no guarantee that bots will obey the directives it provides however so other measures should be taken if content should not be indexed such as adding `nofollow` attributes to links and a `robots` meta tag with a value of `noindex` to your website's head.
 

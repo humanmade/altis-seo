@@ -89,6 +89,8 @@ function load_instant_articles() {
  * @return string
  */
 function robots_txt( string $output ) : string {
+	$robots_output = '';
+
 	// If the legacy-style file exists, load it, but warn.
 	// Legacy file will be in the `/config` dir instead of `/.config`.
 	$legacy_file = ROOT_DIR . '/config/robots.txt';
@@ -96,13 +98,13 @@ function robots_txt( string $output ) : string {
 		trigger_error( 'The "config/robots.txt" file is deprecated as of Altis 2.0. Use ".config/robots.txt" instead.', E_USER_DEPRECATED );
 
 		// @codingStandardsIgnoreLine
-		$output .= "\n" . file_get_contents( $legacy_file ) . "\n";
+		$robots_output = "\n" . file_get_contents( $legacy_file ) . "\n";
 	}
 
 	if ( file_exists( ROOT_DIR . '/.config/robots.txt' ) ) {
 		// @codingStandardsIgnoreLine
-		$output .= "\n" . file_get_contents( ROOT_DIR . '/.config/robots.txt' ) . "\n";
+		$robots_output = "\n" . file_get_contents( ROOT_DIR . '/.config/robots.txt' ) . "\n";
 	}
 
-	return $output;
+	return $output . $robots_output;
 }

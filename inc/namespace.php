@@ -97,9 +97,9 @@ function use_tachyon_img_in_metadata() {
  */
 function metadata_img_as_tachyon_twitter( array $meta ) : array {
 	return metadata_img_as_tachyon( $meta, [
-		'width'  => 1200,
-		'height' => 600,
-		'crop'   => true,
+		'w'      => 1200,
+		'h'      => 600,
+		'resize' => '1200, 600', // crop
 	] );
 }
 
@@ -112,9 +112,9 @@ function metadata_img_as_tachyon_twitter( array $meta ) : array {
  */
 function metadata_img_as_tachyon_opengraph( array $meta ) : array {
 	return metadata_img_as_tachyon( $meta, [
-		'width'  => 1200,
-		'height' => 627,
-		'crop'   => false,
+		'w'   => 1200,
+		'h'   => 627,
+		'fit' => '1200, 627', // no crop
 	] );
 }
 
@@ -133,20 +133,20 @@ function metadata_img_as_tachyon( array $meta, array $img_settings = [] ) : arra
 	}
 
 	// Default image settings.
+	$img_settings = $img_settings :? [ 'fit' => '1200, 1200' ]; // no crop
 	$img_settings = array_merge( [
-		'width'  => 1200,
-		'height' => 1200,
-		'crop'   => false,
+		'w' => 1200,
+		'h' => 1200,
 	], $img_settings );
 
 	// Already a Tachyon enabled image URL. Add crop params.
 	if ( false !== strpos( $meta['image'], TACHYON_URL ) ) {
+		// Remove any Tachyon query args that might already be set.
+		remove_query_arg( [ 'w', 'h', 'fit', 'resize' ], $meta['image'] );
 		$meta['image'] = add_query_arg( $img_settings, $meta['image'] );
 	} else {
 		// Update image URL to use Tachyon.
-		$meta['image'] = tachyon_url( $meta['image'], [
-			'resize' => [ $img_settings['width'], $img_settings['height'] ],
-		] );
+		$meta['image'] = tachyon_url( $meta['image'], $img_settings );
 	}
 
 	return $meta;

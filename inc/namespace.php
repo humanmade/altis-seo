@@ -38,7 +38,7 @@ function bootstrap( Module $module ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\Site_Verification\\bootstrap' );
 	}
 
-	if ( defined( 'TACHYON_URL' ) && TACHYON_URL ) {
+	if ( get_config()['modules']['media']['tachyon'] ?? false ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\use_tachyon_img_in_metadata' );
 	}
 
@@ -128,7 +128,7 @@ function metadata_img_as_tachyon_opengraph( array $meta ) : array {
  */
 function metadata_img_as_tachyon( array $meta, array $img_settings = [] ) : array {
 	// Stop - no image for metadata.
-	if ( ! $meta['image'] ) {
+	if ( ! isset( $meta['image'] ) ) {
 		return $meta;
 	}
 

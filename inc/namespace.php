@@ -38,6 +38,10 @@ function bootstrap( Module $module ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\Site_Verification\\bootstrap' );
 	}
 
+	if ( defined( 'TACHYON_URL' ) && TACHYON_URL ) {
+		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\use_tachyon_img_in_metadata' );
+	}
+
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
 }
@@ -72,6 +76,80 @@ function load_metadata() {
 	add_filter( 'hm.metatags.social_urls', function () use ( $config ) {
 		return $config['social-urls'] ?? [];
 	} );
+}
+
+/**
+ * Add filters to use Tachyon image URLs for metadata images.
+ * Image size and crop depend on the social media type.
+ */
+function use_tachyon_img_in_metadata() {
+	add_filter( 'hm.metatags.context.default', __NAMESPACE__ . '\\metadata_img_as_tachyon' );
+	add_filter( 'hm.metatags.context.twitter', __NAMESPACE__ . '\\metadata_img_as_tachyon_twitter' );
+	add_filter( 'hm.metatags.context.opengraph', __NAMESPACE__ . '\\metadata_img_as_tachyon_opengraph' );
+}
+
+/**
+ * Update twitter metadata to use Tachyon img URL.
+ *
+ * @param array $meta Twitter metadata.
+ *
+ * @return array Twitter metadata with image using Tachyon URL, if any.
+ */
+function metadata_img_as_tachyon_twitter( array $meta ) : array {
+	return metadata_img_as_tachyon( $meta, [
+		'width'  => 1200,
+		'height' => 600,
+		'crop'   => true,
+	] );
+}
+
+/**
+ * Update opengraph metadata to use Tachyon img URL.
+ *
+ * @param array $meta opengraph metadata.
+ *
+ * @return array opengraph metadata with image using Tachyon URL, if any.
+ */
+function metadata_img_as_tachyon_opengraph( array $meta ) : array {
+	return metadata_img_as_tachyon( $meta, [
+		'width'  => 1200,
+		'height' => 627,
+		'crop'   => false,
+	] );
+}
+
+/**
+ * Update metadata image URL to use Tachyon URL with specified image settings.
+ *
+ * @param array $meta          Metadata per social media type.
+ * @param array $img_settings Image settings: size and crop to be used in Tachyon URL.
+ *
+ * @return array Metadata with updated image URL using Tachyon, if an image is specified.
+ */
+function metadata_img_as_tachyon( array $meta, array $img_settings = [] ) : array {
+	// Stop - no image for metadata.
+	if ( ! $meta['image'] ) {
+		return $meta;
+	}
+
+	// Default image settings.
+	$img_settings = array_merge( [
+		'width'  => 1200,
+		'height' => 1200,
+		'crop'   => false,
+	], $img_settings );
+
+	// Already a Tachyon enabled image URL. Add crop params.
+	if ( false !== strpos( $meta['image'], TACHYON_URL ) ) {
+		$meta['image'] = add_query_arg( $img_settings, $meta['image'] );
+	} else {
+		// Update image URL to use Tachyon.
+		$meta['image'] = tachyon_url( $meta['image'], [
+			'resize' => [ $img_settings['width'], $img_settings['height'] ],
+		] );
+	}
+
+	return $meta;
 }
 
 function load_amp() {

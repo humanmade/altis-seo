@@ -12,12 +12,7 @@ use function Altis\register_module;
 require_once __DIR__ . '/inc/namespace.php';
 require_once __DIR__ . '/inc/site_verification/namespace.php';
 
-// Do not initialise if plugin.php hasn't been included yet.
-if ( ! function_exists( 'add_action' ) ) {
-	return;
-}
-
-add_action( 'altis.modules.init', function () {
+function register() {
 	$default_settings = [
 		'enabled' => true,
 		'redirects' => true,
@@ -45,4 +40,11 @@ add_action( 'altis.modules.init', function () {
 		'site-verification' => true,
 	];
 	register_module( 'seo', __DIR__, 'SEO', $default_settings, __NAMESPACE__ . '\\bootstrap' );
-} );
+}
+
+// Do not initialise if plugin.php hasn't been included yet.
+if ( ! function_exists( 'add_action' ) ) {
+	return;
+}
+
+add_action( 'altis.modules.init', __NAMESPACE__ . '\\register' );

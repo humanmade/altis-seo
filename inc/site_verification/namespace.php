@@ -51,6 +51,7 @@ function render_field() {
 	);
 	echo '<p class="description">';
 	printf(
+		// translators: %s is replaced by the documentatin URL for google site verification
 		__( 'Enter the full meta tag from the "HTML tag" verification method. See <a href="%s">the documentation</a> for more information.', 'altis' ),
 		get_url_for_page( 'seo', 'google-site-verification.md' )
 	);

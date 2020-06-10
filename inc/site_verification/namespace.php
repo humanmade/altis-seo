@@ -1,8 +1,13 @@
 <?php
+/**
+ * Altis SEO Google Site Verification.
+ *
+ * @package altis/seo
+ */
 
 namespace Altis\SEO\Site_Verification;
 
-use function Altis\Documentation\get_url_for_page;
+use Altis\Documentation;
 
 const OPTION_NAME = 'altis_google_site_verification';
 
@@ -51,8 +56,12 @@ function render_field() {
 	);
 	echo '<p class="description">';
 	printf(
-		__( 'Enter the full meta tag from the "HTML tag" verification method. See <a href="%s">the documentation</a> for more information.', 'altis' ),
-		get_url_for_page( 'seo', 'google-site-verification.md' )
+		wp_kses(
+			// translators: %s is replaced by the documentatin URL for google site verification.
+			__( 'Enter the full meta tag from the "HTML tag" verification method. See <a href="%s">the documentation</a> for more information.', 'altis' ),
+			[ 'a' => [ 'href' => [] ] ]
+		),
+		esc_attr( Documentation\get_url_for_page( 'seo', 'google-site-verification.md' ) )
 	);
 	echo '</p>';
 }
@@ -89,6 +98,11 @@ function get_meta_tag() {
 function output_meta_tag() {
 	$tag = get_meta_tag();
 	if ( $tag ) {
-		echo $tag . "\n";
+		echo wp_kses( $tag . "\n", [
+			'meta' => [
+				'name' => [],
+				'content' => [],
+			],
+		] );
 	}
 }

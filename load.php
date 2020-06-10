@@ -5,9 +5,9 @@
  * @package altis/seo
  */
 
-namespace Altis\SEO; // @codingStandardsIgnoreLine
+namespace Altis\SEO; // phpcs:ignore
 
-use function Altis\register_module;
+use Altis;
 
 add_action( 'altis.modules.init', function () {
 	$default_settings = [
@@ -36,5 +36,5 @@ add_action( 'altis.modules.init', function () {
 		'facebook-instant-articles' => false,
 		'site-verification' => true,
 	];
-	register_module( 'seo', __DIR__, 'SEO', $default_settings, __NAMESPACE__ . '\\bootstrap' );
+	Altis\register_module( 'seo', __DIR__, 'SEO', $default_settings, __NAMESPACE__ . '\\bootstrap' );
 } );

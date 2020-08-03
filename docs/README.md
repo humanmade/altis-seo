@@ -35,8 +35,6 @@ The following JSON is the default configuration for the module and can be overri
 					},
 					"redirects": true,
 					"xml-sitemaps": true,
-					"amp": false,
-					"facebook-instant-articles": false,
 				}
 			}
 		}

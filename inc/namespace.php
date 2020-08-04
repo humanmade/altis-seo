@@ -31,14 +31,6 @@ function bootstrap( Module $module ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_metadata', 0 );
 	}
 
-	if ( $settings['amp'] ) {
-		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_amp', 0 );
-	}
-
-	if ( $settings['facebook-instant-articles'] ) {
-		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_instant_articles', 0 );
-	}
-
 	if ( $settings['site-verification'] ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\Site_Verification\\bootstrap' );
 	}
@@ -168,24 +160,6 @@ function metadata_img_as_tachyon( array $meta, array $img_settings = [] ) : arra
 	}
 
 	return $meta;
-}
-
-/**
- * Load the AMP plugin.
- *
- * @return void
- */
-function load_amp() {
-	require_once Altis\ROOT_DIR . '/vendor/humanmade/amp/amp.php';
-}
-
-/**
- * Load the instant articles plugin.
- *
- * @return void
- */
-function load_instant_articles() {
-	require_once Altis\ROOT_DIR . '/vendor/humanmade/facebook-instant-articles-wp/facebook-instant-articles.php';
 }
 
 /**

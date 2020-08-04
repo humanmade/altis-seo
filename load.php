@@ -32,8 +32,6 @@ add_action( 'altis.modules.init', function () {
 			],
 		],
 		'xml-sitemaps' => true,
-		'amp' => false,
-		'facebook-instant-articles' => false,
 		'site-verification' => true,
 	];
 	Altis\register_module( 'seo', __DIR__, 'SEO', $default_settings, __NAMESPACE__ . '\\bootstrap' );

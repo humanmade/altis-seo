@@ -34,7 +34,11 @@ The following JSON is the default configuration for the module and can be overri
 						},
 					},
 					"redirects": true,
-					"xml-sitemaps": true,
+					"xml-sitemaps": {
+						"posts": true,
+						"taxonomies": true,
+						"users": true
+					}
 				}
 			}
 		}

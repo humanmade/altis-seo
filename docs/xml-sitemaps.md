@@ -8,9 +8,9 @@ The sitemap index can hold a maximum of 50000 sitemaps, and a single sitemap can
 
 By default, sitemaps are created for all public and publicly queryable post types and taxonomies, as well as for author archives and of course the homepage of the site if set to show posts.
 
-A sitemap index is automatically linked to in the site's [./robots-txt.md](robots.txt) file at `/wp-sitemap.xml` so you don't need to manually submit them to the [Google Search Console](https://search.google.com/search-console/). You can resubmit them from the search console and get diagnostic information there at any time.
+A sitemap index is automatically linked to in the site's [robots.txt](./robots-txt.md) file at `/wp-sitemap.xml` so you don't need to manually submit them to the [Google Search Console](https://search.google.com/search-console/). You can resubmit them from the search console and get diagnostic information there at any time.
 
-**Note:** sitemaps are only linked to in the `robots.txt` file is the site is public and in production. To debug locally you will need to define the constant `HM_DISABLE_INDEXING` as `false`.
+**Note:** sitemaps are only linked to in the `robots.txt` file if the site is public and in production. To debug locally you will need to define the constant `HM_DISABLE_INDEXING` as `false`.
 
 ## Google Site Verification
 
@@ -37,7 +37,7 @@ class Video_Sitemap_Provider extends WP_Sitemaps_Provider {
 	/**
 	 * Return the list of URLs for the current page.
 	 */
-	public function get_url_list( $page ) : array {
+	public function get_url_list( $page ) {
 		$videos = new WP_Query( [
 			'post_type' => 'video',
 			'posts_per_page' => 2000,
@@ -69,7 +69,7 @@ class Video_Sitemap_Provider extends WP_Sitemaps_Provider {
 
 }
 
-add_filter( 'init', function() {
+add_filter( 'init', function () : void {
 	$provider = new Video_Sitemap_Provider();
 	wp_register_sitemap_provider( 'video-sitemaps', $provider );
 } );
@@ -99,9 +99,9 @@ There are three existing sitemaps providers for standard object types - `posts`,
 Alternatively if you need to use more complex logic or work with custom sitemap providers you can use the `wp_sitemaps_add_provider` filter to do so for example:
 
 ```php
-add_filter( 'wp_sitemaps_add_provider', function( $provider, $name ) {
+add_filter( 'wp_sitemaps_add_provider', function ( $provider, string $name ) {
 	// Only switch off the user sitemaps for subsites on the network.
-	if ( 'users' === $name && ! is_main_site() ) {
+	if ( $name === 'users' && ! is_main_site() ) {
 		return false;
 	}
 
@@ -114,7 +114,7 @@ If instead you want to disable sitemap generation for a specific post type or ta
 To disable sitemaps for the page post type you would do the following:
 
 ```php
-add_filter( 'wp_sitemaps_post_types', function( $post_types ) {
+add_filter( 'wp_sitemaps_post_types', function ( array $post_types ) : array {
 	unset( $post_types['page'] );
 	return $post_types;
 } );
@@ -123,7 +123,7 @@ add_filter( 'wp_sitemaps_post_types', function( $post_types ) {
 To disable sitemaps for the `post_tag` taxonomy:
 
 ```php
-add_filter( 'wp_sitemaps_taxonomies', function( $taxonomies ) {
+add_filter( 'wp_sitemaps_taxonomies', function ( array $taxonomies ) : array {
 	unset( $taxonomies['post_tag'] );
 	return $taxonomies;
 } );
@@ -137,7 +137,7 @@ You can use the `wp_sitemaps_posts_entry`, `wp_sitemaps_users_entry` or `wp_site
 To add the last modified date for posts:
 
 ```php
-add_filter( 'wp_sitemaps_posts_entry', function( $entry, $post ) {
+add_filter( 'wp_sitemaps_posts_entry', function( array $entry, WP_Post $post ) : array {
 	$entry['lastmod'] = $post->post_modified_gmt;
 	return $entry;
 }, 10, 2 );
@@ -153,7 +153,7 @@ If you have a feature that allows setting specific posts or pages to `noindex`, 
 The `wp_sitemaps_posts_query_args` filter can be used to exclude specific posts from the sitemap. Here's an example:
 
 ```php
-add_filter( 'wp_sitemaps_posts_query_args', function( $args, $post_type ) {
+add_filter( 'wp_sitemaps_posts_query_args', function ( array $args, string $post_type ): array {
 	if ( 'post' !== $post_type ) {
 		return $args;
 	}

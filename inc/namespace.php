@@ -161,7 +161,7 @@ function metadata_img_as_tachyon( array $meta, array $img_settings = [] ) : arra
  *
  * @param WP_Sitemaps_Provider $provider The sitemap provider class.
  * @param string $name The name of the provider.
- * @return void
+ * @return WP_Sitemaps_Provider|false
  */
 function configure_sitemaps( $provider, string $name ) {
 	$settings = Altis\get_config()['modules']['seo']['xml-sitemaps'];
@@ -170,15 +170,15 @@ function configure_sitemaps( $provider, string $name ) {
 		return $provider;
 	}
 
-	if ( 'users' === $name && ( $settings['users'] ?? true ) === false ) {
+	if ( $name === 'users' && ( $settings['users'] ?? true ) === false ) {
 		return false;
 	}
 
-	if ( 'taxonomies' === $name && ( $settings['taxonomies'] ?? true ) === false ) {
+	if ( $name === 'taxonomies' && ( $settings['taxonomies'] ?? true ) === false ) {
 		return false;
 	}
 
-	if ( 'posts' === $name && ( $settings['posts'] ?? true ) === false ) {
+	if ( $name === 'posts' && ( $settings['posts'] ?? true ) === false ) {
 		return false;
 	}
 

@@ -40,6 +40,7 @@ class Video_Sitemap_Provider extends WP_Sitemaps_Provider {
 	public function get_url_list( $page ) {
 		$videos = new WP_Query( [
 			'post_type' => 'video',
+			// phpcs:ignore WordPress.WP.PostsPerPage.posts_per_page_numberposts
 			'posts_per_page' => 2000,
 			'fields' => 'ids',
 			'paged' => $page,
@@ -60,6 +61,7 @@ class Video_Sitemap_Provider extends WP_Sitemaps_Provider {
 	public function get_max_num_pages() {
 		$videos = new WP_Query( [
 			'post_type' => 'video',
+			// phpcs:ignore WordPress.WP.PostsPerPage.posts_per_page_numberposts
 			'posts_per_page' => 2000,
 			'fields' => 'ids',
 		] );

@@ -24,7 +24,10 @@ function bootstrap( Module $module ) {
 	}
 
 	if ( $settings['xml-sitemaps'] ) {
-		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_sitemaps', 0 );
+		add_filter( 'wp_sitemaps_enabled', '__return_true' );
+		add_filter( 'wp_sitemaps_add_provider', __NAMESPACE__ . '\\configure_sitemaps', 10, 2 );
+	} else {
+		add_filter( 'wp_sitemaps_enabled', '__return_false' );
 	}
 
 	if ( $settings['metadata'] ) {
@@ -60,15 +63,6 @@ function get_bool_callback( bool $condition ) : callable {
  */
 function load_redirects() {
 	require_once Altis\ROOT_DIR . '/vendor/humanmade/hm-redirects/hm-redirects.php';
-}
-
-/**
- * Load the sitemaps plugin.
- *
- * @return void
- */
-function load_sitemaps() {
-	require_once Altis\ROOT_DIR . '/vendor/humanmade/msm-sitemap/msm-sitemap.php';
 }
 
 /**
@@ -160,6 +154,35 @@ function metadata_img_as_tachyon( array $meta, array $img_settings = [] ) : arra
 	}
 
 	return $meta;
+}
+
+/**
+ * Filter sitemap providers.
+ *
+ * @param WP_Sitemaps_Provider $provider The sitemap provider class.
+ * @param string $name The name of the provider.
+ * @return WP_Sitemaps_Provider|false
+ */
+function configure_sitemaps( $provider, string $name ) {
+	$settings = Altis\get_config()['modules']['seo']['xml-sitemaps'];
+
+	if ( ! is_array( $settings ) ) {
+		return $provider;
+	}
+
+	if ( $name === 'users' && ( $settings['users'] ?? true ) === false ) {
+		return false;
+	}
+
+	if ( $name === 'taxonomies' && ( $settings['taxonomies'] ?? true ) === false ) {
+		return false;
+	}
+
+	if ( $name === 'posts' && ( $settings['posts'] ?? true ) === false ) {
+		return false;
+	}
+
+	return $provider;
 }
 
 /**

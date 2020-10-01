@@ -2,70 +2,166 @@
 
 XML Sitemaps are a means of providing key content and additional meta data around the frequency of updates on your website to search engines.
 
-The functionality for this component is provided by the [MSM Sitemap](https://github.com/humanmade/msm-sitemap) plugin.
-
 The sitemaps follow the specification detailed on https://www.sitemaps.org/ and are supported by Google and all major search engines.
 
-The sitemaps are automatically listed in the site's [./robots-txt.md](robots.txt) file so you don't need to manually submit them to the [Google Search Console](https://search.google.com/search-console/) but you can resubmit them there and get diagnostic information there at any time.
+The sitemap index can hold a maximum of 50000 sitemaps, and a single sitemap can hold a (filterable) maximum of 2000 entries.
 
-It is necessary to [verify the site with Google Search Console](https://support.google.com/webmasters/answer/9008080?hl=en) before you can access information about your site's search results performance. It is recommended to use the HTML file upload solution by committing the file to your project's root directory.
+By default, sitemaps are created for all public and publicly queryable post types and taxonomies, as well as for author archives and of course the homepage of the site if set to show posts.
 
-## Indexing content by year
+A sitemap index is automatically linked to in the site's [robots.txt](./robots-txt.md) file at `/wp-sitemap.xml` so you don't need to manually submit them to the [Google Search Console](https://search.google.com/search-console/). You can resubmit them from the search console and get diagnostic information there at any time.
 
-In cases where you have a lot of content (50,000+ pages) you can split your sitemap up into multiple files by year using the following code:
+**Note:** sitemaps are only linked to in the `robots.txt` file if the site is public and in production. To debug locally you will need to define the constant `HM_DISABLE_INDEXING` as `false`.
+
+## Google Site Verification
+
+It is necessary to [verify the site with Google Search Console](https://support.google.com/webmasters/answer/9008080?hl=en) before you can access information about your site's search results performance. It is recommended to use the HTML file upload solution by committing the file to your project's root directory although it is possible to add the meta tag by filling in the [verification code on the Reading Settings page in the admin](admin://options-reading.php).
+
+## Adding Custom Sitemaps
+Sitemaps are provided for built-in content types like pages and author archives out of the box. If you want to add a custom sitemap with additional features such as a video sitemap you can register a custom sitemap provider.
+
+To do so create a custom PHP class that extends the abstract `WP_Sitemaps_Provider` class. Then, you can use the `wp_register_sitemap_provider()` function to register it.
+
+The example below shows a minimal implementation for a custom video sitemap:
 
 ```php
-add_filter( 'msm_sitemap_index_by_year', '__return_true' );
-```
+class Video_Sitemap_Provider extends WP_Sitemaps_Provider {
 
-## Modifying a sitemap entry
-
-In order to modify or add extra data to a URL entry in the sitemap XML you can use the `msm_sitemap_entry` filter. Functions attached to this filter can access the current post data using `get_post()` or template tags such as `get_the_permalink()`.
-
-The following example changes the update frequency value and priority for the home page:
-
-```php
-add_filter( 'msm_sitemap_entry', function ( SimpleXMLElement $url ) : SimpleXMLElement {
-	if ( get_the_permalink() !== get_home_url( '/' ) ) {
-		return $url;
+	/**
+	 * Set the name and object type properties. Required.
+	 */
+	public function __construct() {
+		$this->name = 'videos';
+		$this->object_type = 'post';
 	}
 
-	$url->changefreq = new SimpleXMLElement( '<changefreq>always</changefreq>' );
-	$url->priority = new SimpleXMLElement( '<priority>1.0</priority>' );
+	/**
+	 * Return the list of URLs for the current page.
+	 */
+	public function get_url_list( $page ) {
+		$videos = new WP_Query( [
+			'post_type' => 'video',
+			// phpcs:ignore WordPress.WP.PostsPerPage.posts_per_page_numberposts
+			'posts_per_page' => 2000,
+			'fields' => 'ids',
+			'paged' => $page,
+		] );
 
-	return $url;
-} );
-```
+		$urls = [];
 
-You can use this filter to add more detailed information to enrich your sitemaps with [Video](https://support.google.com/webmasters/answer/80471), [Image](https://support.google.com/webmasters/answer/178636) and [News](https://support.google.com/webmasters/answer/74288) data.
+		foreach ( $videos->posts as $video_id ) {
+			$urls[] = get_post_meta( $video_id, 'video_url', true );
+		}
 
-## Adding an XML namespace
-
-Some custom extensions to the standard sitemap format are supported but require the addition of one or more XML namespaces for them to validate. This is achieved using the `msm_sitemap_namespace` filter. The below example adds Google's video sitemap schema.
-
-```php
-add_filter( 'msm_sitemap_namespace', function ( array $namespaces ) : array {
-	$namespaces['xmlns:video'] = "http://www.google.com/schemas/sitemap-video/1.1";
-	return $namespaces;
-} );
-```
-
-## Skipping a post
-
-The `msm_sitemap_skip_post` filter is used to exclude posts from the sitemaps programmatically. The current post is available via `get_post()`.
-
-```php
-add_filter( 'msm_sitemap_skip_post', function () {
-	if ( get_post_type() === 'hideme' ) {
-		return true;
+		return $urls;
 	}
 
-	return false;
+	/**
+	 * Return the maximum number of pages to output for this sitemap.
+	 */
+	public function get_max_num_pages() {
+		$videos = new WP_Query( [
+			'post_type' => 'video',
+			// phpcs:ignore WordPress.WP.PostsPerPage.posts_per_page_numberposts
+			'posts_per_page' => 2000,
+			'fields' => 'ids',
+		] );
+
+		return $videos->max_num_pages;
+	}
+
+}
+
+add_filter( 'init', function () : void {
+	$provider = new Video_Sitemap_Provider();
+	wp_register_sitemap_provider( 'video-sitemaps', $provider );
 } );
 ```
 
-## CLI commands
+The provider will be responsible for getting all sitemaps and sitemap entries, as well as determining pagination.
 
-**`wp msm-sitemap generate-sitemap`**
+## Removing Specific Sitemaps
+There are three existing sitemaps providers for standard object types - `posts`, `taxonomies`, and `users`. If you want to remove one of them such as the "users" provider, you can configure the module like so:
 
-Regenerates the sitemap file(s).
+```json
+{
+	"extra": {
+		"altis": {
+			"modules": {
+				"seo": {
+					"xml-sitemaps": {
+						"users": false
+					}
+				}
+			}
+		}
+	}
+}
+```
+
+Alternatively if you need to use more complex logic or work with custom sitemap providers you can use the `wp_sitemaps_add_provider` filter to do so for example:
+
+```php
+add_filter( 'wp_sitemaps_add_provider', function ( $provider, string $name ) {
+	// Only switch off the user sitemaps for subsites on the network.
+	if ( $name === 'users' && ! is_main_site() ) {
+		return false;
+	}
+
+	return $provider;
+}, 10, 2 );
+```
+
+If instead you want to disable sitemap generation for a specific post type or taxonomy, use the `wp_sitemaps_post_types` or `wp_sitemaps_taxonomies` filter, respectively.
+
+To disable sitemaps for the page post type you would do the following:
+
+```php
+add_filter( 'wp_sitemaps_post_types', function ( array $post_types ) : array {
+	unset( $post_types['page'] );
+	return $post_types;
+} );
+```
+
+To disable sitemaps for the `post_tag` taxonomy:
+
+```php
+add_filter( 'wp_sitemaps_taxonomies', function ( array $taxonomies ) : array {
+	unset( $taxonomies['post_tag'] );
+	return $taxonomies;
+} );
+```
+
+## Adding Additional Tags to Sitemap Entries
+The sitemaps protocol specifies a certain set of supported attributes for sitemap entries. Of those, only the URL (loc) tag is required. All others (e.g. `changefreq` and `priority`) are optional tags in the sitemaps protocol and not typically consumed by search engines, which is why only the URL itself is listed by default. You can still add those tags if you need to.
+
+You can use the `wp_sitemaps_posts_entry`, `wp_sitemaps_users_entry` or `wp_sitemaps_taxonomies_entry` filters to add additional tags like `changefreq`, `priority`, or `lastmod` to single items in the sitemap.
+
+To add the last modified date for posts:
+
+```php
+add_filter( 'wp_sitemaps_posts_entry', function( array $entry, WP_Post $post ) : array {
+	$entry['lastmod'] = $post->post_modified_gmt;
+	return $entry;
+}, 10, 2 );
+```
+
+Similarly, you can use the `wp_sitemaps_index_entry` filter to add `lastmod` on the sitemap index.
+
+Trying to add any unsupported tags will result in a PHP notice.
+
+## Excluding a Single Post from the Sitemap
+If you have a feature that allows setting specific posts or pages to `noindex`, it's a good idea to exclude those from the sitemap too.
+
+The `wp_sitemaps_posts_query_args` filter can be used to exclude specific posts from the sitemap. Here's an example:
+
+```php
+add_filter( 'wp_sitemaps_posts_query_args', function ( array $args, string $post_type ): array {
+	if ( 'post' !== $post_type ) {
+		return $args;
+	}
+
+	$args['post__not_in'] = isset( $args['post__not_in'] ) ? $args['post__not_in'] : [];
+	$args['post__not_in'][] = 123; // 123 is the ID of the post to exclude.
+	return $args;
+}, 10, 2 );
+```

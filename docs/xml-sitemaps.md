@@ -10,16 +10,16 @@ By default, sitemaps are created for all public and publicly queryable post type
 
 A sitemap index is automatically linked to in the site's [robots.txt](./robots-txt.md) file at `/wp-sitemap.xml` so you don't need to manually submit them to the [Google Search Console](https://search.google.com/search-console/). You can resubmit them from the search console and get diagnostic information there at any time.
 
-**Note:** sitemaps are only linked to in the `robots.txt` file if the site is public and in production. To debug locally you will need to define the constant `HM_DISABLE_INDEXING` as `false`.
+**Note:** Sitemaps are only linked to in the `robots.txt` file if the site is public and in production. To debug locally you will need to define the constant `HM_DISABLE_INDEXING` as `false`.
 
 ## Google Site Verification
 
-It is necessary to [verify the site with Google Search Console](https://support.google.com/webmasters/answer/9008080?hl=en) before you can access information about your site's search results performance. It is recommended to use the HTML file upload solution by committing the file to your project's root directory although it is possible to add the meta tag by filling in the [verification code on the Reading Settings page in the admin](admin://options-reading.php).
+It is necessary to [verify the site with Google Search Console](https://support.google.com/webmasters/answer/9008080?hl=en) before you can access information about your site's search results performance. It is recommended to use the HTML file upload solution by committing the file to your project's root directory, although it is possible to add the meta tag by filling in the [verification code on the Reading Settings page in the admin](admin://options-reading.php).
 
 ## Adding Custom Sitemaps
-Sitemaps are provided for built-in content types like pages and author archives out of the box. If you want to add a custom sitemap with additional features such as a video sitemap you can register a custom sitemap provider.
+Sitemaps are provided for built-in content types like pages and author archives out of the box. If you want to add a custom sitemap with additional features, such as a video sitemap, you can register a custom sitemap provider.
 
-To do so create a custom PHP class that extends the abstract `WP_Sitemaps_Provider` class. Then, you can use the `wp_register_sitemap_provider()` function to register it.
+To do so, create a custom PHP class that extends the abstract `WP_Sitemaps_Provider` class. Then you can use the `wp_register_sitemap_provider()` function to register it.
 
 The example below shows a minimal implementation for a custom video sitemap:
 
@@ -98,7 +98,7 @@ There are three existing sitemaps providers for standard object types - `posts`,
 }
 ```
 
-Alternatively if you need to use more complex logic or work with custom sitemap providers you can use the `wp_sitemaps_add_provider` filter to do so for example:
+Alternatively, if you need to use more complex logic or work with custom sitemap providers you can use the `wp_sitemaps_add_provider` filter to do so. For example:
 
 ```php
 add_filter( 'wp_sitemaps_add_provider', function ( $provider, string $name ) {
@@ -111,9 +111,9 @@ add_filter( 'wp_sitemaps_add_provider', function ( $provider, string $name ) {
 }, 10, 2 );
 ```
 
-If instead you want to disable sitemap generation for a specific post type or taxonomy, use the `wp_sitemaps_post_types` or `wp_sitemaps_taxonomies` filter, respectively.
+If you want to disable sitemap generation for a specific post type or taxonomy, use the `wp_sitemaps_post_types` or `wp_sitemaps_taxonomies` filter, respectively.
 
-To disable sitemaps for the page post type you would do the following:
+To disable sitemaps for the `page` post type you would do the following:
 
 ```php
 add_filter( 'wp_sitemaps_post_types', function ( array $post_types ) : array {
@@ -132,7 +132,7 @@ add_filter( 'wp_sitemaps_taxonomies', function ( array $taxonomies ) : array {
 ```
 
 ## Adding Additional Tags to Sitemap Entries
-The sitemaps protocol specifies a certain set of supported attributes for sitemap entries. Of those, only the URL (loc) tag is required. All others (e.g. `changefreq` and `priority`) are optional tags in the sitemaps protocol and not typically consumed by search engines, which is why only the URL itself is listed by default. You can still add those tags if you need to.
+The [sitemaps protocol](https://www.sitemaps.org/protocol.html) specifies a certain set of supported attributes for sitemap entries. Of those, only the `loc` tag (URL) is required. All others (e.g. `changefreq` and `priority`) are optional tags in the sitemaps protocol and not typically consumed by search engines, which is why only the URL itself is listed by default. You can still add those tags if you need to.
 
 You can use the `wp_sitemaps_posts_entry`, `wp_sitemaps_users_entry` or `wp_sitemaps_taxonomies_entry` filters to add additional tags like `changefreq`, `priority`, or `lastmod` to single items in the sitemap.
 

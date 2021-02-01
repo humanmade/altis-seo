@@ -22,6 +22,12 @@
         ]
     },
     "extra": {
-        "altis": {}
+        "altis": {
+            "install-overrides": [
+                "humanmade/wp-seo",
+                "humanmade/hm-redirects",
+                "humanmade/meta-tags"
+            ]
+        }
     }
 }

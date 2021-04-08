@@ -6,4 +6,4 @@
 
 ## SEO
 
-Take control of your search engine listings through meta data and integrations with [pre-approved plugins](https://www.altis-dxp.com/resources/pre-approved-plugins/) such as [AMP](https://github.com/ampproject/amp-wp) and [Facebook Instant Articles](https://github.com/Automattic/facebook-instant-articles-wp).
+Take control of your search engine and social media listings through meta data and integrations with plugins such as [AMP](https://github.com/ampproject/amp-wp) and [Facebook Instant Articles](https://github.com/Automattic/facebook-instant-articles-wp).

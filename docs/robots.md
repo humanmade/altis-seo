@@ -38,6 +38,8 @@ The example above would output the following:
 
 Note that on local environments, and when the "Search engine visibility" setting in the admin Reading settings is set to "Discourage search engines from indexing this site", the `robots` meta tag will default to include `noindex, nofollow` unless overridden by the filter in addition to any custom parameters.
 
+For more information and examples, refer to the [`wp_robots` hook developer documentation](https://developer.wordpress.org/reference/hooks/wp_robots/).
+
 ## Robots.txt
 
 The SEO module will read a custom `robots.txt` file from `/.config/robots.txt` in your project's root directory.

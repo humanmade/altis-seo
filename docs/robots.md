@@ -1,4 +1,4 @@
-# Robots.txt
+# Robots
 
 The SEO module will read a custom `robots.txt` file from `/.config/robots.txt` in your project's root directory.
 

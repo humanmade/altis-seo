@@ -1,5 +1,45 @@
 # Robots
 
+## Robots API
+
+Altis v7 introduced a filter-based Robots API, providing central control over the `robots` meta tag. The `robots` meta tag allows you to utilize a more granular, page-specific approach to controlling how an individual page should be indexed and served to users in search engine results. The meta tag is usually placed in the `<head>` section of a page.
+
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="robots" content="max-image-preview:large, follow" />
+	</head>
+```
+
+The Robots API allows you to hook into these meta tags to modify the tag's values. By default, the `robots` meta tag will include code that sets the maximum size of an image preview for images on the page. To disable this completely, use a `remove_filter` on the `wp_robots` filter hook.
+
+```php
+remove_filter( 'wp_robots', 'wp_robots_max_image_preview_large' );
+```
+
+You can interact and modify the contents of the `robots` meta tag using the `wp_robots` filter as well. The contents are passed into the filter as an array which can be interacted with.
+
+```php
+add_filter( 'wp_robots', function( array $robots ) : array {
+	$robots['follow'] = true;
+	$robots['foo'] = 'bar';
+	unset( $robots['max-image-preview'] );
+
+	return $robots;
+} );
+```
+
+The example above would output the following:
+
+```html
+<meta name="robots" content="follow, foo:bar" />
+```
+
+Note that on local environments, and when the "Search engine visibility" setting in the admin Reading settings is set to "Discourage search engines from indexing this site", the `robots` meta tag will default to include `noindex, nofollow` unless overridden by the filter in addition to any custom parameters.
+
+## Robots.txt
+
 The SEO module will read a custom `robots.txt` file from `/.config/robots.txt` in your project's root directory.
 
 The `robots.txt` file is a standard for providing instructions to various bots that may visit your site. There is no guarantee that bots will obey the directives it provides however so other measures should be taken if content should not be indexed such as adding `nofollow` attributes to links and a `robots` meta tag with a value of `noindex` to your website's head.

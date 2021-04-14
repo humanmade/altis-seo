@@ -12,7 +12,7 @@ The Robots API provides central control over the `robots` meta tag. The `robots`
 	</head>
 ```
 
-The Robots API allows you to hook into these meta tags to modify the tag's values. By default, the `robots` meta tag will include code that sets the maximum size of an image preview for images on the page. To disable this completely, use a `remove_filter` on the `wp_robots` filter hook.
+The Robots API allows you to hook into this meta tag to modify its values. By default, the `robots` meta tag will include code that sets the maximum size of an image preview for images on the page. To disable this completely, use a `remove_filter` on the `wp_robots` filter hook.
 
 ```php
 remove_filter( 'wp_robots', 'wp_robots_max_image_preview_large' );

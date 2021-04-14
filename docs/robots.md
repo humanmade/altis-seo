@@ -38,7 +38,7 @@ The example above would output the following:
 
 Note that on local environments, and when the "Search engine visibility" setting in the admin Reading settings is set to "Discourage search engines from indexing this site", the `robots` meta tag will default to include `noindex, nofollow` unless overridden by the filter in addition to any custom parameters.
 
-For more information and examples, refer to the [`wp_robots` hook developer documentation](https://developer.wordpress.org/reference/hooks/wp_robots/).
+For more information, refer to the [`wp_robots` hook developer documentation](https://developer.wordpress.org/reference/hooks/wp_robots/) or [this list of available `robots` meta values](https://yoast.com/robots-meta-tags/).
 
 ## Robots.txt
 

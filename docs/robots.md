@@ -2,7 +2,7 @@
 
 ## Robots API
 
-Altis v7 introduced a filter-based Robots API, providing central control over the `robots` meta tag. The `robots` meta tag allows you to utilize a more granular, page-specific approach to controlling how an individual page should be indexed and served to users in search engine results. The meta tag is usually placed in the `<head>` section of a page.
+The Robots API provides central control over the `robots` meta tag. The `robots` meta tag allows you to utilize a more granular, page-specific approach to controlling how an individual page should be indexed and served to users in search engine results. The meta tag is automatically placed in the `<head>` section of a page.
 
 ```html
 <!DOCTYPE html>

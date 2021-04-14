@@ -18,7 +18,7 @@ The Robots API allows you to hook into this meta tag to modify its values. By de
 remove_filter( 'wp_robots', 'wp_robots_max_image_preview_large' );
 ```
 
-You can interact and modify the contents of the `robots` meta tag using the `wp_robots` filter as well. The contents are passed into the filter as an array which can be interacted with.
+You can modify the contents of the `robots` meta tag using the `wp_robots` filter as well. The values are passed into the filter as an array.
 
 ```php
 add_filter( 'wp_robots', function( array $robots ) : array {

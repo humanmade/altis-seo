@@ -95,7 +95,6 @@ function bootstrap( Module $module ) {
 		";
 	} );
 
-
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
 }

@@ -42,6 +42,60 @@ function bootstrap( Module $module ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\use_tachyon_img_in_metadata' );
 	}
 
+	add_action( 'admin_init', function() {
+		remove_meta_box( 'wpseo-dashboard-overview', 'dashboard', 'normal' );
+		wp_dequeue_script( 'dashboard-widget' );
+		wp_dequeue_style( 'wp-dashboard' );
+		$options = get_option( 'wpseo', 'enable_admin_bar_menu' );
+		$options['enable_admin_bar_menu'] = false;
+		if ( in_array( Altis\get_environment_type(), [ 'local', 'dev' ], true ) ) {
+			$options['ignore_search_engines_discouraged_notice'] = true;
+		}
+		update_option( 'wpseo', $options );
+
+		add_filter( 'wpseo_helpscout_show_beacon', '__return_false' );
+
+		$menu = 'wpseo_dashboard';
+		$submenu = 'wpseo_licenses';
+		remove_submenu_page( $menu, $submenu );
+	}, 11 );
+	add_action( 'admin_head', function () {
+		echo "
+		<style type='text/css'>
+			.yoast #sidebar-container,
+			.yoast .yoast_premium_upsell,
+			.yoast #wpseo-local-seo-upsell,
+			[class*=\"AnalysisUpsell__Container\"] {
+				display: none;
+			}
+			.yoast .switch-toggle.switch-yoast-seo a,
+			.yoast .switch-light.switch-yoast-seo a,
+			.yoast .switch-light.switch-yoast-seo input:checked ~ span a,
+			.yoast-field-group__radiobutton input[type=\"radio\"]:checked::after,
+			.yoast span.yTsQm {
+				background-color: #152a4e;
+			}
+			.yoast-field-group__radiobutton input[type=\"radio\"]:checked,
+			.wpseo_content_wrapper #separator input.radio:checked + label {
+				border-color: #1a335e;
+			}
+			.wpseo-metabox-menu ul li a {
+				color: #4667de;
+			}
+			.wpseo-metabox-menu ul li a:hover,
+			.wpseo-metabox-menu ul li a:active {
+				color; #2142ba;
+			}
+			.wpseo-meta-section,
+			.wpseo-meta-section-react,
+			.fRzIon {
+				max-width: 100%;
+			}
+		</style>
+		";
+	} );
+
+
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
 }
@@ -72,6 +126,7 @@ function load_redirects() {
  */
 function load_metadata() {
 	require_once Altis\ROOT_DIR . '/vendor/humanmade/wp-seo/wp-seo.php';
+	require_once Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo/wp-seo.php';
 	require_once Altis\ROOT_DIR . '/vendor/humanmade/meta-tags/plugin.php';
 
 	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];

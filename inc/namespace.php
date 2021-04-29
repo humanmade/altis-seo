@@ -42,23 +42,32 @@ function bootstrap( Module $module ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\use_tachyon_img_in_metadata' );
 	}
 
+	// Yoast SEO overrides PoC.
 	add_action( 'admin_init', function() {
+		// Remove the Dashboard widget.
 		remove_meta_box( 'wpseo-dashboard-overview', 'dashboard', 'normal' );
 		wp_dequeue_script( 'dashboard-widget' );
 		wp_dequeue_style( 'wp-dashboard' );
-		$options = get_option( 'wpseo', 'enable_admin_bar_menu' );
+
+		$options = get_option( 'wpseo' );
+		// Disable the admin bar menu.
 		$options['enable_admin_bar_menu'] = false;
 		if ( in_array( Altis\get_environment_type(), [ 'local', 'dev' ], true ) ) {
+			// Don't display the HUGE SEO issue on local or dev environments.
 			$options['ignore_search_engines_discouraged_notice'] = true;
 		}
 		update_option( 'wpseo', $options );
 
+		// Remove Helpscout.
 		add_filter( 'wpseo_helpscout_show_beacon', '__return_false' );
 
+		// Remove the Premium submenu.
 		$menu = 'wpseo_dashboard';
 		$submenu = 'wpseo_licenses';
 		remove_submenu_page( $menu, $submenu );
 	}, 11 );
+
+	// CSS overrides.
 	add_action( 'admin_head', function () {
 		echo "
 		<style type='text/css'>

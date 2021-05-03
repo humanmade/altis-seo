@@ -52,7 +52,7 @@ function bootstrap( Module $module ) {
 		$options = get_option( 'wpseo' );
 		// Disable the admin bar menu.
 		$options['enable_admin_bar_menu'] = false;
-		if ( in_array( Altis\get_environment_type(), [ 'local', 'dev' ], true ) ) {
+		if ( in_array( Altis\get_environment_type(), [ 'local', 'development' ], true ) ) {
 			// Don't display the HUGE SEO issue on local or dev environments.
 			$options['ignore_search_engines_discouraged_notice'] = true;
 		}

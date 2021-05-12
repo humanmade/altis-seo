@@ -102,6 +102,11 @@ function bootstrap( Module $module ) {
 			}
 		</style>
 		";
+	}, 11 );
+
+	// Load custom Altis CSS rebrand.
+	add_action( 'admin_enqueue_scripts', function() {
+		wp_enqueue_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/global-styles.css', [], time() );
 	} );
 
 	// Read config/robots.txt file into robots.txt route handled by WP.

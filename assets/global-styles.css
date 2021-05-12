@@ -18,16 +18,16 @@
 
 /* Yoast SEO color variable overrides */
 .wp-admin {
-    --yoast-color-primary: var( --altis-blue );
-    --yoast-color-secondary: var( --altis-off-white );
-    --yoast-color-white: var( --altis-white );
-    --yoast-color-green: var( --altis-green );
-    --yoast-color-primary-darker: var( --altis-dark-blue );
-    --yoast-color-primary-lighter: var( --altis-bright-blue );
-    --yoast-color-secondary-darker: var( --altis-light-gray );
-    --yoast-color-link: var( --altis-blue );
-    --yoast-color-border--default: rgba(0,0,0,0.2);
-    --yoast-color-focus: 0 0 0 2px var( --altis-dark-blue ),0 0 0 5px #b6ceff;
+	--yoast-color-primary: var( --altis-blue );
+	--yoast-color-secondary: var( --altis-off-white );
+	--yoast-color-white: var( --altis-white );
+	--yoast-color-green: var( --altis-green );
+	--yoast-color-primary-darker: var( --altis-dark-blue );
+	--yoast-color-primary-lighter: var( --altis-bright-blue );
+	--yoast-color-secondary-darker: var( --altis-light-gray );
+	--yoast-color-link: var( --altis-blue );
+	--yoast-color-border--default: rgba(0,0,0,0.2);
+	--yoast-color-focus: 0 0 0 2px var( --altis-dark-blue ),0 0 0 5px #b6ceff;
 }
 
 .components-modal__content .yoast-modal-content input[type="radio"]:checked {

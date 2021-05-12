@@ -68,38 +68,14 @@ function bootstrap( Module $module ) {
 	}, 11 );
 
 	// CSS overrides.
-	add_action( 'admin_head', function () {
+	add_action( 'admin_head', function() {
+		// These don't always hide if loaded in an actual stylesheet, so printing them in the admin head. TODO: they should probably be moved into a wp_print_styles function instead.
 		echo "
 		<style type='text/css'>
-			.yoast #sidebar-container,
-			.yoast .yoast_premium_upsell,
-			.yoast #wpseo-local-seo-upsell,
-			[class*=\"AnalysisUpsell__Container\"] {
-				display: none;
-			}
-			.yoast .switch-toggle.switch-yoast-seo a,
-			.yoast .switch-light.switch-yoast-seo a,
-			.yoast .switch-light.switch-yoast-seo input:checked ~ span a,
-			.yoast-field-group__radiobutton input[type=\"radio\"]:checked::after,
-			.yoast span.yTsQm {
-				background-color: #152a4e;
-			}
-			.yoast-field-group__radiobutton input[type=\"radio\"]:checked,
-			.wpseo_content_wrapper #separator input.radio:checked + label {
-				border-color: #1a335e;
-			}
-			.wpseo-metabox-menu ul li a {
-				color: #4667de;
-			}
-			.wpseo-metabox-menu ul li a:hover,
-			.wpseo-metabox-menu ul li a:active {
-				color; #2142ba;
-			}
-			.wpseo-meta-section,
-			.wpseo-meta-section-react,
-			.fRzIon {
-				max-width: 100%;
-			}
+		[class*=\"AnalysisUpsell__Container\"],
+		[class*=\"SocialUpsell__PremiumInfoText\"] {
+			display: none;
+		}
 		</style>
 		";
 	}, 11 );

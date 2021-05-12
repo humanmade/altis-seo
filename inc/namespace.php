@@ -83,6 +83,12 @@ function bootstrap( Module $module ) {
 	// Load custom Altis CSS rebrand.
 	add_action( 'admin_enqueue_scripts', function() {
 		wp_enqueue_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/global-styles.css', [], time() );
+	}, 11 );
+
+	// The Yoast Wizard bails early, before our styles are loaded, but we can hook into their action to load in our styles.
+	add_action( 'wpseo_configuration_wizard_head', function() {
+		wp_register_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/global-styles.css', [], time() );
+		wp_print_styles( 'altis-seo' );
 	} );
 
 	// Read config/robots.txt file into robots.txt route handled by WP.

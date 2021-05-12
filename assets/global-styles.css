@@ -26,7 +26,6 @@
 	--yoast-color-primary-lighter: var( --altis-bright-blue );
 	--yoast-color-secondary-darker: var( --altis-light-gray );
 	--yoast-color-link: var( --altis-blue );
-	--yoast-color-border--default: rgba(0,0,0,0.2);
 	--yoast-color-focus: 0 0 0 2px var( --altis-dark-blue ),0 0 0 5px #b6ceff;
 }
 

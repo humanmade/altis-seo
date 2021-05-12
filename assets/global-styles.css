@@ -18,9 +18,6 @@
 
 /* Yoast SEO color variable overrides */
 .wp-admin {
-    --yoast-border-default: 1px solid rgba(0,0,0,0.2);
-    --yoast-color-default: #404040;
-    --yoast-color-default-darker: #303030;
     --yoast-color-primary: var( --altis-blue );
     --yoast-color-secondary: var( --altis-off-white );
     --yoast-color-white: var( --altis-white );
@@ -28,21 +25,6 @@
     --yoast-color-primary-darker: var( --altis-dark-blue );
     --yoast-color-primary-lighter: var( --altis-bright-blue );
     --yoast-color-secondary-darker: var( --altis-light-gray );
-    --yoast-color-button-upsell: #fec228;
-    --yoast-color-button-upsell-hover: #f2ae01;
-    --yoast-color-dark: #303030;
-    --yoast-color-sale: #fec228;
-    --yoast-color-sale-darker: #feb601;
-    --yoast-color-border: rgba(0,0,0,0.2);
-    --yoast-color-label: #303030;
-    --yoast-color-label-help: #707070;
-    --yoast-color-active: #6ea029;
-    --yoast-color-inactive: #dc3232;
-    --yoast-color-inactive-text: #707070;
-    --yoast-color-inactive-grey: #9e9e9e;
-    --yoast-color-inactive-grey-light: #f1f1f1;
-    --yoast-color-active-light: #b6cf94;
-    --yoast-transition-default: all 150ms ease-out;
     --yoast-color-link: var( --altis-blue );
     --yoast-color-border--default: rgba(0,0,0,0.2);
     --yoast-color-focus: 0 0 0 2px var( --altis-dark-blue ),0 0 0 5px #b6ceff;

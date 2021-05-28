@@ -43,7 +43,7 @@ function bootstrap( Module $module ) {
 	}
 
 	// Load Yoast SEO late in case WP SEO Premium is installed as a plugin or mu-plugin.
-	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_wpseo', 100 );
+	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_wpseo', 1 );
 
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );

@@ -72,8 +72,14 @@ function load_redirects() {
  * Load Yoast SEO.
  */
 function load_wpseo() {
-	defined( 'WPSEO_PREMIUM_FILE' ) or define( 'WPSEO_PREMIUM_FILE', true );
-	require_once Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo/wp-seo.php';
+	$wpseo_file = Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo/wp-seo.php';
+
+	// Define a fake WP SEO Premium File value if we don't have WP SEO Premium installed. This hides some of the upsell UI.
+	if ( ! class_exists( 'WPSEO_Premium' ) ) {
+		define( 'WPSEO_PREMIUM_FILE', $wpseo_file );
+		define( 'WPSEO_PREMIUM_VERSION', 8 );
+		require_once $wpseo_file;
+	}
 }
 
 /**

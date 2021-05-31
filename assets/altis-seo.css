@@ -57,6 +57,10 @@
 	background-color: var( --altis-dark-blue );
 }
 
+#wizard .yoast-wizard-input-radio-separator input:checked + label {
+	border-color: var( --altis-blue );
+}
+
 .yoast-field-group__radiobutton input[type="\"radio\""]:checked,
 .wpseo_content_wrapper #separator input.radio:checked + label {
 	border-color: var( --altis-dark-blue );
@@ -132,8 +136,4 @@
 .yoast-wizard--suggestion,
 .yoast-wizard--navigation {
 	border-color: var( --altis-dark-blue );
-}
-
-#wizard .yoast-wizard-input-radio-separator input:checked + label {
-	border-color: var( --altis-blue );
 }

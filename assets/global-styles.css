@@ -40,6 +40,10 @@
 	max-width: 100%;
 }
 
+.wpseo-metabox-menu ul li a {
+	color: var( --altis-blue );
+}
+
 .yoast .switch-toggle.switch-yoast-seo a,
 .yoast .switch-light.switch-yoast-seo a,
 .yoast .switch-light.switch-yoast-seo input:checked ~ span a,
@@ -51,10 +55,6 @@
 .yoast-field-group__radiobutton input[type="\"radio\""]:checked,
 .wpseo_content_wrapper #separator input.radio:checked + label {
 	border-color: var( --altis-dark-blue );
-}
-
-.wpseo-metabox-menu ul li a {
-	color: var( --altis-blue );
 }
 
 .wpseo-metabox-menu ul li a:hover,

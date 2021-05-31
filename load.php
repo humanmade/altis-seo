@@ -31,7 +31,6 @@ add_action( 'altis.modules.init', function () {
 				'tumblr' => '',
 			],
 		],
-		'xml-sitemaps' => true,
 		'site-verification' => true,
 	];
 	Altis\register_module( 'seo', __DIR__, 'SEO', $default_settings, __NAMESPACE__ . '\\bootstrap' );

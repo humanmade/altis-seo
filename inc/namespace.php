@@ -233,6 +233,9 @@ function robots_txt( string $output ) : string {
 	return $output;
 }
 
+/**
+ * Enqueue CSS.
+ */
 function enqueue_yoast_css_overrides() {
 	$version = ( defined( 'WP_DEBUG' ) && WP_DEBUG ) || ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? Altis\get_version() . '?' . time( 'Ymd' ) : Altis\get_version();
 

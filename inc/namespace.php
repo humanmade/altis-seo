@@ -76,8 +76,10 @@ function load_wpseo() {
 
 	// Define a fake WP SEO Premium File value if we don't have WP SEO Premium installed. This hides some of the upsell UI.
 	if ( ! class_exists( 'WPSEO_Premium' ) ) {
-		define( 'WPSEO_PREMIUM_FILE', $wpseo_file );
-		define( 'WPSEO_PREMIUM_VERSION', 8 );
+		if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
+			define( 'WPSEO_PREMIUM_FILE', $wpseo_file );
+			define( 'WPSEO_PREMIUM_VERSION', 8 );
+		}
 		require_once $wpseo_file;
 	}
 }

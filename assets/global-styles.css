@@ -1,0 +1,139 @@
+/**
+ * Altis SEO styles.
+ *
+ * This file largely overrides the Yoast SEO admin styling. As such,
+ * there may be some limited use of !important that is necessary.
+ */
+
+/* stylelint-disable declaration-no-important, selector-class-pattern */
+
+/* Yoast SEO color variable overrides */
+.wp-admin {
+	--yoast-color-primary: var( --altis-blue );
+	--yoast-color-secondary: var( --altis-off-white );
+	--yoast-color-white: var( --altis-white );
+	--yoast-color-green: var( --altis-green );
+	--yoast-color-primary-darker: var( --altis-dark-blue );
+	--yoast-color-primary-lighter: var( --altis-bright-blue );
+	--yoast-color-secondary-darker: var( --altis-light-gray );
+	--yoast-color-link: var( --altis-blue );
+	--yoast-color-focus: 0 0 0 2px var( --altis-dark-blue ), 0 0 0 5px #b6ceff;
+}
+
+.components-modal__content .yoast-modal-content input[type="radio"]:checked {
+	background: transparent;
+}
+
+.components-modal__content .components-modal__icon-container {
+	display: none;
+}
+
+.yoast #sidebar-container,
+.yoast .yoast_premium_upsell,
+.yoast #wpseo-local-seo-upsell {
+	display: none !important;
+}
+
+.wpseo-meta-section,
+.wpseo-meta-section-react,
+#yoast-snippet-preview-container {
+	max-width: 100%;
+}
+
+.yoast .switch-toggle.switch-yoast-seo a,
+.yoast .switch-light.switch-yoast-seo a,
+.yoast .switch-light.switch-yoast-seo input:checked ~ span a,
+.yoast-field-group__radiobutton input[type="\"radio\""]:checked::after,
+.yoast span.yTsQm {
+	background-color: var( --altis-dark-blue );
+}
+
+.yoast-field-group__radiobutton input[type="\"radio\""]:checked,
+.wpseo_content_wrapper #separator input.radio:checked + label {
+	border-color: var( --altis-dark-blue );
+}
+
+.wpseo-metabox-menu ul li a {
+	color: var( --altis-blue );
+}
+
+.wpseo-metabox-menu ul li a:hover,
+.wpseo-metabox-menu ul li a:active {
+	color: var( --altis-bright-blue );
+}
+
+/* SEO Setup Wizard */
+#wizard a,
+#wizard a:visited {
+	color: var( --altis-blue );
+	text-decoration: none;
+}
+
+#wizard a:hover,
+#wizard a:active {
+	color: var( --altis-dark-blue );
+	border-bottom: 3px solid #3fcf8e;
+}
+
+#wizard .yoast-wizard--header svg {
+	display: none;
+}
+
+#wizard .yoast-wizard--header--page-title {
+	color: var( --altis-dark-blue );
+}
+
+#wizard .yoast-wizard-container h1 {
+	color: var( --altis-blue );
+}
+
+#wizard .yoast-wizard--heading {
+	color: var( --altis-dark-blue );
+}
+
+#wizard .yoast-wizard-container h3.yoast-wizard--heading {
+	color: var( --altis-blue );
+}
+
+#wizard .yoast-wizard--button {
+	color: var( --altis-blue );
+}
+
+#wizard .yoast-wizard--button::after {
+	border-bottom: 3px solid #3fcf8e;
+}
+
+#wizard .yoast-wizard-content-container button {
+	background-color: var( --altis-blue ) !important;
+}
+
+#wizard .yoast-wizard-content-container .yoast-wizard-image-upload-container-buttons__choose div span {
+	color: var( --altis-white ) !important;
+}
+
+#wizard .yoast-wizard-container .yoast-wizard--suggestion a {
+	background-color: var( --altis-blue ) !important;
+}
+
+#wizard .yoast-wizard-container .yoast-wizard--suggestion a div span {
+	color: var( --altis-white ) !important;
+}
+
+#wizard .yoast-wizard-container .yoast-wizard--suggestion a div svg {
+	color: var( --altis-white ) !important;
+	fill: var( --altis-white ) !important;
+}
+
+#wizard .yoast-wizard-container a#plugin-training-image-link:hover,
+#wizard .yoast-wizard-container a#plugin-training-image-link:active {
+	border-bottom: none;
+}
+
+.yoast-wizard--suggestion,
+.yoast-wizard--navigation {
+	border-color: var( --altis-dark-blue );
+}
+
+#wizard .yoast-wizard-input-radio-separator input:checked + label {
+	border-color: var( --altis-blue );
+}

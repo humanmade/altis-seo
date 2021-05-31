@@ -40,6 +40,9 @@ function bootstrap( Module $module ) {
 
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
+
+	// Add sitemap to robots.txt.
+	add_filter( 'robots_txt', __NAMESPACE__ . '\\add_sitemap_index_to_robots', 11, 2 );
 }
 
 /**
@@ -189,6 +192,23 @@ function robots_txt( string $output ) : string {
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$output .= "\n" . file_get_contents( $legacy_file ) . "\n";
+	}
+
+	return $output;
+}
+
+/**
+ * Add the Yoast SEO sitemap index to the robots.txt file.
+ *
+ * @param string $output The original robots.txt content.
+ * @param bool $public Whether the site is public.
+ *
+ * @return string The filtered robots.txt content.
+ */
+function add_sitemap_index_to_robots( string $output, bool $public ) : string {
+	if ( $public ) {
+		$site_url = parse_url( site_url() );
+		$output .= esc_textarea( "Sitemap: {$site_url['scheme']}://{$site_url['host']}/sitemap_index.xml\n" );
 	}
 
 	return $output;

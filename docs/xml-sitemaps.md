@@ -8,7 +8,7 @@ The sitemap index can hold a maximum of 50000 sitemaps, and a single sitemap can
 
 By default, sitemaps are created for all public and publicly queryable post types and taxonomies, as well as for author archives and of course the homepage of the site if set to show posts.
 
-A sitemap index is automatically linked to in the site's [robots.txt](./robots-txt.md) file at `/wp-sitemap.xml` so you don't need to manually submit them to the [Google Search Console](https://search.google.com/search-console/). You can resubmit them from the search console and get diagnostic information there at any time.
+The XML Sitemaps in Altis are provided by our integration with [Yoast SEO](https://developer.yoast.com/features/xml-sitemaps/overview). A sitemap index is automatically linked to in the site's [robots.txt](./robots-txt.md) file at `/sitemap_index.xml` so you don't need to manually submit them to the [Google Search Console](https://search.google.com/search-console/). You can resubmit them from the search console and get diagnostic information there at any time.
 
 **Note:** Sitemaps are only linked to in the `robots.txt` file if the site is public and in production. To debug locally you will need to define the constant `HM_DISABLE_INDEXING` as `false`.
 
@@ -16,152 +16,43 @@ A sitemap index is automatically linked to in the site's [robots.txt](./robots-t
 
 It is necessary to [verify the site with Google Search Console](https://support.google.com/webmasters/answer/9008080?hl=en) before you can access information about your site's search results performance. It is recommended to use the HTML file upload solution by committing the file to your project's root directory, although it is possible to add the meta tag by filling in the [verification code on the Reading Settings page in the admin](admin://options-reading.php).
 
-## Adding Custom Sitemaps
-Sitemaps are provided for built-in content types like pages and author archives out of the box. If you want to add a custom sitemap with additional features, such as a video sitemap, you can register a custom sitemap provider.
+## Adding or Removing Post Types
+Sitemaps are provided for public content types like posts and pages out of the box. If you want to add support for additional custom post types in your sitemaps, you can do so by using the built-in Yoast SEO filters.
 
-To do so, create a custom PHP class that extends the abstract `WP_Sitemaps_Provider` class. Then you can use the `wp_register_sitemap_provider()` function to register it.
-
-The example below shows a minimal implementation for a custom video sitemap:
+To add a post type to the sitemaps, use the `register_sitemap` method of the `$wpseo_sitemaps` global like in the example below:
 
 ```php
-class Video_Sitemap_Provider extends WP_Sitemaps_Provider {
+add_action( 'init', function () {
+	global $wpseo_sitemaps;
 
-	/**
-	 * Set the name and object type properties. Required.
-	 */
-	public function __construct() {
-		$this->name = 'videos';
-		$this->object_type = 'post';
+	if ( isset( $wpseo_sitemaps ) && ! empty( $wpseo_sitemaps ) ) {
+		$wpseo_sitemaps->register_sitemap( 'video', 'create_video_sitemap' );
 	}
-
-	/**
-	 * Return the list of URLs for the current page.
-	 */
-	public function get_url_list( $page ) {
-		$videos = new WP_Query( [
-			'post_type' => 'video',
-			// phpcs:ignore WordPress.WP.PostsPerPage.posts_per_page_numberposts
-			'posts_per_page' => 2000,
-			'fields' => 'ids',
-			'paged' => $page,
-		] );
-
-		$urls = [];
-
-		foreach ( $videos->posts as $video_id ) {
-			$urls[] = get_post_meta( $video_id, 'video_url', true );
-		}
-
-		return $urls;
-	}
-
-	/**
-	 * Return the maximum number of pages to output for this sitemap.
-	 */
-	public function get_max_num_pages() {
-		$videos = new WP_Query( [
-			'post_type' => 'video',
-			// phpcs:ignore WordPress.WP.PostsPerPage.posts_per_page_numberposts
-			'posts_per_page' => 2000,
-			'fields' => 'ids',
-		] );
-
-		return $videos->max_num_pages;
-	}
-
-}
-
-add_filter( 'init', function () : void {
-	$provider = new Video_Sitemap_Provider();
-	wp_register_sitemap_provider( 'video-sitemaps', $provider );
 } );
 ```
 
-The provider will be responsible for getting all sitemaps and sitemap entries, as well as determining pagination.
-
-## Removing Specific Sitemaps
-There are three existing sitemaps providers for standard object types - `posts`, `taxonomies`, and `users`. If you want to remove one of them such as the "users" provider, you can configure the module like so:
-
-```json
-{
-	"extra": {
-		"altis": {
-			"modules": {
-				"seo": {
-					"xml-sitemaps": {
-						"users": false
-					}
-				}
-			}
-		}
-	}
-}
-```
-
-Alternatively, if you need to use more complex logic or work with custom sitemap providers you can use the `wp_sitemaps_add_provider` filter to do so. For example:
+To remove a post type from your sitemaps, use the `wp_seo_sitemap_exclude_post_type` filter. The example below removes a post type registered as `recipe`.
 
 ```php
-add_filter( 'wp_sitemaps_add_provider', function ( $provider, string $name ) {
-	// Only switch off the user sitemaps for subsites on the network.
-	if ( $name === 'users' && ! is_main_site() ) {
-		return false;
-	}
-
-	return $provider;
+add_filter( 'wpseo_sitemap_exclude_post_type', function ( $excluded, $post_type ) {
+	return $post_type === 'recipe';
 }, 10, 2 );
 ```
 
-If you want to disable sitemap generation for a specific post type or taxonomy, use the `wp_sitemaps_post_types` or `wp_sitemaps_taxonomies` filter, respectively.
+You can similarly exclude specific posts, taxonomies or authors, using built in filters in Yoast SEO.
 
-To disable sitemaps for the `page` post type you would do the following:
-
-```php
-add_filter( 'wp_sitemaps_post_types', function ( array $post_types ) : array {
-	unset( $post_types['page'] );
-	return $post_types;
-} );
-```
-
-To disable sitemaps for the `post_tag` taxonomy:
+If you need to add additional sitemaps to the index, this can be done with the `wpseo_sitemap_index` filter. This filter allows you to add additional XML Sitemap URLs to the index.
 
 ```php
-add_filter( 'wp_sitemaps_taxonomies', function ( array $taxonomies ) : array {
-	unset( $taxonomies['post_tag'] );
-	return $taxonomies;
-} );
+add_filter( 'wpseo_sitemap_index', function ( $sitemap_custom_items ) {
+	$sitemap_custom_items .= '
+<sitemap>
+	<loc>https://example.altis.cloud/external-sitemap-1.xml</loc>
+	<lastmod>2021-05-31T12:23:27+00:00</lastmod>
+</sitemap>';
+
+	return $sitemap_custom_items;
+} )
 ```
 
-## Adding Additional Tags to Sitemap Entries
-The [sitemaps protocol](https://www.sitemaps.org/protocol.html) specifies a certain set of supported attributes for sitemap entries. Of those, only the `loc` tag (URL) is required. All others (e.g. `changefreq` and `priority`) are optional tags in the sitemaps protocol and not typically consumed by search engines, which is why only the URL itself is listed by default. You can still add those tags if you need to.
-
-You can use the `wp_sitemaps_posts_entry`, `wp_sitemaps_users_entry` or `wp_sitemaps_taxonomies_entry` filters to add additional tags like `changefreq`, `priority`, or `lastmod` to single items in the sitemap.
-
-To add the last modified date for posts:
-
-```php
-add_filter( 'wp_sitemaps_posts_entry', function( array $entry, WP_Post $post ) : array {
-	$entry['lastmod'] = $post->post_modified_gmt;
-	return $entry;
-}, 10, 2 );
-```
-
-Similarly, you can use the `wp_sitemaps_index_entry` filter to add `lastmod` on the sitemap index.
-
-Trying to add any unsupported tags will result in a PHP notice.
-
-## Excluding a Single Post from the Sitemap
-If you have a feature that allows setting specific posts or pages to `noindex`, it's a good idea to exclude those from the sitemap too.
-
-The `wp_sitemaps_posts_query_args` filter can be used to exclude specific posts from the sitemap. Here's an example:
-
-```php
-add_filter( 'wp_sitemaps_posts_query_args', function ( array $args, string $post_type ): array {
-	if ( 'post' !== $post_type ) {
-		return $args;
-	}
-
-	$args['post__not_in'] = isset( $args['post__not_in'] ) ? $args['post__not_in'] : [];
-	$args['post__not_in'][] = 123; // 123 is the ID of the post to exclude.
-	return $args;
-}, 10, 2 );
-```
+Additional examples and documentation can be found in the [Yoast SEO developer documentation](https://developer.yoast.com/features/xml-sitemaps/api).

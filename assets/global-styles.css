@@ -5,7 +5,7 @@
  * there may be some limited use of !important that is necessary.
  */
 
-/* stylelint-disable declaration-no-important, selector-class-pattern */
+/* stylelint-disable declaration-no-important, selector-class-pattern, max-line-length */
 
 /* Yoast SEO color variable overrides */
 .wp-admin {

@@ -208,7 +208,12 @@ function robots_txt( string $output ) : string {
 function add_sitemap_index_to_robots( string $output, bool $public ) : string {
 	if ( $public ) {
 		$site_url = parse_url( site_url() );
-		$output .= esc_textarea( "Sitemap: {$site_url['scheme']}://{$site_url['host']}/sitemap_index.xml\n" );
+		$output .= sprintf(
+			'Sitemap: %1$s://%2$s/sitemap_index.xml',
+			$site_url['scheme'],
+			$site_url['host']
+		);
+		$output .= "\n";
 	}
 
 	return $output;

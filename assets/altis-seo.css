@@ -52,6 +52,7 @@
 .yoast .switch-toggle.switch-yoast-seo a,
 .yoast .switch-light.switch-yoast-seo a,
 .yoast .switch-light.switch-yoast-seo input:checked ~ span a,
+.yoast input[type="\"radio\""]:checked::before,
 .yoast-field-group__radiobutton input[type="\"radio\""]:checked::after,
 .yoast span.yTsQm {
 	background-color: var( --altis-dark-blue );

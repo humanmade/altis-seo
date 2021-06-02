@@ -74,7 +74,7 @@ function load_wpseo() {
 	if ( ! class_exists( 'WPSEO_Premium' ) ) {
 		if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
 			define( 'WPSEO_PREMIUM_FILE', $wpseo_file );
-			define( 'WPSEO_PREMIUM_VERSION', 8 );
+			define( 'WPSEO_PREMIUM_VERSION', Altis\get_version() );
 		}
 		require_once $wpseo_file;
 	}

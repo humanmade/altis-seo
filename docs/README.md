@@ -2,7 +2,7 @@
 
 ![](./assets/banner-seo.png)
 
-The Altis SEO module is powered by [Yoast SEO](https://yoast.com/wordpress/plugins/seo/) for its advanced features. The SEO module provides a suite of tools for enhancing and managing your networks visibility to search engines and social platforms including Facebook and Twitter.
+The Altis SEO module is powered by [Yoast SEO](https://yoast.com/wordpress/plugins/seo/) for its advanced features. The SEO module provides a suite of tools for enhancing and managing your network's visibility to search engines and social platforms including Facebook and Twitter.
 
 ## Configuration
 

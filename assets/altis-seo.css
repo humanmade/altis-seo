@@ -67,6 +67,14 @@
 	border-color: var( --altis-dark-blue );
 }
 
+#yoast-warnings-header .dashicons {
+	color: var( --altis-blue-darker-10 );
+}
+
+#yoast-warnings-active .yoast-notification {
+	border-left-color: var( --altis-blue-darker-10 );
+}
+
 /* SEO Setup Wizard */
 #wizard a,
 #wizard a:visited {

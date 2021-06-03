@@ -37,13 +37,101 @@ If a matching sitemap provider is not registered or cannot be found, the second 
 
 ## Excluding Content From XML Sitemaps
 
+### `wpseo_sitemap_exclude_post_type`
+
+Excludes a post type from your sitemaps. The example below removes a post type registered as `recipe`.
+
+**Parameters**
+
+**`$excluded`** _(bool)_ Whether the post type is excluded by default.
+
+**`$post_type`** _(string)_ The post type to exclude.
+
+**Example**
+
 ```php
-add_filter( 'wpseo_sitemap_exclude_post_type', function ( $excluded, $post_type ) {
+add_filter( 'wpseo_sitemap_exclude_post_type', function ( bool $excluded, string $post_type ) : bool {
 	return $post_type === 'recipe';
 }, 10, 2 );
 ```
 
-You can similarly exclude specific posts, taxonomies or authors, using built in filters in Yoast SEO.
+### `wpseo_sitemap_exclude_taxonomy`
+
+Excludes a taxonomy from your sitemaps. The example below removes a taxonomy that has been registered as `cuisine`.
+
+**Parameters**
+
+**`$excluded`** _(bool)_ Whether the taxonomy is excluded by default.
+
+**`$taxonomy`** _(string)_ The taxonomy to exclude.
+
+**Example**
+
+```php
+add_filter( 'wpseo_sitemap_exclude_taxonomy', function ( bool $excluded, string $taxonomy ) : bool {
+	return $taxonomy === 'cuisine';
+}, 10, 2 )
+```
+
+### `wpseo_exclude_from_sitemap_by_post_ids`
+
+Excludes specific posts from a sitemap by post IDs.
+
+**Example**
+
+```php
+add_filter( 'wpseo_exclude_from_sitemap_by_post_ids' function () : array {
+	return [ 1, 2, 3 ];
+} );
+```
+
+### `wpseo_exclude_from_sitemap_by_term_ids`
+
+Excludes specific taxonomy terms from a sitemap by term IDs.
+
+**Parameters**
+
+**`$terms`** _(array)_ Array of term IDs already excluded.
+
+**Example**
+
+```php
+add_filter( 'wpseo_exclude_from_sitemap_by_term_ids', function ( array $terms ) : array {
+	$term_ids_to_exclude = [ 3, 5, 9 ];
+
+	// Check if our excluded terms are already excluded.
+	foreach ( $term_ids_to_exclude as $i => $term_id ) {
+		if ( in_array( $term_id, $terms, true ) ) {
+			unset( $term_ids_to_exclude[ $i ] );
+		}
+	}
+
+	return $term_ids_to_exclude;
+} )
+```
+
+### `wpseo_sitemap_exclude_author`
+
+Exclude a specific author from the authors sitemap. The example below excludes an author with the slug `chris-reynolds` from the authors sitemap.
+
+**Parameters**
+
+**`$users`** _(array)_ Array of User objects to filter through.
+
+**Example**
+
+```php
+add_filter( 'wpseo_sitemap_exclude_author', function ( array $users ) : array {
+	$author_to_exclude = get_user_by( 'slug', 'chris-reynolds' );
+	return array_filter( $users, function ( $user ) use ( $author_to_exclude ) : bool {
+		if ( $user->ID === $author_to_exclude->ID ) {
+			return false;
+		}
+
+		return true;
+	} );
+} );
+```
 
 ## Adding Additional Sitemaps
 

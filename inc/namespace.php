@@ -237,5 +237,5 @@ function robots_txt( string $output ) : string {
  * Enqueue CSS.
  */
 function enqueue_yoast_css_overrides() {
-	wp_enqueue_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/altis-seo.css', [], '2021-06-03-1' );
+	wp_enqueue_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/altis-seo.css', [], '2021-06-03' );
 }

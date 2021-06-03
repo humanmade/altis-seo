@@ -16,7 +16,7 @@ The XML Sitemaps in Altis are provided by our integration with [Yoast SEO](https
 
 It is necessary to [verify the site with Google Search Console](https://support.google.com/webmasters/answer/9008080?hl=en) before you can access information about your site's search results performance. It is recommended to use the HTML file upload solution by committing the file to your project's root directory, although it is possible to add the meta tag by filling in the [verification code on the Reading Settings page in the admin](admin://options-reading.php).
 
-## Adding or Removing Post Types
+## Adding Content to XML Sitemaps
 Sitemaps are provided for public content types like posts and pages out of the box. If you want to add support for additional custom post types in your sitemaps (for example, non-public post types or otherwise excluded post types), you can do so by using the built-in Yoast SEO functions and filters.
 
 To add a post type to the sitemaps, use the `register_sitemap` method of the `$wpseo_sitemaps` global like in the example below:

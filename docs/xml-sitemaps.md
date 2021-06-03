@@ -149,4 +149,4 @@ add_filter( 'wpseo_sitemap_index', function ( string $sitemap_custom_items ) : s
 } )
 ```
 
-Additional examples and documentation can be found in the [Yoast SEO developer documentation](https://developer.yoast.com/features/xml-sitemaps/api).
+More examples and documentation can be found in the [Yoast SEO developer documentation](https://developer.yoast.com/features/xml-sitemaps/api).

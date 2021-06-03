@@ -35,7 +35,7 @@ The above example works if `video` is the name of a post type that has not been 
 
 If a matching sitemap provider is not registered or cannot be found, the second parameter in the `register_sitemap` method must correspond to a callback function which must generate the entire sitemap XML.
 
-To remove a post type from your sitemaps, use the `wp_seo_sitemap_exclude_post_type` filter. The example below removes a post type registered as `recipe`.
+## Excluding Content From XML Sitemaps
 
 ```php
 add_filter( 'wpseo_sitemap_exclude_post_type', function ( $excluded, $post_type ) {

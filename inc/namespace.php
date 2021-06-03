@@ -42,6 +42,9 @@ function bootstrap( Module $module ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\use_tachyon_img_in_metadata' );
 	}
 
+	// Load Yoast SEO late in case WP SEO Premium is installed as a plugin or mu-plugin.
+	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_wpseo', 1 );
+
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
 }
@@ -66,12 +69,27 @@ function load_redirects() {
 }
 
 /**
+ * Load Yoast SEO.
+ */
+function load_wpseo() {
+	$wpseo_file = Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo/wp-seo.php';
+
+	// Define a fake WP SEO Premium File value if we don't have WP SEO Premium installed. This hides some of the upsell UI.
+	if ( ! class_exists( 'WPSEO_Premium' ) ) {
+		if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
+			define( 'WPSEO_PREMIUM_FILE', $wpseo_file );
+			define( 'WPSEO_PREMIUM_VERSION', Altis\get_version() );
+		}
+		require_once $wpseo_file;
+	}
+}
+
+/**
  * Load the SEO metadata plugin.
  *
  * @return void
  */
 function load_metadata() {
-	require_once Altis\ROOT_DIR . '/vendor/humanmade/wp-seo/wp-seo.php';
 	require_once Altis\ROOT_DIR . '/vendor/humanmade/meta-tags/plugin.php';
 
 	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];

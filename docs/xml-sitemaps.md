@@ -138,7 +138,7 @@ add_filter( 'wpseo_sitemap_exclude_author', function ( array $users ) : array {
 If you need to add additional sitemaps to the index, this can be done with the `wpseo_sitemap_index` filter. This filter allows you to add additional XML Sitemap URLs to the index.
 
 ```php
-add_filter( 'wpseo_sitemap_index', function ( $sitemap_custom_items ) {
+add_filter( 'wpseo_sitemap_index', function ( string $sitemap_custom_items ) : string {
 	$sitemap_custom_items .= '
 <sitemap>
 	<loc>https://example.altis.cloud/external-sitemap-1.xml</loc>

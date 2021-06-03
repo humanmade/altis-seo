@@ -43,6 +43,9 @@ function bootstrap( Module $module ) {
 
 	// Add sitemap to robots.txt.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\add_sitemap_index_to_robots', 11, 2 );
+
+	// CSS overrides.
+	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_yoast_css_overrides', 11 );
 }
 
 /**
@@ -207,8 +210,15 @@ function robots_txt( string $output ) : string {
  */
 function add_sitemap_index_to_robots( string $output, bool $public ) : string {
 	if ( $public ) {
-		$output .= sprintf( "Sitemap: %s/sitemap_index.xml\n", site_url() );
+		$output .= sprintf( "Sitemap: %s\n", site_url( '/sitemap_index.xml' ) );
 	}
 
 	return $output;
+}
+
+/**
+ * Enqueue CSS.
+ */
+function enqueue_yoast_css_overrides() {
+	wp_enqueue_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/altis-seo.css', [], '2021-06-03' );
 }

@@ -31,6 +31,10 @@ add_action( 'init', function () {
 } );
 ```
 
+The above example works if `video` is the name of a post type that has not been previously set to render sitemaps. In that case, the second parameter is not explicitly used, as Yoast SEO will use its own matching `WPSEO_Sitemap_Provider` subclass to handle building the actual sitemap. The same is true if you wish to generate a (previously-excluded) taxonomy sitemap (where the first parameter is the taxonomy name).
+
+If a matching sitemap provider is not registered or cannot be found, the second parameter in the `register_sitemap` method must correspond to a callback function which must generate the entire sitemap XML.
+
 To remove a post type from your sitemaps, use the `wp_seo_sitemap_exclude_post_type` filter. The example below removes a post type registered as `recipe`.
 
 ```php

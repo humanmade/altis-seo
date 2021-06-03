@@ -41,6 +41,8 @@ add_filter( 'wpseo_sitemap_exclude_post_type', function ( $excluded, $post_type 
 
 You can similarly exclude specific posts, taxonomies or authors, using built in filters in Yoast SEO.
 
+## Adding Additional Sitemaps
+
 If you need to add additional sitemaps to the index, this can be done with the `wpseo_sitemap_index` filter. This filter allows you to add additional XML Sitemap URLs to the index.
 
 ```php

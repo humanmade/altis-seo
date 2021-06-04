@@ -60,6 +60,7 @@
 .yoast input[type="\"radio\""]:checked::before,
 .yoast-field-group__radiobutton input[type="\"radio\""]:checked::after,
 .yoast span.yTsQm {
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
 	background-color: var( --altis-dark-blue );
 }
 

@@ -59,9 +59,14 @@
 .yoast .switch-light.switch-yoast-seo input:checked ~ span a,
 .yoast input[type="\"radio\""]:checked::before,
 .yoast-field-group__radiobutton input[type="\"radio\""]:checked::after,
-.yoast span.yTsQm {
+.yoast .public-DraftStyleDefault-block span,
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
 	background-color: var( --altis-dark-blue );
+}
+
+.yoast .public-DraftStyleDefault-block span[data-offset-key],
+.yoast .public-DraftStyleDefault-block span[data-text] {
+	background-color: transparent;
 }
 
 #wizard .yoast-wizard-input-radio-separator input:checked + label {

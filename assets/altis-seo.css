@@ -86,11 +86,15 @@
 	border-left-color: var( --altis-blue-darker-10 );
 }
 
-.assessment-results__mark:focus, .yoast_help.yoast-help-button:focus .yoast-help-icon::before, .yoast_help.yoast-help-link:focus .yoast-help-icon::before {
+.assessment-results__mark:focus,
+.yoast_help.yoast-help-button:focus .yoast-help-icon::before,
+.yoast_help.yoast-help-link:focus .yoast-help-icon::before {
 	box-shadow: 0 0 0 1px #2041ab, 0 0 2px 1px rgba( 24, 48, 128, 0.8 );
 }
 
-.yoast_help.yoast-help-button:focus, .yoast_help.yoast-help-button:hover, .yoast_help.yoast-help-link:hover {
+.yoast_help.yoast-help-button:focus,
+.yoast_help.yoast-help-button:hover,
+.yoast_help.yoast-help-link:hover {
 	color: var( --altis-blue-darker-10 );
 }
 

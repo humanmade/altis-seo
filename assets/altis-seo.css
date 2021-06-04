@@ -40,6 +40,11 @@
 	max-width: 100%;
 }
 
+.wpseo-metabox-content .wpseo-schema-icon {
+	-webkit-filter: hue-rotate( 40deg );
+	filter: hue-rotate( 40deg );
+}
+
 .wpseo-metabox-menu ul li a {
 	color: var( --altis-blue );
 }

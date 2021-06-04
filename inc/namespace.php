@@ -50,6 +50,7 @@ function bootstrap( Module $module ) {
 
 	// CSS overrides.
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_yoast_css_overrides', 11 );
+	add_action( 'wpseo_configuration_wizard_head', __NAMESPACE__ . '\\override_wizard_styles' );
 }
 
 /**
@@ -237,5 +238,16 @@ function robots_txt( string $output ) : string {
  * Enqueue CSS.
  */
 function enqueue_yoast_css_overrides() {
-	wp_enqueue_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/altis-seo.css', [], '2021-06-03' );
+	wp_enqueue_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/altis-seo.css', [], '2021-06-04' );
+}
+
+/**
+ * Override the Yoast wizard styles.
+ *
+ * The Yoast setup wizard bails early, before our styles are loaded, but we can
+ * hook into their action to load in our style overrides.
+ */
+function override_wizard_styles() {
+	wp_register_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/global-styles.css', [], '2021-06-04' );
+	wp_print_styles( 'altis-seo' );
 }

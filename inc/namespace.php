@@ -45,6 +45,9 @@ function bootstrap( Module $module ) {
 	// Load Yoast SEO late in case WP SEO Premium is installed as a plugin or mu-plugin.
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_wpseo', 1 );
 
+	// Remove Yoast SEO dashboard widget.
+	add_action( 'admin_init', __NAMESPACE__ . '\\remove_yoast_dashboard_widget' );
+
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
 }
@@ -201,6 +204,17 @@ function configure_sitemaps( $provider, string $name ) {
 	}
 
 	return $provider;
+}
+
+/**
+ * Remove the Yoast SEO dashboard widget.
+ */
+function remove_yoast_dashboard_widget() {
+	remove_meta_box( 'wpseo-dashboard-overview', 'dashboard', 'normal' );
+
+	// This script & style are enqueued by Yoast.
+	wp_dequeue_script( 'dashboard-widget' );
+	wp_dequeue_style( 'wp-dashboard' );
 }
 
 /**

@@ -234,6 +234,6 @@ function enqueue_yoast_css_overrides() {
  * hook into their action to load in our style overrides.
  */
 function override_wizard_styles() {
-	wp_register_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/global-styles.css', [], '2021-06-04-5' );
+	wp_register_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/global-styles.css', [], '2021-06-04' );
 	wp_print_styles( 'altis-seo' );
 }

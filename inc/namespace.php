@@ -224,7 +224,7 @@ function add_sitemap_index_to_robots( string $output, bool $public ) : string {
  * Enqueue CSS.
  */
 function enqueue_yoast_css_overrides() {
-	wp_enqueue_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/altis-seo.css', [], '2021-06-03' );
+	wp_enqueue_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/altis-seo.css', [], '2021-06-04-5' );
 }
 
 /**

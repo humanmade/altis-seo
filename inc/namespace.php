@@ -38,6 +38,9 @@ function bootstrap( Module $module ) {
 	// Load Yoast SEO late in case WP SEO Premium is installed as a plugin or mu-plugin.
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_wpseo', 1 );
 
+	// Remove Yoast SEO dashboard widget.
+	add_action( 'admin_init', __NAMESPACE__ . '\\remove_yoast_dashboard_widget' );
+
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
 
@@ -46,6 +49,7 @@ function bootstrap( Module $module ) {
 
 	// CSS overrides.
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_yoast_css_overrides', 11 );
+	add_action( 'wpseo_configuration_wizard_head', __NAMESPACE__ . '\\override_wizard_styles' );
 }
 
 /**
@@ -221,4 +225,15 @@ function add_sitemap_index_to_robots( string $output, bool $public ) : string {
  */
 function enqueue_yoast_css_overrides() {
 	wp_enqueue_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/altis-seo.css', [], '2021-06-03' );
+}
+
+/**
+ * Override the Yoast wizard styles.
+ *
+ * The Yoast setup wizard bails early, before our styles are loaded, but we can
+ * hook into their action to load in our style overrides.
+ */
+function override_wizard_styles() {
+	wp_register_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/global-styles.css', [], '2021-06-04-5' );
+	wp_print_styles( 'altis-seo' );
 }

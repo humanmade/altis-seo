@@ -50,6 +50,9 @@ function bootstrap( Module $module ) {
 
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
+
+	// CSS overrides.
+	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_yoast_css_overrides', 11 );
 }
 
 /**
@@ -242,4 +245,11 @@ function robots_txt( string $output ) : string {
 	}
 
 	return $output;
+}
+
+/**
+ * Enqueue CSS.
+ */
+function enqueue_yoast_css_overrides() {
+	wp_enqueue_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/altis-seo.css', [], '2021-06-03' );
 }

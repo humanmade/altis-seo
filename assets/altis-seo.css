@@ -40,6 +40,11 @@
 	max-width: 100%;
 }
 
+.wpseo-metabox-content .wpseo-schema-icon {
+	-webkit-filter: hue-rotate( 40deg );
+	filter: hue-rotate( 40deg );
+}
+
 .wpseo-metabox-menu ul li a {
 	color: var( --altis-blue );
 }
@@ -54,8 +59,14 @@
 .yoast .switch-light.switch-yoast-seo input:checked ~ span a,
 .yoast input[type="\"radio\""]:checked::before,
 .yoast-field-group__radiobutton input[type="\"radio\""]:checked::after,
-.yoast span.yTsQm {
+.yoast .public-DraftStyleDefault-block span,
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
 	background-color: var( --altis-dark-blue );
+}
+
+.yoast .public-DraftStyleDefault-block span[data-offset-key],
+.yoast .public-DraftStyleDefault-block span[data-text] {
+	background-color: transparent;
 }
 
 #wizard .yoast-wizard-input-radio-separator input:checked + label {
@@ -73,6 +84,18 @@
 
 #yoast-warnings-active .yoast-notification {
 	border-left-color: var( --altis-blue-darker-10 );
+}
+
+.assessment-results__mark:focus,
+.yoast_help.yoast-help-button:focus .yoast-help-icon::before,
+.yoast_help.yoast-help-link:focus .yoast-help-icon::before {
+	box-shadow: 0 0 0 1px #2041ab, 0 0 2px 1px rgba( 24, 48, 128, 0.8 );
+}
+
+.yoast_help.yoast-help-button:focus,
+.yoast_help.yoast-help-button:hover,
+.yoast_help.yoast-help-link:hover {
+	color: var( --altis-blue-darker-10 );
 }
 
 /* SEO Setup Wizard */

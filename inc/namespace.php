@@ -88,6 +88,17 @@ function load_wpseo() {
 }
 
 /**
+ * Remove the Yoast SEO dashboard widget.
+ */
+function remove_yoast_dashboard_widget() {
+	remove_meta_box( 'wpseo-dashboard-overview', 'dashboard', 'normal' );
+
+	// This script & style are enqueued by Yoast.
+	wp_dequeue_script( 'dashboard-widget' );
+	wp_dequeue_style( 'wp-dashboard' );
+}
+
+/**
  * Load the SEO metadata plugin.
  *
  * @return void

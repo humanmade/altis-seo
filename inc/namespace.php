@@ -88,14 +88,7 @@ function load_wpseo() {
 		return;
 	}
 
-	// Define a fake WP SEO Premium File value if we don't have WP SEO Premium installed. This hides some of the upsell UI.
-	if ( ! class_exists( 'WPSEO_Premium' ) ) {
-		if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
-			define( 'WPSEO_PREMIUM_FILE', $wpseo_file );
-			define( 'WPSEO_PREMIUM_VERSION', Altis\get_version() );
-		}
-		require_once $wpseo_file;
-	}
+	require_once Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo/wp-seo.php';
 }
 
 /**

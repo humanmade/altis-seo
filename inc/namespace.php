@@ -284,5 +284,5 @@ function hide_yoast_premium_social_previews() {
 		display:none;
 	}';
 
-	echo "<style>$styles</style>";
+	echo "<style>$styles</style>"; // phpcs:ignore HM.Security.EscapeOutput.OutputNotEscaped
 }

@@ -84,7 +84,9 @@ function is_yoast_premium() : bool {
  * Load Yoast SEO.
  */
 function load_wpseo() {
-	$wpseo_file = Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo/wp-seo.php';
+	if ( is_yoast_premium() ) {
+		return;
+	}
 
 	// Define a fake WP SEO Premium File value if we don't have WP SEO Premium installed. This hides some of the upsell UI.
 	if ( ! class_exists( 'WPSEO_Premium' ) ) {

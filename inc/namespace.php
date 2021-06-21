@@ -41,6 +41,9 @@ function bootstrap( Module $module ) {
 	// Remove Yoast SEO dashboard widget.
 	add_action( 'admin_init', __NAMESPACE__ . '\\remove_yoast_dashboard_widget' );
 
+	// Remove the Yoast Premium submenu page.
+	add_action( 'admin_init', __NAMESPACE__ . '\\remove_yoast_submenu_page' );
+
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
 
@@ -50,6 +53,7 @@ function bootstrap( Module $module ) {
 	// CSS overrides.
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_yoast_css_overrides', 11 );
 	add_action( 'wpseo_configuration_wizard_head', __NAMESPACE__ . '\\override_wizard_styles' );
+	add_action( 'admin_head', __NAMESPACE__ . '\\hide_yoast_premium_social_previews' );
 }
 
 /**
@@ -72,19 +76,23 @@ function load_redirects() {
 }
 
 /**
+ * Checks if Yoast SEO Premium is installed.
+ *
+ * @return bool
+ */
+function is_yoast_premium() : bool {
+	return class_exists( 'WPSEO_Premium' );
+}
+
+/**
  * Load Yoast SEO.
  */
 function load_wpseo() {
-	$wpseo_file = Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo/wp-seo.php';
-
-	// Define a fake WP SEO Premium File value if we don't have WP SEO Premium installed. This hides some of the upsell UI.
-	if ( ! class_exists( 'WPSEO_Premium' ) ) {
-		if ( ! defined( 'WP_CLI' ) || ! WP_CLI ) {
-			define( 'WPSEO_PREMIUM_FILE', $wpseo_file );
-			define( 'WPSEO_PREMIUM_VERSION', Altis\get_version() );
-		}
-		require_once $wpseo_file;
+	if ( is_yoast_premium() ) {
+		return;
 	}
+
+	require_once Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo/wp-seo.php';
 }
 
 /**
@@ -96,6 +104,13 @@ function remove_yoast_dashboard_widget() {
 	// This script & style are enqueued by Yoast.
 	wp_dequeue_script( 'dashboard-widget' );
 	wp_dequeue_style( 'wp-dashboard' );
+}
+
+/**
+ * Remove the Premium submenu.
+ */
+function remove_yoast_submenu_page() {
+	remove_submenu_page( 'wpseo_dashboard', 'wpseo_licenses' );
 }
 
 /**
@@ -247,4 +262,37 @@ function enqueue_yoast_css_overrides() {
 function override_wizard_styles() {
 	wp_register_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/global-styles.css', [], '2021-06-04-5' );
 	wp_print_styles( 'altis-seo' );
+}
+
+/**
+ * Hide the social previews if Yoast Premium is not active.
+ */
+function hide_yoast_premium_social_previews() {
+	$screen = get_current_screen();
+
+	// Bail early if Yoast Premium is active or if we aren't on a post edit screen.
+	if ( is_yoast_premium() || $screen->base !== 'post' ) {
+		return;
+	}
+
+	/**
+	 * This targets the 6th and 7th components panel in the Yoast
+	 * sidebar, which corresponds to the Facebook and Twitter social
+	 * preview buttons. If Yoast ever adds more panels to this sidebar,
+	 * this will need to be updated.
+	 */
+	$styles = 'div.components-panel div:nth-child(6n) div.yoast.components-panel__body, div.components-panel div:nth-child(7n) div.yoast.components-panel__body {
+		display: none;
+	}';
+
+	/**
+	 * Hide the Social tab in the Yoast Metabox.
+	 * The Google preview is in the basic SEO tab and social previews
+	 * are only available for Yoast SEO Premium.
+	 */
+	$styles .= '.wpseo-metabox-menu .yoast-aria-tabs li:last-of-type {
+		display:none;
+	}';
+
+	echo "<style>$styles</style>"; // phpcs:ignore HM.Security.EscapeOutput.OutputNotEscaped
 }

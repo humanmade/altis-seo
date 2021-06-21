@@ -47,6 +47,9 @@ function bootstrap( Module $module ) {
 	// Remove Helpscout.
 	add_filter( 'wpseo_helpscout_show_beacon', '__return_false' );
 
+	// Hide the HUGE SEO ISSUE warning and disable admin bar menu.
+	add_filter( 'pre_option_wpseo', __NAMESPACE__ . '\\override_yoast_seo_options' );
+
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
 
@@ -204,6 +207,27 @@ function metadata_img_as_tachyon( array $meta, array $img_settings = [] ) : arra
 	}
 
 	return $meta;
+}
+
+/**
+ * Override the Yoast SEO options.
+ *
+ * Disables the Search Engines Discouraged warning on non-production environments and the admin bar menu.
+ *
+ * @param mixed $options The option to retrieve.
+ *
+ * @return array The updated WPSEO options.
+ */
+function override_yoast_seo_options( $options ) : ?array {
+	$options['enable_admin_bar_menu'] = false;
+
+	if ( Altis\get_environment_type() === 'production' ) {
+		return $options;
+	}
+
+	$options['ignore_search_engines_discouraged_notice'] = true;
+
+	return $options;
 }
 
 /**

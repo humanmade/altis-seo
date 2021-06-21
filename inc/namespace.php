@@ -72,6 +72,15 @@ function load_redirects() {
 }
 
 /**
+ * Checks if Yoast SEO Premium is installed.
+ *
+ * @return bool
+ */
+function is_yoast_premium() : bool {
+	return class_exists( 'WPSEO_Premium' );
+}
+
+/**
  * Load Yoast SEO.
  */
 function load_wpseo() {

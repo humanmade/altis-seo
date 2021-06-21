@@ -50,6 +50,7 @@ function bootstrap( Module $module ) {
 	// CSS overrides.
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_yoast_css_overrides', 11 );
 	add_action( 'wpseo_configuration_wizard_head', __NAMESPACE__ . '\\override_wizard_styles' );
+	add_action( 'admin_head', __NAMESPACE__ . '\\hide_yoast_premium_social_previews' );
 }
 
 /**
@@ -251,4 +252,27 @@ function enqueue_yoast_css_overrides() {
 function override_wizard_styles() {
 	wp_register_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/global-styles.css', [], '2021-06-04-5' );
 	wp_print_styles( 'altis-seo' );
+}
+
+/**
+ * Hide the social previews if Yoast Premium is not active.
+ */
+function hide_yoast_premium_social_previews() {
+	$screen = get_current_screen();
+
+	// Bail early if Yoast Premium is active or if we aren't on a post edit screen.
+	if ( is_yoast_premium() || $screen->base !== 'post' ) {
+		return;
+	}
+
+	/**
+	 * Hide the Social tab in the Yoast Metabox.
+	 * The Google preview is in the basic SEO tab and social previews
+	 * are only available for Yoast SEO Premium.
+	 */
+	$styles .= '.wpseo-metabox-menu .yoast-aria-tabs li:last-of-type {
+		display:none;
+	}';
+
+	echo "<style>$styles</style>";
 }

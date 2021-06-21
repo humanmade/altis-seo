@@ -44,6 +44,9 @@ function bootstrap( Module $module ) {
 	// Remove the Yoast Premium submenu page.
 	add_action( 'admin_init', __NAMESPACE__ . '\\remove_yoast_submenu_page' );
 
+	// Remove Helpscout.
+	add_filter( 'wpseo_helpscout_show_beacon', '__return_false' );
+
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
 

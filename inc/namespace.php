@@ -266,6 +266,16 @@ function hide_yoast_premium_social_previews() {
 	}
 
 	/**
+	 * This targets the 6th and 7th components panel in the Yoast
+	 * sidebar, which corresponds to the Facebook and Twitter social
+	 * preview buttons. If Yoast ever adds more panels to this sidebar,
+	 * this will need to be updated.
+	 */
+	$styles = 'div.components-panel div:nth-child(6n) div.yoast.components-panel__body, div.components-panel div:nth-child(7n) div.yoast.components-panel__body {
+		display: none;
+	}';
+
+	/**
 	 * Hide the Social tab in the Yoast Metabox.
 	 * The Google preview is in the basic SEO tab and social previews
 	 * are only available for Yoast SEO Premium.

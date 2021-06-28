@@ -121,7 +121,8 @@ function remove_yoast_submenu_page() {
  * @return void
  */
 function load_metadata() {
-	require_once Altis\ROOT_DIR . '/vendor/humanmade/meta-tags/plugin.php';
+	require_once __DIR__ . '/opengraph/class-altis-opengraph-author-presenter.php';
+	require_once __DIR__ . '/opengraph/class-altis-opengraph-section-presenter.php';
 
 	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];
 

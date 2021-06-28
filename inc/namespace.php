@@ -31,10 +31,6 @@ function bootstrap( Module $module ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\Site_Verification\\bootstrap' );
 	}
 
-	if ( Altis\get_config()['modules']['media']['tachyon'] ?? false ) {
-		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\use_tachyon_img_in_metadata' );
-	}
-
 	// Load Yoast SEO late in case WP SEO Premium is installed as a plugin or mu-plugin.
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_wpseo', 1 );
 

@@ -126,6 +126,12 @@ function load_metadata() {
 
 	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];
 
+	add_filter( 'wpseo_frontend_presenters', function ( $presenters ) {
+		$presenters[] = new Altis_Opengraph_Author_Presenter();
+
+		return $presenters;
+	} );
+
 	// Enable / disable plugin features.
 	add_filter( 'hm.metatags.twitter', get_bool_callback( $config['twitter'] ?? true ) );
 	add_filter( 'hm.metatags.opengraph', get_bool_callback( $config['opengraph'] ?? true ) );

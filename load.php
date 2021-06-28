@@ -16,7 +16,6 @@ add_action( 'altis.modules.init', function () {
 		'metadata' => [
 			'opengraph' => true,
 			'twitter' => true,
-			'json-ld' => true,
 			'fallback-image' => false,
 			'social-urls' => [
 				'google' => '',

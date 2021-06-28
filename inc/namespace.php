@@ -43,6 +43,8 @@ function bootstrap( Module $module ) {
 	// Remove Helpscout.
 	add_filter( 'wpseo_helpscout_show_beacon', '__return_false' );
 
+	add_filter( 'pre_option_wpseo_social', __NAMESPACE__ . '\\override_yoast_social_options' );
+
 	// Hide the HUGE SEO ISSUE warning and disable admin bar menu.
 	add_filter( 'pre_option_wpseo', __NAMESPACE__ . '\\override_yoast_seo_options' );
 
@@ -146,70 +148,57 @@ function load_metadata() {
 	} );
 }
 
-/**
- * Add filters to use Tachyon image URLs for metadata images.
- * Image size and crop depend on the social media type.
- */
-function use_tachyon_img_in_metadata() {
-	add_filter( 'hm.metatags.context.default', __NAMESPACE__ . '\\metadata_img_as_tachyon' );
-	add_filter( 'hm.metatags.context.twitter', __NAMESPACE__ . '\\metadata_img_as_tachyon_twitter' );
-	add_filter( 'hm.metatags.context.opengraph', __NAMESPACE__ . '\\metadata_img_as_tachyon_opengraph' );
-}
+function override_yoast_social_options( $options ) : ?array {
+	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];
 
-/**
- * Update twitter metadata to use Tachyon img URL.
- *
- * @param array $meta Twitter metadata.
- *
- * @return array Twitter metadata with image using Tachyon URL, if any.
- */
-function metadata_img_as_tachyon_twitter( array $meta ) : array {
-	return metadata_img_as_tachyon( $meta, [
-		'resize' => '1200,600', // crop.
-	] );
-}
+	$options['opengraph'] = $config['opengraph'];
+	$options['twitter'] = $config['twitter'];
 
-/**
- * Update opengraph metadata to use Tachyon img URL.
- *
- * @param array $meta opengraph metadata.
- *
- * @return array opengraph metadata with image using Tachyon URL, if any.
- */
-function metadata_img_as_tachyon_opengraph( array $meta ) : array {
-	return metadata_img_as_tachyon( $meta, [
-		'fit' => '1200,627', // no crop.
-	] );
-}
-
-/**
- * Update metadata image URL to use Tachyon URL with specified image settings.
- *
- * @param array $meta          Metadata per social media type.
- * @param array $img_settings Image settings: size and crop to be used in Tachyon URL.
- *
- * @return array Metadata with updated image URL using Tachyon, if an image is specified.
- */
-function metadata_img_as_tachyon( array $meta, array $img_settings = [] ) : array {
-	// Stop - no image for metadata.
-	if ( ! isset( $meta['image'] ) ) {
-		return $meta;
+	if ( $config['social-urls']['facebook'] ) {
+		$options['facebook_site'] = $config['social-urls']['facebook'];
 	}
 
-	// Default image settings.
-	$img_settings = $img_settings ?: [ 'fit' => '1200,1200' ]; // no crop.
-
-	// Already a Tachyon enabled image URL. Add crop params.
-	if ( false !== strpos( $meta['image'], TACHYON_URL ) ) {
-		// Remove any Tachyon query args that might already be set.
-		$meta['image'] = remove_query_arg( [ 'w', 'h', 'fit', 'resize' ], $meta['image'] );
-		$meta['image'] = add_query_arg( $img_settings, $meta['image'] );
-	} else {
-		// Update image URL to use Tachyon.
-		$meta['image'] = tachyon_url( $meta['image'], $img_settings );
+	if ( $config['social-urls']['twitter'] ) {
+		$options['twitter_site'] = $config['social-urls']['twitter'];
 	}
 
-	return $meta;
+	if ( $config['social-urls']['instagram'] ) {
+		$options['instagram_url'] = $config['social-urls']['instagram'];
+	}
+
+	if ( $config['social-urls']['linkedin'] ) {
+		$options['linkedin_url'] = $config['social-urls']['linkedin'];
+	}
+
+	if ( $config['social-urls']['google'] ) {
+		$options['google_url'] = $config['social-urls']['google'];
+	}
+
+	if ( $config['social-urls']['myspace'] ) {
+		$options['myspace_url'] = $config['social-urls']['myspace'];
+	}
+
+	if ( $config['social-urls']['pinterest'] ) {
+		$options['pinterest_url'] = $config['social-urls']['pinterest'];
+	}
+
+	if ( $config['social-urls']['youtube'] ) {
+		$options['youtube_url'] = $config['social-urls']['youtube'];
+	}
+
+	if ( $config['social-urls']['wikipedia'] ) {
+		$options['wikipedia_url'] = $config['social-urls']['wikipedia'];
+	}
+
+	if ( $config['social-urls']['soundcloud'] ) {
+		$options['soundcloud_url'] = $config['social-urls']['soundcloud'];
+	}
+
+	if ( $config['social-urls']['tumblr'] ) {
+		$options['tumblr_url'] = $config['social-urls']['tumblr'];
+	}
+
+	return $options;
 }
 
 /**

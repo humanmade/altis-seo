@@ -153,47 +153,47 @@ function override_yoast_social_options( $options ) : ?array {
 	$options['opengraph'] = $config['opengraph'];
 	$options['twitter'] = $config['twitter'];
 
-	if ( $config['social-urls']['facebook'] ) {
+	if ( ! empty( $config['social-urls']['facebook'] ) ) {
 		$options['facebook_site'] = $config['social-urls']['facebook'];
 	}
 
-	if ( $config['social-urls']['twitter'] ) {
+	if ( ! empty( $config['social-urls']['twitter'] ) ) {
 		$options['twitter_site'] = $config['social-urls']['twitter'];
 	}
 
-	if ( $config['social-urls']['instagram'] ) {
+	if ( ! empty( $config['social-urls']['instagram'] ) ) {
 		$options['instagram_url'] = $config['social-urls']['instagram'];
 	}
 
-	if ( $config['social-urls']['linkedin'] ) {
+	if ( ! empty( $config['social-urls']['linkedin'] ) ) {
 		$options['linkedin_url'] = $config['social-urls']['linkedin'];
 	}
 
-	if ( $config['social-urls']['google'] ) {
+	if ( ! empty( $config['social-urls']['google'] ) ) {
 		$options['google_url'] = $config['social-urls']['google'];
 	}
 
-	if ( $config['social-urls']['myspace'] ) {
+	if ( ! empty( $config['social-urls']['myspace'] ) ) {
 		$options['myspace_url'] = $config['social-urls']['myspace'];
 	}
 
-	if ( $config['social-urls']['pinterest'] ) {
+	if ( ! empty( $config['social-urls']['pinterest'] ) ) {
 		$options['pinterest_url'] = $config['social-urls']['pinterest'];
 	}
 
-	if ( $config['social-urls']['youtube'] ) {
+	if ( ! empty( $config['social-urls']['youtube'] ) ) {
 		$options['youtube_url'] = $config['social-urls']['youtube'];
 	}
 
-	if ( $config['social-urls']['wikipedia'] ) {
+	if ( ! empty( $config['social-urls']['wikipedia'] ) ) {
 		$options['wikipedia_url'] = $config['social-urls']['wikipedia'];
 	}
 
-	if ( $config['social-urls']['soundcloud'] ) {
+	if ( ! empty( $config['social-urls']['soundcloud'] ) ) {
 		$options['soundcloud_url'] = $config['social-urls']['soundcloud'];
 	}
 
-	if ( $config['social-urls']['tumblr'] ) {
+	if ( ! empty( $config['social-urls']['tumblr'] ) ) {
 		$options['tumblr_url'] = $config['social-urls']['tumblr'];
 	}
 

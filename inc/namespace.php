@@ -140,6 +140,13 @@ function load_metadata() {
 	} );
 }
 
+/**
+ * Override SEO Social options from config.
+ *
+ * @param array|null $options Any options set by pre_option_* filters.
+ *
+ * @return array|null The filtered option values.
+ */
 function override_yoast_social_options( $options ) : ?array {
 	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];
 

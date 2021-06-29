@@ -134,17 +134,9 @@ function load_metadata() {
 		return $presenters;
 	} );
 
-	// Enable / disable plugin features.
-	add_filter( 'hm.metatags.twitter', get_bool_callback( $config['twitter'] ?? true ) );
-	add_filter( 'hm.metatags.opengraph', get_bool_callback( $config['opengraph'] ?? true ) );
-	add_filter( 'hm.metatags.json_ld', get_bool_callback( $config['json-ld'] ?? true ) );
-
 	// Set plugin values from config.
 	add_filter( 'hm.metatags.fallback_image', function () use ( $config ) {
 		return $config['fallback-image'] ?? '';
-	} );
-	add_filter( 'hm.metatags.social_urls', function () use ( $config ) {
-		return $config['social-urls'] ?? [];
 	} );
 }
 

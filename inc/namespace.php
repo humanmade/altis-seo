@@ -125,11 +125,14 @@ function remove_yoast_submenu_page() {
 function load_metadata() {
 	require_once __DIR__ . '/opengraph/class-altis-opengraph-author-presenter.php';
 	require_once __DIR__ . '/opengraph/class-altis-opengraph-section-presenter.php';
+	require_once __DIR__ . '/opengraph/class-altis-opengraph-tag-presenter.php';
 
 	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];
 
 	add_filter( 'wpseo_frontend_presenters', function ( $presenters ) {
 		$presenters[] = new Altis_Opengraph_Author_Presenter();
+		$presenters[] = new Altis_Opengraph_Section_Presenter();
+		$presenters[] = new Altis_Opengraph_Tag_Presenter();
 
 		return $presenters;
 	} );

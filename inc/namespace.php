@@ -159,15 +159,20 @@ function opengraph_presenters( array $presenters ) : array {
 /**
  * Override SEO Social options from config.
  *
- * @param array|null $options Any options set by pre_option_* filters.
+ * @param array|bool $options Any options set by pre_option_* filters.
  *
- * @return array|null The filtered option values.
+ * @return array|bool The filtered option values.
  */
-function override_yoast_social_options( $options ) : ?array {
+function override_yoast_social_options( $options ) {
 	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];
 
-	$options['opengraph'] = $config['opengraph'];
-	$options['twitter'] = $config['twitter'];
+	// Bail early if we aren't using config options.
+	if ( empty( array_filter( $config['social-urls'] ) ) ) {
+		return $options;
+	}
+
+	$options['opengraph'] = $config['opengraph'] ?? true;
+	$options['twitter'] = $config['twitter'] ?? true;
 
 	if ( ! empty( $config['social-urls']['facebook'] ) ) {
 		$options['facebook_site'] = $config['social-urls']['facebook'];

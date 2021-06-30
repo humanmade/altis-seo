@@ -12,32 +12,27 @@ In addition the default title tag content can be edited via the admin for each t
 
 Meta tag output is provided out of the box with some sensible defaults for [Opengraph](https://ogp.me), [Twitter cards](https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/abouts-cards) and [Schema.org](https://schema.org) (using JSON+LD).
 
-The meta tags that are output can be extended or modified using the following filters, where `<type>` should be replaced by one of `opengraph`, `twitter` or `json_ld`.
+These can be further configured in the admin via the Yoast SEO Social settings.
 
-- `hm.metatags.context.<type>.front_page`
-- `hm.metatags.context.<type>.singular`
-- `hm.metatags.context.<type>.singular.<post-type>`
-- `hm.metatags.context.<type>.blog` - default blog archive if different to front page
-- `hm.metatags.context.<type>.taxonomy` - taxonomy term archive
-- `hm.metatags.context.<type>.post_type` - post type archive
-- `hm.metatags.context.<type>.author` - author archive
-- `hm.metatags.context.<type>.date` - date archive
-- `hm.metatags.context.<type>.search` - search results
-- `hm.metatags.context.<type>.404`
-- `hm.metatags.context.<type>` - catch all filter for any custom contexts
+For browsers that support it, your social media profile URLs can be defined in the admin (via Yoast SEO Social controls) or via the Altis config.
 
-The filters receive two arguments, `$meta` is the array of data converted into HTML meta tags and `$context` which is an array of data derived from the current request context.
-
-The following is an example that modifies the opengraph output for an "Event" custom post type.
-
-```php
-add_filter( `hm.metatags.context.opengraph.singular.event`, function ( array $meta, array $context ) : array {
-	$meta['type'] = 'event';
-
-	// Start and end times should be in ISO 8601 format.
-	$meta['event:start_time'] = date( 'c', get_post_meta( $context['object_id'], 'event_start', true ) );
-	$meta['event:end_time'] = date( 'c', get_post_meta( $context['object_id'], 'event_end', true ) );
-
-	return $meta;
-}, 10, 2 );
+```json
+{
+	"extra": {
+		"altis": {
+			"modules": {
+				"seo": {
+					"metadata": {
+						"social-urls": {
+							"facebook": "https://facebook.com/YourCompanyProfile",
+							"twitter": "YourTwitterHandle",
+						},
+					}
+				}
+			}
+		}
+	}
+}
 ```
+
+**Note:** Configuring the social URLs via the config will override those settings in the admin.

@@ -132,7 +132,6 @@ function load_metadata() {
 	}
 
 	// Set plugin values from config.
-	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];
 	add_filter( 'hm.metatags.fallback_image', function () use ( $config ) {
 		return $config['fallback-image'] ?? '';
 	} );

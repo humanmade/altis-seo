@@ -123,7 +123,13 @@ function remove_yoast_submenu_page() {
  * @return void
  */
 function load_metadata() {
-	add_filter( 'wpseo_frontend_presenters', __NAMESPACE__ . '\\opengraph_presenters' );
+	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];
+	$options = get_option( 'wpseo_social' );
+
+	// Only add our custom Opengraph presenters if Opengraph is enabled.
+	if ( $config['opengraph'] || $options['opengraph'] ) {
+		add_filter( 'wpseo_frontend_presenters', __NAMESPACE__ . '\\opengraph_presenters' );
+	}
 
 	// Set plugin values from config.
 	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];

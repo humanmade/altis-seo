@@ -27,8 +27,6 @@ add_action( 'altis.modules.init', function () {
 				'pinterest' => '',
 				'youtube' => '',
 				'wikipedia' => '',
-				'soundcloud' => '',
-				'tumblr' => '',
 			],
 		],
 		'site-verification' => true,

@@ -210,14 +210,6 @@ function override_yoast_social_options( $options ) {
 		$options['wikipedia_url'] = $config['social-urls']['wikipedia'];
 	}
 
-	if ( ! empty( $config['social-urls']['soundcloud'] ) ) {
-		$options['soundcloud_url'] = $config['social-urls']['soundcloud'];
-	}
-
-	if ( ! empty( $config['social-urls']['tumblr'] ) ) {
-		$options['tumblr_url'] = $config['social-urls']['tumblr'];
-	}
-
 	return $options;
 }
 

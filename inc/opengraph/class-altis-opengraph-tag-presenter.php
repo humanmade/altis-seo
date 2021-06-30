@@ -16,10 +16,13 @@ class Altis_Opengraph_Tag_Presenter extends Abstract_Indexable_Tag_Presenter {
 	/**
 	 * The tag format including placeholders.
 	 *
-	 * @var string
+	 * @var void|string The opengraph tag if we're currently on a singular page.
 	 */
-
 	public function present() {
+		if ( ! is_single() ) {
+			return;
+		}
+
 		$terms = explode( ',', $this->get() );
 		$tag_format = '<meta property="og:article:tag" content="%s" />';
 		$output = '';
@@ -37,10 +40,6 @@ class Altis_Opengraph_Tag_Presenter extends Abstract_Indexable_Tag_Presenter {
 	 * @return void|string The first tag if we're on a singular post.
 	 */
 	public function get() {
-		if ( ! is_single() ) {
-			return;
-		}
-
 		$terms = get_the_terms( $this->presentation->model->object_id, 'post_tag' );
 
 		if ( ! $terms ) {

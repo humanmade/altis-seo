@@ -35,4 +35,25 @@ For browsers that support it, your social media profile URLs can be defined in t
 }
 ```
 
+Opengraph or Twitter card meta tags can be disabled in the Altis config by passing `false` to their values in the Altis config file. Disabling either Twitter or Opengraph metadata will require you to define your social media URLs in the config file. The example below disables the Twitter metadata but retains the Opengraph metadata and defines the Facebook company profile URL.
+
+```json
+{
+	"extra": {
+		"altis": {
+			"modules": {
+				"seo": {
+					"metadata": {
+						"twitter": false,
+						"social-urls": {
+							"facebook": "https://facebook.com/YourCompanyProfile"
+						},
+					}
+				}
+			}
+		}
+	}
+}
+```
+
 **Note:** Configuring the social URLs via the config will override those settings in the admin.

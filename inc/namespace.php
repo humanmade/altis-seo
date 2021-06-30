@@ -25,6 +25,8 @@ function bootstrap( Module $module ) {
 
 	if ( $settings['metadata'] ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_metadata', 0 );
+
+		// Maybe override Yoast social options.
 		add_filter( 'pre_option_wpseo_social', __NAMESPACE__ . '\\override_yoast_social_options', 9999 );
 
 		// Hide the HUGE SEO ISSUE warning and disable admin bar menu.

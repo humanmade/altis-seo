@@ -55,6 +55,8 @@ function bootstrap( Module $module ) {
 	// Remove Helpscout.
 	add_filter( 'wpseo_helpscout_show_beacon', '__return_false' );
 
+	// Hide the HUGE SEO ISSUE warning and disable admin bar menu.
+	add_filter( 'pre_option_wpseo', __NAMESPACE__ . '\\override_yoast_seo_options' );
 
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );

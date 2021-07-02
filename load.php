@@ -17,6 +17,8 @@ add_action( 'altis.modules.init', function () {
 			'opengraph' => true,
 			'twitter' => true,
 			'fallback-image' => false,
+			'fallback-image-id' => '',
+			'pinterest-verify' => false,
 			'social-urls' => [
 				'facebook' => '',
 				'twitter' => '',
@@ -27,6 +29,12 @@ add_action( 'altis.modules.init', function () {
 				'pinterest' => '',
 				'youtube' => '',
 				'wikipedia' => '',
+			],
+			'opengraph-fallback' => [
+				'og-frontpage-title' => '',
+				'og-frontpage-desc' => '',
+				'og-frontpage-image' => '',
+				'og-frontpage-image-id' => '',
 			],
 		],
 		'site-verification' => true,

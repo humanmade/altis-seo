@@ -163,25 +163,43 @@ function opengraph_presenters( array $presenters ) : array {
 function override_yoast_social_options( $options ) {
 	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];
 
-	// Bail early if we aren't using config options.
-	if ( empty( array_filter( $config['social-urls'] ) ) ) {
-		return $options;
-	}
-
+	// Get Opengraph and Twitter card settings. These default to true if the config has been set but no value given to these options.
 	$options['opengraph'] = $config['opengraph'] ?? true;
 	$options['twitter'] = $config['twitter'] ?? true;
 
-	if ( ! empty( $config['social-urls']['facebook'] ) ) {
-		$options['facebook_site'] = $config['social-urls']['facebook'];
+	$options['pinterestverify'] = $config['pinterest-verify'] ?? '';
+	$options['facebook_site'] = $config['social-urls']['facebook'] ?? '';
+	$options['twitter_site'] = $config['social-urls']['twitter'] ?? '';
+	$options['instagram_url'] = $config['social-urls']['instagram'] ?? '';
+	$options['linkedin_url'] = $config['social-urls']['linkedin'] ?? '';
+	$options['google_url'] = $config['social-urls']['google'] ?? '';
+	$options['myspace_url'] = $config['social-urls']['myspace'] ?? '';
+	$options['pinterest_url'] = $config['social-urls']['pinterest'] ?? '';
+	$options['youtube_url'] = $config['social-urls']['youtube'] ?? '';
+	$options['wikipedia_url'] = $config['social-urls']['wikipedia'] ?? '';
+
+	// Set fallback image based on config.
+	$options['og_default_image'] = $config['fallback-image'] ?? '';
+	$options['og_default_image_id'] = $config['fallback-image-id'] ?? '';
+
+	// If the fallback image ID was not configured, but we do have a fallback image, get the ID from the URL.
+	if ( empty( $options['og_default_image_id'] ) && $options['og_default_image'] ) {
+		$options['og_default_image_id'] = get_image_id_from_url( $config['fallback-image'] );
 	}
 
-	if ( ! empty( $config['social-urls']['twitter'] ) ) {
-		$options['twitter_site'] = $config['social-urls']['twitter'];
+	// These options are only used as fallbacks from the default Home and Front Page SEO options, and possibly not even then.
+	$options['og_frontpage_title'] = $config['opengraph-fallback']['og-frontpage-title'] ?? '';
+	$options['og_frontpage_desc'] = $config['opengraph-fallback']['og-frontpage-desc'] ?? '';
+	$options['og_frontpage_image'] = $config['opengraph-fallback']['og-frontpage-image'] ?? '';
+	$options['og_frontpage_image_id'] = $config['opengraph-fallback']['og-frontpage-image-id'] ?? '';
+
+	// If the frontpage image ID was not configured but we do have a frontpage image, get the ID from the url.
+	if ( empty( $options['og_frontpage_image_id'] ) && $options['og_frontpage_image'] ) {
+		$options['og_frontpage_image_id'] = get_image_id_from_url( $config['opengraph-fallback']['og-frontpage-image'] );
 	}
 
-	if ( ! empty( $config['social-urls']['instagram'] ) ) {
-		$options['instagram_url'] = $config['social-urls']['instagram'];
-	}
+	return $options;
+}
 
 	if ( ! empty( $config['social-urls']['linkedin'] ) ) {
 		$options['linkedin_url'] = $config['social-urls']['linkedin'];

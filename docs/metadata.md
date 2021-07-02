@@ -14,7 +14,7 @@ Meta tag output is provided out of the box with some sensible defaults for [Open
 
 These can be further configured in the admin via the Yoast SEO Social settings.
 
-For browsers that support it, your social media profile URLs can be defined in the admin (via Yoast SEO Social controls) or via the Altis config.
+For social networks that support it, your social media profile URLs can be defined in the admin (via Yoast SEO Social controls) or via the Altis config.
 
 ```json
 {

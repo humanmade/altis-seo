@@ -153,9 +153,9 @@ function opengraph_presenters( array $presenters ) : array {
 	require_once __DIR__ . '/opengraph/class-altis-opengraph-section-presenter.php';
 	require_once __DIR__ . '/opengraph/class-altis-opengraph-tag-presenter.php';
 
-	$presenters[] = new Altis_Opengraph_Author_Presenter();
-	$presenters[] = new Altis_Opengraph_Section_Presenter();
-	$presenters[] = new Altis_Opengraph_Tag_Presenter();
+	$presenters[] = new Opengraph\Altis_Opengraph_Author_Presenter();
+	$presenters[] = new Opengraph\Altis_Opengraph_Section_Presenter();
+	$presenters[] = new Opengraph\Altis_Opengraph_Tag_Presenter();
 
 	return $presenters;
 }

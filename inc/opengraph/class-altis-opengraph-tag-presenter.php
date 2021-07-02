@@ -5,7 +5,7 @@
  * @package altis/seo
  */
 
-namespace Altis\SEO;
+namespace Altis\SEO\Opengraph;
 
 use Yoast\WP\SEO\Presenters\Abstract_Indexable_Tag_Presenter;
 

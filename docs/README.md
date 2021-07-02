@@ -19,6 +19,8 @@ The following JSON is the default configuration for the module and can be overri
 						"opengraph": true,
 						"twitter": true,
 						"fallback-image": false,
+						"fallback-image-id": "",
+						"pinterest-verify": false,
 						"social-urls": {
 							"facebook": "",
 							"twitter": "",
@@ -30,6 +32,12 @@ The following JSON is the default configuration for the module and can be overri
 							"youtube": "",
 							"wikipedia": ""
 						},
+						"opengraph-fallback": {
+							"og-frontpage-title": "",
+							"og-frontpage-desc": "",
+							"og-frontpage-image": "",
+							"og-frontpage-image-id": ""
+						}
 					},
 					"redirects": true
 				}

@@ -240,7 +240,7 @@ function get_image_id_from_url( string $url ) {
 	$url = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $url );
 
 	$image = $wpdb->get_col( $wpdb->prepare(
-		"SELECT ID FROM $wpdb->posts WHERE guid='%s';",
+		"SELECT ID FROM $wpdb->posts WHERE guid=%s;",
 		$url
 	) );
 

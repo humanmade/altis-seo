@@ -220,12 +220,31 @@ function should_override_metadata_options() : bool {
 	$default_config = apply_filters( 'altis.config.default', [] )['modules']['seo']['metadata'];
 
 	// If the config matches the default, we aren't overriding metadata options.
-	if ( empty( array_diff_assoc( $config, $default_config ) ) ) {
+	if ( empty( config_diff( $config, $default_config ) ) ) {
 		return false;
 	}
 
 	// If any changes have been made to the metadata config, they will override the default options.
 	return true;
+}
+
+/**
+ * Determine the difference between two associative arrays by serializing the arrays and comparing them.
+ *
+ * @link https://stackoverflow.com/a/22355153/11710741
+ *
+ * @param array $config The array to compare, e.g. a config value.
+ * @param array $default_config The array to compare against, e.g. the default config.
+ *
+ * @return array The difference between the two arrays.
+ */
+function config_diff( array $config, array $default_config ) : array {
+	return array_map( 'unserialize',
+		array_diff(
+			array_map( 'serialize', $config ),
+			array_map( 'serialize', $default_config )
+		)
+	);
 }
 
 /**

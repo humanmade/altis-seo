@@ -29,14 +29,13 @@ function bootstrap( Module $module ) {
 		if ( should_override_metadata_options() ) {
 			add_filter( 'pre_option_wpseo_social', __NAMESPACE__ . '\\override_yoast_social_options' );
 
-			// Remove the Yoast SEO Social page
+			// Remove the Yoast SEO Social page.
 			add_action( 'admin_menu', function() {
 				remove_submenu_page( 'wpseo_dashboard', 'wpseo_social' );
 			} );
 
 			add_action( 'admin_notices', __NAMESPACE__ . '\\social_options_overridden_notice' );
 		}
-
 	}
 
 	if ( $settings['site-verification'] ) {
@@ -241,7 +240,8 @@ function get_image_id_from_url( string $url ) {
 	$url = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $url );
 
 	$image = $wpdb->get_col( $wpdb->prepare(
-		"SELECT ID FROM $wpdb->posts WHERE guid='%s';",
+		'SELECT ID FROM %1$s WHERE guid="%2$s";',
+		$wpdb->posts,
 		$url
 	) );
 

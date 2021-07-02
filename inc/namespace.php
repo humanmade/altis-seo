@@ -129,7 +129,7 @@ function load_metadata() {
 	$options = get_option( 'wpseo_social' );
 
 	// Only add our custom Opengraph presenters if Opengraph is enabled.
-	if ( $config['opengraph'] || $options['opengraph'] ) {
+	if ( ( isset( $config['opengraph'] ) && $config['opengraph'] === true ) || $options['opengraph'] ) {
 		add_filter( 'wpseo_frontend_presenters', __NAMESPACE__ . '\\opengraph_presenters' );
 	}
 

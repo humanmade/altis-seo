@@ -26,11 +26,17 @@ function bootstrap( Module $module ) {
 	if ( $settings['metadata'] ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_metadata', 0 );
 
-		// Maybe override Yoast social options.
-		add_filter( 'pre_option_wpseo_social', __NAMESPACE__ . '\\override_yoast_social_options', 9999 );
+		if ( should_override_metadata_options() ) {
+			add_filter( 'pre_option_wpseo_social', __NAMESPACE__ . '\\override_yoast_social_options' );
 
-		// Hide the HUGE SEO ISSUE warning and disable admin bar menu.
-		add_filter( 'pre_option_wpseo', __NAMESPACE__ . '\\override_yoast_seo_options' );
+			// Remove the Yoast SEO Social page
+			add_action( 'admin_menu', function() {
+				remove_submenu_page( 'wpseo_dashboard', 'wpseo_social' );
+			} );
+
+			add_action( 'admin_notices', __NAMESPACE__ . '\\social_options_overridden_notice' );
+		}
+
 	}
 
 	if ( $settings['site-verification'] ) {

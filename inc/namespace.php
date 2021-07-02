@@ -132,11 +132,6 @@ function load_metadata() {
 	if ( ( isset( $config['opengraph'] ) && $config['opengraph'] === true ) || $options['opengraph'] ) {
 		add_filter( 'wpseo_frontend_presenters', __NAMESPACE__ . '\\opengraph_presenters' );
 	}
-
-	// Set plugin values from config.
-	add_filter( 'hm.metatags.fallback_image', function () use ( $config ) {
-		return $config['fallback-image'] ?? '';
-	} );
 }
 
 /**

@@ -221,19 +221,27 @@ function should_override_metadata_options() : bool {
 	return true;
 }
 
-	if ( ! empty( $config['social-urls']['pinterest'] ) ) {
-		$options['pinterest_url'] = $config['social-urls']['pinterest'];
+/**
+ * Get a WordPress image ID by the URL.
+ *
+ * @param string $url URL of the uploaded image.
+ *
+ * @return int|string Either the ID of the image or an empty string if no matching ID was found.
+ */
+function get_image_id_from_url( string $url ) {
+	global $wpdb;
+	$url = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $url );
+
+	$image = $wpdb->get_col( $wpdb->prepare(
+		"SELECT ID FROM $wpdb->posts WHERE guid='%s';",
+		$url
+	) );
+
+	if ( ! empty( $image ) ) {
+		return $image[0];
 	}
 
-	if ( ! empty( $config['social-urls']['youtube'] ) ) {
-		$options['youtube_url'] = $config['social-urls']['youtube'];
-	}
-
-	if ( ! empty( $config['social-urls']['wikipedia'] ) ) {
-		$options['wikipedia_url'] = $config['social-urls']['wikipedia'];
-	}
-
-	return $options;
+	return '';
 }
 
 /**

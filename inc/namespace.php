@@ -201,17 +201,25 @@ function override_yoast_social_options( $options ) {
 	return $options;
 }
 
-	if ( ! empty( $config['social-urls']['linkedin'] ) ) {
-		$options['linkedin_url'] = $config['social-urls']['linkedin'];
+/**
+ * Check if we should override the metadata options.
+ *
+ * Compares the SEO metadata options saved in the config file with the default values. If anything has been changed, returns true.
+ *
+ * @return bool True if metadata values have been saved.
+ */
+function should_override_metadata_options() : bool {
+	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];
+	$default_config = apply_filters( 'altis.config.default', [] )['modules']['seo']['metadata'];
+
+	// If the config matches the default, we aren't overriding metadata options.
+	if ( empty( array_diff_assoc( $config, $default_config ) ) ) {
+		return false;
 	}
 
-	if ( ! empty( $config['social-urls']['google'] ) ) {
-		$options['google_url'] = $config['social-urls']['google'];
-	}
-
-	if ( ! empty( $config['social-urls']['myspace'] ) ) {
-		$options['myspace_url'] = $config['social-urls']['myspace'];
-	}
+	// If any changes have been made to the metadata config, they will override the default options.
+	return true;
+}
 
 	if ( ! empty( $config['social-urls']['pinterest'] ) ) {
 		$options['pinterest_url'] = $config['social-urls']['pinterest'];

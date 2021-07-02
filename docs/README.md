@@ -26,7 +26,6 @@ The following JSON is the default configuration for the module and can be overri
 							"twitter": "",
 							"instagram": "",
 							"linkedin": "",
-							"google": "",
 							"myspace": "",
 							"pinterest": "",
 							"youtube": "",

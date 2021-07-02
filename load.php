@@ -24,7 +24,6 @@ add_action( 'altis.modules.init', function () {
 				'twitter' => '',
 				'instagram' => '',
 				'linkedin' => '',
-				'google' => '',
 				'myspace' => '',
 				'pinterest' => '',
 				'youtube' => '',

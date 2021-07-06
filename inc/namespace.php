@@ -175,6 +175,7 @@ function override_yoast_social_options( $options ) {
 	$options['twitter'] = $config['twitter'] ?? true;
 
 	$options['pinterestverify'] = $config['pinterest-verify'] ?? '';
+	$options['og_default_image'] = $config['fallback-image'] ?? '';
 	$options['facebook_site'] = $config['social-urls']['facebook'] ?? '';
 	$options['twitter_site'] = $config['social-urls']['twitter'] ?? '';
 	$options['instagram_url'] = $config['social-urls']['instagram'] ?? '';
@@ -184,9 +185,6 @@ function override_yoast_social_options( $options ) {
 	$options['pinterest_url'] = $config['social-urls']['pinterest'] ?? '';
 	$options['youtube_url'] = $config['social-urls']['youtube'] ?? '';
 	$options['wikipedia_url'] = $config['social-urls']['wikipedia'] ?? '';
-
-	// Set fallback image based on config.
-	$options['og_default_image'] = $config['fallback-image'] ?? '';
 
 	// These options are only used as fallbacks from the default Home and Front Page SEO options, and possibly not even then.
 	$options['og_frontpage_title'] = $config['opengraph-fallback']['og-frontpage-title'] ?? '';

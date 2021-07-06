@@ -29,9 +29,9 @@ add_action( 'altis.modules.init', function () {
 				'wikipedia' => '',
 			],
 			'opengraph-fallback' => [
-				'og-frontpage-title' => '',
-				'og-frontpage-desc' => '',
-				'og-frontpage-image' => '',
+				'frontpage-title' => '',
+				'frontpage-desc' => '',
+				'frontpage-image' => '',
 			],
 		],
 		'site-verification' => true,

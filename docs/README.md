@@ -31,10 +31,9 @@ The following JSON is the default configuration for the module and can be overri
 							"wikipedia": ""
 						},
 						"opengraph-fallback": {
-							"og-frontpage-title": "",
-							"og-frontpage-desc": "",
-							"og-frontpage-image": "",
-							"og-frontpage-image-id": ""
+							"frontpage-title": "",
+							"frontpage-desc": "",
+							"frontpage-image": ""
 						}
 					},
 					"redirects": true

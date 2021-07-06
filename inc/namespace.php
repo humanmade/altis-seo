@@ -187,9 +187,9 @@ function override_yoast_social_options( $options ) {
 	$options['wikipedia_url'] = $config['social-urls']['wikipedia'] ?? '';
 
 	// These options are only used as fallbacks from the default Home and Front Page SEO options, and possibly not even then.
-	$options['og_frontpage_title'] = $config['opengraph-fallback']['og-frontpage-title'] ?? '';
-	$options['og_frontpage_desc'] = $config['opengraph-fallback']['og-frontpage-desc'] ?? '';
-	$options['og_frontpage_image'] = $config['opengraph-fallback']['og-frontpage-image'] ?? '';
+	$options['og_frontpage_title'] = $config['opengraph-fallback']['frontpage-title'] ?? '';
+	$options['og_frontpage_desc'] = $config['opengraph-fallback']['frontpage-desc'] ?? '';
+	$options['og_frontpage_image'] = $config['opengraph-fallback']['frontpage-image'] ?? '';
 
 	return $options;
 }

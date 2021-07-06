@@ -149,13 +149,9 @@ function load_metadata() {
  * @return array Updated array of presenters.
  */
 function opengraph_presenters( array $presenters ) : array {
-	require_once __DIR__ . '/opengraph/class-altis-opengraph-author-presenter.php';
-	require_once __DIR__ . '/opengraph/class-altis-opengraph-section-presenter.php';
-	require_once __DIR__ . '/opengraph/class-altis-opengraph-tag-presenter.php';
-
-	$presenters[] = new Opengraph\Altis_Opengraph_Author_Presenter();
-	$presenters[] = new Opengraph\Altis_Opengraph_Section_Presenter();
-	$presenters[] = new Opengraph\Altis_Opengraph_Tag_Presenter();
+	$presenters[] = new Opengraph\Author_Presenter();
+	$presenters[] = new Opengraph\Section_Presenter();
+	$presenters[] = new Opengraph\Tag_Presenter();
 
 	return $presenters;
 }

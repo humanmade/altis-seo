@@ -18,6 +18,9 @@
         "files": [
             "inc/namespace.php",
             "inc/site_verification/namespace.php"
+        ],
+        "classmap": [
+            "inc/opengraph/"
         ]
     },
     "extra": {

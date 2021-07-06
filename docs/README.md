@@ -19,7 +19,6 @@ The following JSON is the default configuration for the module and can be overri
 						"opengraph": true,
 						"twitter": true,
 						"fallback-image": false,
-						"fallback-image-id": "",
 						"pinterest-verify": false,
 						"social-urls": {
 							"facebook": "",

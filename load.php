@@ -17,7 +17,6 @@ add_action( 'altis.modules.init', function () {
 			'opengraph' => true,
 			'twitter' => true,
 			'fallback-image' => false,
-			'fallback-image-id' => '',
 			'pinterest-verify' => false,
 			'social-urls' => [
 				'facebook' => '',

@@ -187,13 +187,11 @@ function override_yoast_social_options( $options ) {
 
 	// Set fallback image based on config.
 	$options['og_default_image'] = $config['fallback-image'] ?? '';
-	$options['og_default_image_id'] = $config['fallback-image-id'] ?? '';
 
 	// These options are only used as fallbacks from the default Home and Front Page SEO options, and possibly not even then.
 	$options['og_frontpage_title'] = $config['opengraph-fallback']['og-frontpage-title'] ?? '';
 	$options['og_frontpage_desc'] = $config['opengraph-fallback']['og-frontpage-desc'] ?? '';
 	$options['og_frontpage_image'] = $config['opengraph-fallback']['og-frontpage-image'] ?? '';
-	$options['og_frontpage_image_id'] = $config['opengraph-fallback']['og-frontpage-image-id'] ?? '';
 
 	return $options;
 }

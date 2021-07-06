@@ -32,7 +32,6 @@ add_action( 'altis.modules.init', function () {
 				'og-frontpage-title' => '',
 				'og-frontpage-desc' => '',
 				'og-frontpage-image' => '',
-				'og-frontpage-image-id' => '',
 			],
 		],
 		'site-verification' => true,

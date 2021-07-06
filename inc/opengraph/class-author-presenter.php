@@ -12,7 +12,7 @@ use Yoast\WP\SEO\Presenters\Abstract_Indexable_Tag_Presenter;
 /**
  * Adds a custom Opengraph Article Author meta tag.
  */
-class Altis_Opengraph_Author_Presenter extends Abstract_Indexable_Tag_Presenter {
+class Author_Presenter extends Abstract_Indexable_Tag_Presenter {
 
 	/**
 	 * The tag format including placeholders.

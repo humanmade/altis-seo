@@ -260,11 +260,18 @@ function social_options_overridden_notice() {
 		return;
 	}
 
-	$classes = 'notice notice-warning is-dismissable';
+	// Bail if we've seen this message once already.
+	if ( wp_cache_get( 'has_displayed_social_notice', 'altis.seo' ) ) {
+		return;
+	}
+
 	$classes = 'notice notice-warning';
 	$message = __( 'Social metadata has been set in the Altis configuration file and cannot be modified in the WordPress admin.', 'altis-seo' );
 
 	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $classes ), esc_html( $message ) );
+
+	// Store a value in the cache to say that we've seen this message once.
+	wp_cache_set( 'has_displayed_social_notice', true, 'altis.seo' );
 }
 
 /**

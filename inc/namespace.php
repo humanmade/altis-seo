@@ -248,29 +248,6 @@ function config_diff( array $config, array $default_config ) : array {
 }
 
 /**
- * Get a WordPress image ID by the URL.
- *
- * @param string $url URL of the uploaded image.
- *
- * @return int|string Either the ID of the image or an empty string if no matching ID was found.
- */
-function get_image_id_from_url( string $url ) {
-	global $wpdb;
-	$url = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $url );
-
-	$image = $wpdb->get_col( $wpdb->prepare(
-		"SELECT ID FROM $wpdb->posts WHERE guid=%s;",
-		$url
-	) );
-
-	if ( ! empty( $image ) ) {
-		return $image[0];
-	}
-
-	return '';
-}
-
-/**
  * Override the Yoast SEO options.
  *
  * Disables the Search Engines Discouraged warning on non-production environments and the admin bar menu.

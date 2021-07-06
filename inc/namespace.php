@@ -261,6 +261,7 @@ function social_options_overridden_notice() {
 	}
 
 	$classes = 'notice notice-warning is-dismissable';
+	$classes = 'notice notice-warning';
 	$message = __( 'Social metadata has been set in the Altis configuration file and cannot be modified in the WordPress admin.', 'altis-seo' );
 
 	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $classes ), esc_html( $message ) );

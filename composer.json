@@ -13,7 +13,7 @@
         "php": ">=7.1",
         "humanmade/wp-seo": "0.14.0",
         "humanmade/hm-redirects": "~0.5.1",
-        "humanmade/meta-tags": "^0.1.6"
+        "humanmade/meta-tags": "^0.1.8"
     },
     "autoload": {
         "files": [

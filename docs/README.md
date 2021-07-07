@@ -18,27 +18,25 @@ The following JSON is the default configuration for the module and can be overri
 					"metadata": {
 						"opengraph": true,
 						"twitter": true,
-						"json-ld": true,
-						"fallback-image": "",
+						"fallback-image": false,
+						"pinterest-verify": false,
 						"social-urls": {
-							"google": "",
 							"facebook": "",
 							"twitter": "",
 							"instagram": "",
-							"youtube": "",
 							"linkedin": "",
 							"myspace": "",
 							"pinterest": "",
-							"soundcloud": "",
-							"tumblr": "",
+							"youtube": "",
+							"wikipedia": ""
 						},
+						"opengraph-fallback": {
+							"frontpage-title": "",
+							"frontpage-desc": "",
+							"frontpage-image": ""
+						}
 					},
-					"redirects": true,
-					"xml-sitemaps": {
-						"posts": true,
-						"taxonomies": true,
-						"users": true
-					}
+					"redirects": true
 				}
 			}
 		}

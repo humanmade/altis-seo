@@ -25,14 +25,21 @@ function bootstrap( Module $module ) {
 
 	if ( $settings['metadata'] ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_metadata', 0 );
+
+		if ( should_override_metadata_options() ) {
+			add_filter( 'pre_option_wpseo_social', __NAMESPACE__ . '\\override_yoast_social_options' );
+
+			// Remove the Yoast SEO Social page.
+			add_action( 'admin_menu', function() {
+				remove_submenu_page( 'wpseo_dashboard', 'wpseo_social' );
+			} );
+
+			add_action( 'admin_notices', __NAMESPACE__ . '\\social_options_overridden_notice' );
+		}
 	}
 
 	if ( $settings['site-verification'] ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\Site_Verification\\bootstrap' );
-	}
-
-	if ( Altis\get_config()['modules']['media']['tachyon'] ?? false ) {
-		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\use_tachyon_img_in_metadata' );
 	}
 
 	// Load Yoast SEO late in case WP SEO Premium is installed as a plugin or mu-plugin.
@@ -125,88 +132,101 @@ function remove_yoast_submenu_page() {
  * @return void
  */
 function load_metadata() {
-	require_once Altis\ROOT_DIR . '/vendor/humanmade/meta-tags/plugin.php';
+	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];
+	$options = get_option( 'wpseo_social' );
 
+	// Only add our custom Opengraph presenters if Opengraph is enabled.
+	if ( ( isset( $config['opengraph'] ) && $config['opengraph'] === true ) || $options['opengraph'] ) {
+		add_filter( 'wpseo_frontend_presenters', __NAMESPACE__ . '\\opengraph_presenters' );
+	}
+}
+
+/**
+ * Add our custom Opengraph presenters to the array of Yoast Opengraph presenters.
+ *
+ * @param array $presenters The array of presenters.
+ *
+ * @return array Updated array of presenters.
+ */
+function opengraph_presenters( array $presenters ) : array {
+	$presenters[] = new Opengraph\Author_Presenter();
+	$presenters[] = new Opengraph\Section_Presenter();
+	$presenters[] = new Opengraph\Tag_Presenter();
+
+	return $presenters;
+}
+
+/**
+ * Override SEO Social options from config.
+ *
+ * @param array|bool $options Any options set by pre_option_* filters.
+ *
+ * @return array|bool The filtered option values.
+ */
+function override_yoast_social_options( $options ) {
 	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];
 
-	// Enable / disable plugin features.
-	add_filter( 'hm.metatags.twitter', get_bool_callback( $config['twitter'] ?? true ) );
-	add_filter( 'hm.metatags.opengraph', get_bool_callback( $config['opengraph'] ?? true ) );
-	add_filter( 'hm.metatags.json_ld', get_bool_callback( $config['json-ld'] ?? true ) );
+	// Get Opengraph and Twitter card settings. These default to true if the config has been set but no value given to these options.
+	$options['opengraph'] = $config['opengraph'] ?? true;
+	$options['twitter'] = $config['twitter'] ?? true;
 
-	// Set plugin values from config.
-	add_filter( 'hm.metatags.fallback_image', function () use ( $config ) {
-		return $config['fallback-image'] ?? '';
-	} );
-	add_filter( 'hm.metatags.social_urls', function () use ( $config ) {
-		return $config['social-urls'] ?? [];
-	} );
+	$options['pinterestverify'] = $config['pinterest-verify'] ?? '';
+	$options['og_default_image'] = $config['fallback-image'] ?? '';
+	$options['facebook_site'] = $config['social-urls']['facebook'] ?? '';
+	$options['twitter_site'] = $config['social-urls']['twitter'] ?? '';
+	$options['instagram_url'] = $config['social-urls']['instagram'] ?? '';
+	$options['linkedin_url'] = $config['social-urls']['linkedin'] ?? '';
+	$options['google_url'] = $config['social-urls']['google'] ?? '';
+	$options['myspace_url'] = $config['social-urls']['myspace'] ?? '';
+	$options['pinterest_url'] = $config['social-urls']['pinterest'] ?? '';
+	$options['youtube_url'] = $config['social-urls']['youtube'] ?? '';
+	$options['wikipedia_url'] = $config['social-urls']['wikipedia'] ?? '';
+
+	// These options are only used as fallbacks from the default Home and Front Page SEO options, and possibly not even then.
+	$options['og_frontpage_title'] = $config['opengraph-fallback']['frontpage-title'] ?? '';
+	$options['og_frontpage_desc'] = $config['opengraph-fallback']['frontpage-desc'] ?? '';
+	$options['og_frontpage_image'] = $config['opengraph-fallback']['frontpage-image'] ?? $options['og_default_image']; // Fall back to the default image if the frontpage image isn't set.
+
+	return $options;
 }
 
 /**
- * Add filters to use Tachyon image URLs for metadata images.
- * Image size and crop depend on the social media type.
+ * Check if we should override the metadata options.
+ *
+ * Compares the SEO metadata options saved in the config file with the default values. If anything has been changed, returns true.
+ *
+ * @return bool True if metadata values have been saved.
  */
-function use_tachyon_img_in_metadata() {
-	add_filter( 'hm.metatags.context.default', __NAMESPACE__ . '\\metadata_img_as_tachyon' );
-	add_filter( 'hm.metatags.context.twitter', __NAMESPACE__ . '\\metadata_img_as_tachyon_twitter' );
-	add_filter( 'hm.metatags.context.opengraph', __NAMESPACE__ . '\\metadata_img_as_tachyon_opengraph' );
-}
+function should_override_metadata_options() : bool {
+	$config = Altis\get_config()['modules']['seo']['metadata'] ?? [];
+	$default_config = apply_filters( 'altis.config.default', [] )['modules']['seo']['metadata'];
 
-/**
- * Update twitter metadata to use Tachyon img URL.
- *
- * @param array $meta Twitter metadata.
- *
- * @return array Twitter metadata with image using Tachyon URL, if any.
- */
-function metadata_img_as_tachyon_twitter( array $meta ) : array {
-	return metadata_img_as_tachyon( $meta, [
-		'resize' => '1200,600', // crop.
-	] );
-}
-
-/**
- * Update opengraph metadata to use Tachyon img URL.
- *
- * @param array $meta opengraph metadata.
- *
- * @return array opengraph metadata with image using Tachyon URL, if any.
- */
-function metadata_img_as_tachyon_opengraph( array $meta ) : array {
-	return metadata_img_as_tachyon( $meta, [
-		'fit' => '1200,627', // no crop.
-	] );
-}
-
-/**
- * Update metadata image URL to use Tachyon URL with specified image settings.
- *
- * @param array $meta          Metadata per social media type.
- * @param array $img_settings Image settings: size and crop to be used in Tachyon URL.
- *
- * @return array Metadata with updated image URL using Tachyon, if an image is specified.
- */
-function metadata_img_as_tachyon( array $meta, array $img_settings = [] ) : array {
-	// Stop - no image for metadata.
-	if ( ! isset( $meta['image'] ) ) {
-		return $meta;
+	// If the config matches the default, we aren't overriding metadata options.
+	if ( empty( config_diff( $config, $default_config ) ) ) {
+		return false;
 	}
 
-	// Default image settings.
-	$img_settings = $img_settings ?: [ 'fit' => '1200,1200' ]; // no crop.
+	// If any changes have been made to the metadata config, they will override the default options.
+	return true;
+}
 
-	// Already a Tachyon enabled image URL. Add crop params.
-	if ( false !== strpos( $meta['image'], TACHYON_URL ) ) {
-		// Remove any Tachyon query args that might already be set.
-		$meta['image'] = remove_query_arg( [ 'w', 'h', 'fit', 'resize' ], $meta['image'] );
-		$meta['image'] = add_query_arg( $img_settings, $meta['image'] );
-	} else {
-		// Update image URL to use Tachyon.
-		$meta['image'] = tachyon_url( $meta['image'], $img_settings );
-	}
-
-	return $meta;
+/**
+ * Determine the difference between two associative arrays by serializing the arrays and comparing them.
+ *
+ * @link https://stackoverflow.com/a/22355153/11710741
+ *
+ * @param array $config The array to compare, e.g. a config value.
+ * @param array $default_config The array to compare against, e.g. the default config.
+ *
+ * @return array The difference between the two arrays.
+ */
+function config_diff( array $config, array $default_config ) : array {
+	return array_map( 'unserialize',
+		array_diff(
+			array_map( 'serialize', $config ),
+			array_map( 'serialize', $default_config )
+		)
+	);
 }
 
 /**
@@ -228,6 +248,30 @@ function override_yoast_seo_options( $options ) : ?array {
 	$options['ignore_search_engines_discouraged_notice'] = true;
 
 	return $options;
+}
+
+/**
+ * Render a notice on the Yoast SEO Dashboard page that social settings have been configured in the Altis config.
+ */
+function social_options_overridden_notice() {
+	$screen = get_current_screen();
+
+	if ( $screen->base !== 'toplevel_page_wpseo_dashboard' ) {
+		return;
+	}
+
+	// Bail if we've seen this message once already.
+	if ( wp_cache_get( 'has_displayed_social_notice', 'altis.seo' ) ) {
+		return;
+	}
+
+	$classes = 'notice notice-warning';
+	$message = __( 'Social metadata has been set in the Altis configuration file and cannot be modified in the WordPress admin.', 'altis-seo' );
+
+	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $classes ), esc_html( $message ) );
+
+	// Store a value in the cache to say that we've seen this message once.
+	wp_cache_set( 'has_displayed_social_notice', true, 'altis.seo' );
 }
 
 /**

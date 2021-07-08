@@ -9,6 +9,9 @@ namespace Altis\SEO;
 
 use Altis;
 use Altis\Module;
+use WP_CLI;
+use WP_Query;
+use WP_Site_Query;
 
 /**
  * Bootstrap SEO Module.
@@ -67,6 +70,9 @@ function bootstrap( Module $module ) {
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_yoast_css_overrides', 11 );
 	add_action( 'wpseo_configuration_wizard_head', __NAMESPACE__ . '\\override_wizard_styles' );
 	add_action( 'admin_head', __NAMESPACE__ . '\\hide_yoast_premium_social_previews' );
+
+	// Migrations.
+	add_action( 'altis.migrate', __NAMESPACE__ . '\\do_migrations' );
 }
 
 /**
@@ -367,4 +373,180 @@ function hide_yoast_premium_social_previews() {
 	}';
 
 	echo "<style>$styles</style>"; // phpcs:ignore HM.Security.EscapeOutput.OutputNotEscaped
+}
+
+/**
+ * Run migration functions.
+ *
+ * @return void
+ */
+function do_migrations() : void {
+	migrate_wpseo_to_yoast();
+}
+
+/**
+ * Copy WPSEO settings to Yoast.
+ *
+ * Migration for Altis 7 or lower to 8+.
+ *
+ * @return void
+ */
+function migrate_wpseo_to_yoast() : void {
+	$version = Altis\get_version();
+	if ( $version && version_compare( '8', $version, 'lt' ) ) {
+		return;
+	}
+
+	// WP SEO to Yoast data mappings.
+	$title_tag_mapping = [
+		'#site_name#' => '%%sitename%%',
+		'#site_description#' => '%%sitedesc%%',
+		'#date_published#' => '%%date%%',
+		'#date_modified#' => '%%modified%%',
+		'#author#' => '%%name%%',
+		'#categories#' => '%%category%%',
+		'#tags#' => '%%tag%%',
+		'#term_name#' => '%%term_title%%',
+		'#post_type_singular_name#' => '%%pt_single%%',
+		'#post_type_plural_name#' => '%%pt_plural%%',
+		'#archive_date#' => '%%archive_title%%',
+		'#search_term#' => '%%searchphrase%%',
+		'#thumbnail_url#' => '',
+	];
+
+	$options_mapping = [
+		'home_title' => 'title-home-wpseo',
+		'home_description' => 'metadesc-home-wpseo',
+		'archive_author_title' => 'title-author-wpseo',
+		'archive_author_description' => 'metadesc-author-wpseo',
+		'archive_date_title' => 'title-archive-wpseo',
+		'archive_date_description' => 'metadesc-archive-wpseo',
+		'search_title' => 'title-search-wpseo',
+		'404_title' => 'title-404-wpseo',
+		'single_post_title' => 'title-post',
+		'single_post_description' => 'metadesc-post',
+		'single_page_title' => 'title-page',
+		'single_page_description' => 'metadesc-page',
+		'single_attachment_title' => 'title-attachment',
+		'single_attachment_description' => 'metadesc-attachment',
+	];
+
+	$meta_mapping = [
+		'_meta_title' => '_yoast_wpseo_title',
+		'_meta_description' => '_yoast_wpseo_metadesc',
+		'_meta_keywords' => '_yoast_wpseo_focuskw',
+	];
+
+	// Begin processing.
+	$sites_count = new WP_Site_Query( [ 'count' => true ] );
+	$sites_processed = 0;
+	$sites_page = 0;
+
+	while ( $sites_processed < $sites_count ) {
+
+		// Get sites collection.
+		$sites = new WP_Site_Query( [
+			'number' => 100,
+			'offset' => $sites_page * 100,
+			'fields' => 'ids',
+		] );
+
+		// Set next page.
+		$sites_page++;
+
+		foreach ( $sites as $site_id ) {
+
+			switch_to_blog( $site_id );
+
+			// Handle options.
+			$options = get_option( 'wp-seo' );
+			if ( ! empty( $options ) && is_array( $options ) ) {
+				WP_CLI::log( sprintf( 'Migrating legacy SEO settings for site %d...', $site_id ) );
+
+				$yoast_options = get_option( 'wpseo_titles' );
+				if ( empty( $yoast_options ) || ! is_array( $yoast_options ) ) {
+					$yoast_options = [];
+				}
+
+				foreach ( $options as $name => $value ) {
+					// Ignore if empty.
+					if ( empty( $value ) ) {
+						continue;
+					}
+
+					// Replace variables with Yoast equivalents.
+					$value = str_replace(
+						array_keys( $title_tag_mapping ),
+						array_values( $title_tag_mapping ),
+						$value
+					);
+
+					// Replace remaining hash delimited words with double percents (tag names are the same).
+					$value = preg_replace( '/(?:#([^#\s])+#)/', '%%$1%%', $value );
+
+					// Check how to map this value.
+					if ( isset( $options_mapping[ $name ] ) ) {
+						$yoast_options[ $options_mapping[ $name ] ] = $value;
+					} else {
+						// Dynamic item.
+						preg_match( '/(single|archive)_([a-z_-])_(title|description)/', $name, $matches );
+						$prefix = $matches[2] === 'title' ? 'title' : 'metadesc';
+						if ( $matches[0] === 'single' ) {
+							$yoast_options[ $prefix . '-' . $matches[1] ] = $value;
+						} else {
+							if ( taxonomy_exists( $matches[1] ) ) {
+								$yoast_options[ $prefix . '-tax-' . $matches[1] ] = $value;
+							}
+							if ( post_type_exists( $matches[1] ) ) {
+								$yoast_options[ $prefix . '-ptarchive-' . $matches[1] ] = $value;
+							}
+						}
+					}
+				}
+
+				// Update Yoast options.
+				update_option( 'wpseo_titles', $yoast_options );
+			}
+
+			// Handle post meta.
+			$posts_query_args = [
+				'post_type' => 'any',
+				'post_status' => 'any',
+				'posts_per_page' => 0,
+				'meta_key' => '_meta_title',
+				'meta_compare' => 'EXISTS',
+				'fields' => 'ids',
+			];
+			$posts = new WP_Query( $posts_query_args );
+
+			$posts_query_args['posts_per_page'] = 100;
+			$posts_query_args['paged'] = 1;
+
+			WP_CLI::log( sprintf( 'Migrating legacy SEO metadata for %d posts...', $posts->found_posts ) );
+
+			while ( $posts_query_args['paged'] < $posts->max_num_pages ) {
+
+				$posts = new WP_Query( $posts_query_args );
+				$posts_query_args['paged']++;
+
+				foreach ( $posts->posts as $post_id ) {
+					foreach ( $meta_mapping as $old => $new ) {
+						// Copy post meta data over.
+						$value = get_post_meta( $post_id, $old, true );
+						update_post_meta( $post_id, $new, $value );
+						// Remove old meta data.
+						delete_post_meta( $post_id, $old );
+					}
+				}
+
+				// Prevent objecct cache consuming too much memory.
+				WP_CLI\Utils\wp_clear_object_cache();
+			}
+
+			restore_current_blog();
+
+			// Site processed.
+			$sites_processed++;
+		}
+	}
 }

@@ -11,7 +11,6 @@ use Altis;
 use Altis\Module;
 use WP_CLI;
 use WP_Query;
-use WP_Site_Query;
 
 /**
  * Bootstrap SEO Module.

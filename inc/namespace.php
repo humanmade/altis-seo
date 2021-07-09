@@ -392,11 +392,6 @@ function do_migrations() : void {
  * @return void
  */
 function migrate_wpseo_to_yoast() : void {
-	$version = Altis\get_version();
-	if ( $version && version_compare( '8', $version, 'lt' ) ) {
-		return;
-	}
-
 	// WP SEO to Yoast data mappings.
 	$title_tag_mapping = [
 		'#site_name#' => '%%sitename%%',
@@ -423,12 +418,6 @@ function migrate_wpseo_to_yoast() : void {
 		'archive_date_description' => 'metadesc-archive-wpseo',
 		'search_title' => 'title-search-wpseo',
 		'404_title' => 'title-404-wpseo',
-		'single_post_title' => 'title-post',
-		'single_post_description' => 'metadesc-post',
-		'single_page_title' => 'title-page',
-		'single_page_description' => 'metadesc-page',
-		'single_attachment_title' => 'title-attachment',
-		'single_attachment_description' => 'metadesc-attachment',
 	];
 
 	$meta_mapping = [
@@ -458,11 +447,11 @@ function migrate_wpseo_to_yoast() : void {
 
 			switch_to_blog( $site_id );
 
+			WP_CLI::log( sprintf( 'Migrating legacy SEO settings for site %d...', $site_id ) );
+
 			// Handle options.
 			$options = get_option( 'wp-seo' );
 			if ( ! empty( $options ) && is_array( $options ) ) {
-				WP_CLI::log( sprintf( 'Migrating legacy SEO settings for site %d...', $site_id ) );
-
 				$yoast_options = get_option( 'wpseo_titles' );
 				if ( empty( $yoast_options ) || ! is_array( $yoast_options ) ) {
 					$yoast_options = [];
@@ -482,23 +471,22 @@ function migrate_wpseo_to_yoast() : void {
 					);
 
 					// Replace remaining hash delimited words with double percents (tag names are the same).
-					$value = preg_replace( '/(?:#([^#\s])+#)/', '%%$1%%', $value );
+					$value = preg_replace( '/(?:#([^#\s]+)#)/', '%%$1%%', $value );
 
 					// Check how to map this value.
 					if ( isset( $options_mapping[ $name ] ) ) {
 						$yoast_options[ $options_mapping[ $name ] ] = $value;
-					} else {
+					} elseif ( preg_match( '/^(single|archive)_([a-z_-]+)_(title|description)$/', $name, $matches ) ) {
 						// Dynamic item.
-						preg_match( '/(single|archive)_([a-z_-])_(title|description)/', $name, $matches );
-						$prefix = $matches[2] === 'title' ? 'title' : 'metadesc';
-						if ( $matches[0] === 'single' ) {
-							$yoast_options[ $prefix . '-' . $matches[1] ] = $value;
+						$prefix = $matches[3] === 'title' ? 'title' : 'metadesc';
+						if ( $matches[1] === 'single' ) {
+							$yoast_options[ $prefix . '-' . $matches[2] ] = $value;
 						} else {
-							if ( taxonomy_exists( $matches[1] ) ) {
-								$yoast_options[ $prefix . '-tax-' . $matches[1] ] = $value;
+							if ( taxonomy_exists( $matches[2] ) ) {
+								$yoast_options[ $prefix . '-tax-' . $matches[2] ] = $value;
 							}
-							if ( post_type_exists( $matches[1] ) ) {
-								$yoast_options[ $prefix . '-ptarchive-' . $matches[1] ] = $value;
+							if ( post_type_exists( $matches[2] ) ) {
+								$yoast_options[ $prefix . '-ptarchive-' . $matches[2] ] = $value;
 							}
 						}
 					}
@@ -522,7 +510,7 @@ function migrate_wpseo_to_yoast() : void {
 			$posts_query_args['posts_per_page'] = 100;
 			$posts_query_args['paged'] = 1;
 
-			WP_CLI::log( sprintf( 'Migrating legacy SEO metadata for %d posts...', $posts->found_posts ) );
+			$progress = WP_CLI\Utils\make_progress_bar( 'Copying post meta data', $posts->found_posts );
 
 			while ( $posts_query_args['paged'] < $posts->max_num_pages ) {
 
@@ -533,15 +521,21 @@ function migrate_wpseo_to_yoast() : void {
 					foreach ( $meta_mapping as $old => $new ) {
 						// Copy post meta data over.
 						$value = get_post_meta( $post_id, $old, true );
-						update_post_meta( $post_id, $new, $value );
+						if ( ! empty( $value ) ) {
+							update_post_meta( $post_id, $new, $value );
+						}
 						// Remove old meta data.
 						delete_post_meta( $post_id, $old );
 					}
+
+					$progress->tick();
 				}
 
-				// Prevent objecct cache consuming too much memory.
+				// Prevent object cache consuming too much memory.
 				WP_CLI\Utils\wp_clear_object_cache();
 			}
+
+			$progress->finish();
 
 			restore_current_blog();
 

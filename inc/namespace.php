@@ -427,14 +427,17 @@ function migrate_wpseo_to_yoast() : void {
 	];
 
 	// Begin processing.
-	$sites_count = new WP_Site_Query( [ 'count' => true ] );
+	$sites_count = get_sites( [
+		'count' => true,
+		'number' => -1,
+	] );
 	$sites_processed = 0;
 	$sites_page = 0;
 
 	while ( $sites_processed < $sites_count ) {
 
 		// Get sites collection.
-		$sites = new WP_Site_Query( [
+		$sites = get_sites( [
 			'number' => 100,
 			'offset' => $sites_page * 100,
 			'fields' => 'ids',
@@ -494,6 +497,7 @@ function migrate_wpseo_to_yoast() : void {
 
 				// Update Yoast options.
 				update_option( 'wpseo_titles', $yoast_options );
+				delete_option( 'wp-seo' );
 			}
 
 			// Handle post meta.
@@ -507,35 +511,43 @@ function migrate_wpseo_to_yoast() : void {
 			];
 			$posts = new WP_Query( $posts_query_args );
 
-			$posts_query_args['posts_per_page'] = 100;
-			$posts_query_args['paged'] = 1;
+			if ( $posts->found_posts > 0 ) {
+				$posts_query_args['posts_per_page'] = 100;
+				$posts_query_args['paged'] = 1;
 
-			$progress = WP_CLI\Utils\make_progress_bar( 'Copying post meta data', $posts->found_posts );
+				$progress = WP_CLI\Utils\make_progress_bar( 'Copying post meta data', $posts->found_posts );
 
-			while ( $posts_query_args['paged'] < $posts->max_num_pages ) {
+				while ( $posts_query_args['paged'] <= $posts->max_num_pages ) {
 
-				$posts = new WP_Query( $posts_query_args );
-				$posts_query_args['paged']++;
+					$posts = new WP_Query( $posts_query_args );
+					$posts_query_args['paged']++;
 
-				foreach ( $posts->posts as $post_id ) {
-					foreach ( $meta_mapping as $old => $new ) {
-						// Copy post meta data over.
-						$value = get_post_meta( $post_id, $old, true );
-						if ( ! empty( $value ) ) {
-							update_post_meta( $post_id, $new, $value );
+					foreach ( $posts->posts as $post_id ) {
+						foreach ( $meta_mapping as $old => $new ) {
+							// Copy post meta data over.
+							$value = get_post_meta( $post_id, $old, true );
+							// Handle keywords, Yoast only accepts 1 focus keyword by default so use the 1st.
+							if ( $old === '_meta_keywords' ) {
+								$value = explode( ',', $value );
+								$value = array_map( 'trim', $value );
+								$value = array_shift( $value );
+							}
+							if ( ! empty( $value ) ) {
+								update_post_meta( $post_id, $new, $value );
+							}
+							// Remove old meta data to prevent reprocessing.
+							delete_post_meta( $post_id, $old );
 						}
-						// Remove old meta data.
-						delete_post_meta( $post_id, $old );
+
+						$progress->tick();
 					}
 
-					$progress->tick();
+					// Prevent object cache consuming too much memory.
+					WP_CLI\Utils\wp_clear_object_cache();
 				}
 
-				// Prevent object cache consuming too much memory.
-				WP_CLI\Utils\wp_clear_object_cache();
+				$progress->finish();
 			}
-
-			$progress->finish();
 
 			restore_current_blog();
 

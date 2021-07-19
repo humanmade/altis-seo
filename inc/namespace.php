@@ -57,7 +57,7 @@ function bootstrap( Module $module ) {
 	add_filter( 'wpseo_helpscout_show_beacon', '__return_false' );
 
 	// Hide the HUGE SEO ISSUE warning and disable admin bar menu.
-	add_filter( 'pre_option_wpseo', __NAMESPACE__ . '\\override_yoast_seo_options' );
+	add_filter( 'pre_option_wpseo', __NAMESPACE__ . '\\override_yoast_seo_options', 20 );
 
 	// Read config/robots.txt file into robots.txt route handled by WP.
 	add_filter( 'robots_txt', __NAMESPACE__ . '\\robots_txt', 10 );
@@ -241,9 +241,13 @@ function config_diff( array $config, array $default_config ) : array {
  *
  * @param mixed $options The option to retrieve.
  *
- * @return array The updated WPSEO options.
+ * @return array|false The updated WPSEO options.
  */
-function override_yoast_seo_options( $options ) : ?array {
+function override_yoast_seo_options( $options ) {
+	if ( ! is_array( $options ) ) {
+		return $options;
+	}
+
 	$options['enable_admin_bar_menu'] = false;
 
 	if ( Altis\get_environment_type() === 'production' ) {

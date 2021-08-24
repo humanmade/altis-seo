@@ -9,8 +9,11 @@ namespace Altis\SEO;
 
 use Altis;
 use Altis\Module;
+use WPSEO_Menu;
+use WPSEO_Network_Admin_Menu;
 use WP_CLI;
 use WP_Query;
+use Yoast_Network_Admin;
 
 /**
  * Bootstrap SEO Module.
@@ -46,6 +49,9 @@ function bootstrap( Module $module ) {
 
 	// Load Yoast SEO late in case WP SEO Premium is installed as a plugin or mu-plugin.
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_wpseo', 1 );
+
+	// Patch network activated plugin bootstrapping manually.
+	add_action( 'wpseo_loaded', __NAMESPACE__ . '\\enable_yoast_network_admin' );
 
 	// Remove Yoast SEO dashboard widget.
 	add_action( 'admin_init', __NAMESPACE__ . '\\remove_yoast_dashboard_widget' );
@@ -111,6 +117,27 @@ function load_wpseo() {
 	}
 
 	require_once Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo/wp-seo.php';
+}
+
+/**
+ * Bootstrap network admin features of Yoast SEO.
+ *
+ * This is done because the plugin's built in check for whether it is network
+ * activated relies on `wp_get_active_network_plugins()` which does not
+ * work for plugins loaded from the vendor directory.
+ *
+ * @return void
+ */
+function enable_yoast_network_admin() {
+	if ( is_yoast_premium() ) {
+		return;
+	}
+
+	$network_admin = new Yoast_Network_Admin();
+	$network_admin->register_hooks();
+	$admin_menu = new WPSEO_Menu();
+	$network_admin_menu = new WPSEO_Network_Admin_Menu( $admin_menu );
+	$network_admin_menu->register_hooks();
 }
 
 /**

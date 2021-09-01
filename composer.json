@@ -27,7 +27,8 @@
         "altis": {
             "install-overrides": [
                 "humanmade/hm-redirects",
-                "yoast/wordpress-seo"
+                "yoast/wordpress-seo",
+                "yoast/wordpress-seo-premium"
             ]
         }
     }

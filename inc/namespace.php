@@ -374,7 +374,7 @@ function add_sitemap_index_to_robots( string $output, bool $public ) : string {
  * @return boolean
  */
 function is_altis_admin_color_scheme() : bool {
-	$color_scheme = get_user_meta( get_current_user_id(), 'admin_color', true );
+	$color_scheme = get_user_option( 'admin_color' );
 	if ( ! empty( $color_scheme ) && $color_scheme !== 'altis' ) {
 		return false;
 	}

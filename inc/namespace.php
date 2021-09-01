@@ -354,11 +354,23 @@ function add_sitemap_index_to_robots( string $output, bool $public ) : string {
 }
 
 /**
+ * Check if the current admin color scheme is the Altis default.
+ *
+ * @return boolean
+ */
+function is_altis_admin_color_scheme() : bool {
+	$color_scheme = get_user_meta( get_current_user_id(), 'admin_color', true );
+	if ( ! empty( $color_scheme ) && $color_scheme !== 'altis' ) {
+		return false;
+	}
+	return true;
+}
+
+/**
  * Enqueue CSS.
  */
 function enqueue_yoast_css_overrides() {
-	$color_scheme = get_user_meta( get_current_user_id(), 'admin_color', true );
-	if ( ! empty( $color_scheme ) && $color_scheme !== 'altis' ) {
+	if ( ! is_altis_admin_color_scheme() ) {
 		return;
 	}
 
@@ -372,8 +384,7 @@ function enqueue_yoast_css_overrides() {
  * hook into their action to load in our style overrides.
  */
 function override_wizard_styles() {
-	$color_scheme = get_user_meta( get_current_user_id(), 'admin_color', true );
-	if ( ! empty( $color_scheme ) && $color_scheme !== 'altis' ) {
+	if ( ! is_altis_admin_color_scheme() ) {
 		return;
 	}
 

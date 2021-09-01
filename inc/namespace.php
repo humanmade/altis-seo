@@ -48,7 +48,7 @@ function bootstrap( Module $module ) {
 	}
 
 	// Load Yoast SEO late in case WP SEO Premium is installed as a plugin or mu-plugin.
-	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_wpseo', 1 );
+	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_wpseo', 11 );
 
 	// Patch network activated plugin bootstrapping manually.
 	add_action( 'wpseo_loaded', __NAMESPACE__ . '\\enable_yoast_network_admin' );
@@ -112,11 +112,42 @@ function is_yoast_premium() : bool {
  * Load Yoast SEO.
  */
 function load_wpseo() {
+	require_once Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo/wp-seo.php';
+
+	// Call these automatically as typically they would run on `plugins_loaded` at priority 10.
+	wpseo_load_textdomain();
+	load_yoast_notifications();
+
+	// Load Premium if available.
 	if ( is_yoast_premium() ) {
-		return;
+		load_wpseo_premium();
+	}
+}
+
+/**
+ * Load Yoast SEO Premium.
+ *
+ * @return void
+ */
+function load_wpseo_premium() {
+	if ( ! defined( 'WPSEO_PREMIUM_FILE' ) ) {
+		define( 'WPSEO_PREMIUM_FILE', Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo-premium/wp-seo-premium.php' );
 	}
 
-	require_once Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo/wp-seo.php';
+	if ( ! defined( 'WPSEO_PREMIUM_PATH' ) ) {
+		define( 'WPSEO_PREMIUM_PATH', Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo-premium' );
+	}
+
+	if ( ! defined( 'WPSEO_PREMIUM_BASENAME' ) ) {
+		define( 'WPSEO_PREMIUM_BASENAME', 'wordpress-seo-premium/wp-seo-premium.php' );
+	}
+
+	$data = get_plugin_data( WPSEO_PREMIUM_FILE );
+
+	define( 'WPSEO_PREMIUM_VERSION', $data['Version'] );
+
+	require_once Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo-premium/src/functions.php';
+	YoastSEOPremium();
 }
 
 /**
@@ -129,10 +160,6 @@ function load_wpseo() {
  * @return void
  */
 function enable_yoast_network_admin() {
-	if ( is_yoast_premium() ) {
-		return;
-	}
-
 	$network_admin = new Yoast_Network_Admin();
 	$network_admin->register_hooks();
 	$admin_menu = new WPSEO_Menu();

@@ -130,6 +130,11 @@ function load_wpseo() {
 		define( 'WPSEO_PREMIUM_BASENAME', 'wordpress-seo-premium/wp-seo-premium.php' );
 	}
 
+	// Ensure we have the plugin data function, sometimes not loaded outside of admin contexts.
+	if ( ! function_exists( 'get_plugin_data' ) ) {
+		require_once Altis\ROOT_DIR . '/wordpress/wp-admin/includes/plugin.php';
+	}
+
 	$data = get_plugin_data( WPSEO_PREMIUM_FILE );
 
 	define( 'WPSEO_PREMIUM_VERSION', $data['Version'] );

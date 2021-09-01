@@ -47,8 +47,8 @@ function bootstrap( Module $module ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\Site_Verification\\bootstrap' );
 	}
 
-	// Load Yoast SEO late in case WP SEO Premium is installed as a plugin or mu-plugin.
-	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_wpseo', 11 );
+	// Load Yoast SEO.
+	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_wpseo', 9 );
 
 	// Patch network activated plugin bootstrapping manually.
 	add_action( 'wpseo_loaded', __NAMESPACE__ . '\\enable_yoast_network_admin' );
@@ -114,22 +114,10 @@ function is_yoast_premium() : bool {
 function load_wpseo() {
 	require_once Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo/wp-seo.php';
 
-	// Call these automatically as typically they would run on `plugins_loaded` at priority 10.
-	wpseo_load_textdomain();
-	load_yoast_notifications();
-
-	// Load Premium if available.
-	if ( is_yoast_premium() ) {
-		load_wpseo_premium();
+	if ( ! is_yoast_premium() ) {
+		return;
 	}
-}
 
-/**
- * Load Yoast SEO Premium.
- *
- * @return void
- */
-function load_wpseo_premium() {
 	if ( ! defined( 'WPSEO_PREMIUM_FILE' ) ) {
 		define( 'WPSEO_PREMIUM_FILE', Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo-premium/wp-seo-premium.php' );
 	}

@@ -369,9 +369,26 @@ function add_sitemap_index_to_robots( string $output, bool $public ) : string {
 }
 
 /**
+ * Check if the current admin color scheme is the Altis default.
+ *
+ * @return boolean
+ */
+function is_altis_admin_color_scheme() : bool {
+	$color_scheme = get_user_option( 'admin_color' );
+	if ( ! empty( $color_scheme ) && $color_scheme !== 'altis' ) {
+		return false;
+	}
+	return true;
+}
+
+/**
  * Enqueue CSS.
  */
 function enqueue_yoast_css_overrides() {
+	if ( ! is_altis_admin_color_scheme() ) {
+		return;
+	}
+
 	wp_enqueue_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/altis-seo.css', [], '2021-06-04-5' );
 }
 
@@ -382,6 +399,10 @@ function enqueue_yoast_css_overrides() {
  * hook into their action to load in our style overrides.
  */
 function override_wizard_styles() {
+	if ( ! is_altis_admin_color_scheme() ) {
+		return;
+	}
+
 	wp_register_style( 'altis-seo', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/global-styles.css', [], '2021-06-04-5' );
 	wp_print_styles( 'altis-seo' );
 }

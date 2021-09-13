@@ -11,6 +11,7 @@ use Altis;
 
 add_action( 'altis.modules.init', function () {
 	$default_settings = [
+		'development-mode' => true,
 		'enabled' => true,
 		'redirects' => true,
 		'metadata' => [

@@ -341,9 +341,9 @@ function social_options_overridden_notice() {
  */
 function enable_yoast_development_mode() {
 
-    if ( Altis\get_environment_type() !== 'production' ) {
-        define( 'YOAST_ENVIRONMENT', 'development' );
-    }
+	if ( Altis\get_environment_type() !== 'production' ) {
+		define( 'YOAST_ENVIRONMENT', 'development' );
+	}
 }
 
 /**

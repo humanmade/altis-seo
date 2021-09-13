@@ -48,6 +48,7 @@ The following JSON is the default configuration for the module and can be overri
 ## Developmnt Mode
 
 Yoast SEO includes a _development mode_, this is enabled by default for non-production environments and will _pretty print_ the _yoast-schema-graph_ HTML rather than the minified default.
+
 ## Using Yoast SEO Premium
 
 [Yoast SEO Premium](https://yoast.com/wordpress/plugins/seo/) adds more features and access to Yoast's support team. Altis SEO is configured in such a way that if you own a copy of Yoast SEO Premium, all you need to do is install it as a composer dependency and it will work seamlessly without any additional configuration.

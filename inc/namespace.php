@@ -340,7 +340,6 @@ function social_options_overridden_notice() {
  * Yoast development mode will pretty print the yoast-schema-graph HTML.
  */
 function enable_yoast_development_mode() {
-
 	if ( Altis\get_environment_type() !== 'production' ) {
 		define( 'YOAST_ENVIRONMENT', 'development' );
 	}

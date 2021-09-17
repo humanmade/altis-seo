@@ -14,8 +14,8 @@ The following JSON is the default configuration for the module and can be overri
 		"altis": {
 			"modules": {
 				"seo": {
-					"development-mode": true,
 					"enabled": true,
+					"development-mode": true,
 					"metadata": {
 						"opengraph": true,
 						"twitter": true,
@@ -47,7 +47,7 @@ The following JSON is the default configuration for the module and can be overri
 
 ## Developmnt Mode
 
-Yoast SEO includes a _development mode_, this is enabled by default for non-production environments and will _pretty print_ the _yoast-schema-graph_ HTML rather than the minified default.
+Yoast SEO includes a development mode, this is enabled by default for non-production environments and will pretty print the JSON+LD schema output rather than the minified default.
 
 ## Using Yoast SEO Premium
 

@@ -12,7 +12,6 @@ use Altis;
 add_action( 'altis.modules.init', function () {
 	$default_settings = [
 		'enabled' => true,
-		'development-mode' => true,
 		'redirects' => true,
 		'metadata' => [
 			'opengraph' => true,

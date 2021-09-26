@@ -58,8 +58,8 @@ function bootstrap( Module $module ) {
 
 	// Remove the Yoast Premium submenu page.
 	add_action( 'admin_init', __NAMESPACE__ . '\\remove_yoast_submenu_page' );
-	
-	// Pretty print the JSON+LD schema output
+
+	// Pretty print the JSON+LD schema output.
 	add_action( 'muplugins_loaded', __NAMESPACE__ . '\\enable_yoast_development_mode' );
 
 	// Remove Helpscout.

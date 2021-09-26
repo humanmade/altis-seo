@@ -24,10 +24,6 @@ use Yoast_Network_Admin;
 function bootstrap( Module $module ) {
 	$settings = $module->get_settings();
 
-	if ( $settings['development-mode'] ) {
-		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\enable_yoast_development_mode' );
-	}
-
 	if ( $settings['redirects'] ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_redirects', 0 );
 	}
@@ -62,6 +58,9 @@ function bootstrap( Module $module ) {
 
 	// Remove the Yoast Premium submenu page.
 	add_action( 'admin_init', __NAMESPACE__ . '\\remove_yoast_submenu_page' );
+	
+	// Pretty print the JSON+LD schema output
+	add_action( 'muplugins_loaded', __NAMESPACE__ . '\\enable_yoast_development_mode' );
 
 	// Remove Helpscout.
 	add_filter( 'wpseo_helpscout_show_beacon', '__return_false' );

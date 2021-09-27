@@ -59,6 +59,9 @@ function bootstrap( Module $module ) {
 	// Remove the Yoast Premium submenu page.
 	add_action( 'admin_init', __NAMESPACE__ . '\\remove_yoast_submenu_page' );
 
+	// Pretty print the JSON+LD schema output.
+	add_action( 'muplugins_loaded', __NAMESPACE__ . '\\enable_yoast_development_mode' );
+
 	// Remove Helpscout.
 	add_filter( 'wpseo_helpscout_show_beacon', '__return_false' );
 
@@ -328,6 +331,17 @@ function social_options_overridden_notice() {
 
 	// Store a value in the cache to say that we've seen this message once.
 	wp_cache_set( 'has_displayed_social_notice', true, 'altis.seo' );
+}
+
+/**
+ * Enable Yoast Development Mode.
+ *
+ * Yoast development mode will pretty print the yoast-schema-graph HTML.
+ */
+function enable_yoast_development_mode() {
+	if ( Altis\get_environment_type() !== 'production' ) {
+		define( 'YOAST_ENVIRONMENT', 'development' );
+	}
 }
 
 /**

@@ -36,5 +36,8 @@ add_action( 'altis.modules.init', function () {
 		],
 		'site-verification' => true,
 	];
-	Altis\register_module( 'seo', __DIR__, 'SEO', $default_settings, __NAMESPACE__ . '\\bootstrap' );
+	$options = [
+		'defaults' => $default_settings,
+	];
+	Altis\register_module( 'seo', __DIR__, 'SEO', $options, __NAMESPACE__ . '\\bootstrap' );
 } );

@@ -12,7 +12,7 @@
     "require": {
         "php": ">=7.1",
         "humanmade/hm-redirects": "~0.5.2",
-        "yoast/wordpress-seo": "^17.3"
+        "yoast/wordpress-seo": "^17.4"
     },
     "autoload": {
         "files": [

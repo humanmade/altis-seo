@@ -76,6 +76,9 @@ function bootstrap( Module $module ) {
 	add_action( 'wpseo_configuration_wizard_head', __NAMESPACE__ . '\\override_wizard_styles' );
 	add_action( 'admin_head', __NAMESPACE__ . '\\hide_yoast_premium_social_previews' );
 
+	// Intend to save indexables.
+	add_filter( 'wpseo_should_save_indexable', '__return_true' );
+
 	// Migrations.
 	add_action( 'altis.migrate', __NAMESPACE__ . '\\do_migrations' );
 }

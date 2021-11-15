@@ -129,7 +129,7 @@ function load_wpseo() {
 	}
 
 	if ( ! defined( 'WPSEO_PREMIUM_PATH' ) ) {
-		define( 'WPSEO_PREMIUM_PATH', Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo-premium' );
+		define( 'WPSEO_PREMIUM_PATH', Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo-premium/' );
 	}
 
 	if ( ! defined( 'WPSEO_PREMIUM_BASENAME' ) ) {

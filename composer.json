@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=7.1",
-        "humanmade/hm-redirects": "~0.5.2",
+        "humanmade/hm-redirects": "~0.5.4",
         "yoast/wordpress-seo": "^17.5"
     },
     "autoload": {

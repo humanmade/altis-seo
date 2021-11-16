@@ -576,12 +576,30 @@ function migrate_wpseo_to_yoast() : void {
 
 			// Handle post meta.
 			$posts_query_args = [
-				'post_type' => 'any',
+				// Get all post types, even those with exclude_from_search (so "any" is not appropriate https://core.trac.wordpress.org/ticket/17592).
+				'post_type' => get_post_types(),
 				'post_status' => 'any',
 				'posts_per_page' => 0,
-				'meta_key' => '_meta_title',
-				'meta_compare' => 'EXISTS',
 				'fields' => 'ids',
+				// Ignore filters that may exclude certain post types from queries.
+				'suppress_filters' => true,
+				// phpcs:disable HM.Performance.SlowMetaQuery.dynamic_query -- check required for all of this meta. Performance here isn't a major issue, as this is only run manually on upgrade.
+				'meta_query' => [
+					'relation' => 'OR',
+					[
+						'meta_key' => '_meta_title',
+						'meta_compare' => 'EXISTS',
+					],
+					[
+						'meta_key' => '_meta_description',
+						'meta_compare' => 'EXISTS',
+					],
+					[
+						'meta_key' => '_meta_keywords',
+						'meta_compare' => 'EXISTS',
+					],
+				],
+				// phpcs:enable HM.Performance.SlowMetaQuery.dynamic_query
 			];
 			$posts = new WP_Query( $posts_query_args );
 

@@ -587,16 +587,16 @@ function migrate_wpseo_to_yoast() : void {
 				'meta_query' => [
 					'relation' => 'OR',
 					[
-						'meta_key' => '_meta_title',
-						'meta_compare' => 'EXISTS',
+						'key' => '_meta_title',
+						'compare' => 'EXISTS',
 					],
 					[
-						'meta_key' => '_meta_description',
-						'meta_compare' => 'EXISTS',
+						'key' => '_meta_description',
+						'compare' => 'EXISTS',
 					],
 					[
-						'meta_key' => '_meta_keywords',
-						'meta_compare' => 'EXISTS',
+						'key' => '_meta_keywords',
+						'compare' => 'EXISTS',
 					],
 				],
 				// phpcs:enable HM.Performance.SlowMetaQuery.dynamic_query
@@ -624,7 +624,7 @@ function migrate_wpseo_to_yoast() : void {
 								$value = array_map( 'trim', $value );
 								$value = array_shift( $value );
 							}
-							if ( ! empty( $value ) ) {
+							if ( ! empty( $value ) && empty( get_post_meta( $post_id, $new, true ) ) ) {
 								update_post_meta( $post_id, $new, $value );
 							}
 							// Remove old meta data to prevent reprocessing.

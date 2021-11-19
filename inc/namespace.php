@@ -83,7 +83,10 @@ function bootstrap( Module $module ) {
 	add_filter( 'wpseo_should_save_indexable', '__return_true' );
 
 	// Migrations.
-	add_action( 'altis.migrate', __NAMESPACE__ . '\\do_migrations' );
+	add_action( 'altis.migrate', __NAMESPACE__ . '\\suggest_migrations' );
+	if ( defined( 'WP_CLI' ) && WP_CLI ) {
+		WP_CLI::add_command( 'altis migrate-seo', __NAMESPACE__ . '\\do_migrations' );
+	}
 }
 
 /**
@@ -464,6 +467,15 @@ function hide_yoast_premium_social_previews() {
 }
 
 /**
+ * Suggestion migration command.
+ *
+ * @return void
+ */
+function suggest_migrations() : void {
+	WP_CLI::line( WP_CLI::colorize( '%yTo migrate SEO data for Altis v7 or earlier to Yoast SEO run `wp altis migrate-seo`%n' ) );
+}
+
+/**
  * Run migration functions.
  *
  * @return void
@@ -588,71 +600,65 @@ function migrate_wpseo_to_yoast() : void {
 				delete_option( 'wp-seo' );
 			}
 
+			// Ensure queries are not modified and go via the db, prevents ElasticPress integration etc...
+			remove_all_actions( 'pre_get_posts' );
+
 			// Handle post meta.
-			$posts_query_args = [
-				// Get all post types, even those with exclude_from_search (so "any" is not appropriate https://core.trac.wordpress.org/ticket/17592).
-				'post_type' => get_post_types(),
-				'post_status' => 'any',
-				'posts_per_page' => 0,
-				'fields' => 'ids',
-				// Ignore filters that may exclude certain post types from queries.
-				'suppress_filters' => true,
-				// phpcs:disable HM.Performance.SlowMetaQuery.dynamic_query -- check required for all of this meta. Performance here isn't a major issue, as this is only run manually on upgrade.
-				'meta_query' => [
-					'relation' => 'OR',
-					[
-						'key' => '_meta_title',
-						'compare' => 'EXISTS',
+			foreach ( array_keys( $meta_mapping ) as $meta_key ) {
+				$posts_query_args = [
+					// Get all public post types, even those with exclude_from_search (so "any" is not appropriate https://core.trac.wordpress.org/ticket/17592).
+					'post_type' => get_post_types( [ 'public' => true ] ),
+					'post_status' => 'any',
+					'posts_per_page' => 1,
+					'fields' => 'ids',
+					'suppress_filters' => true,
+					'meta_query' => [
+						[
+							'key' => $meta_key,
+							'compare' => 'EXISTS',
+						],
 					],
-					[
-						'key' => '_meta_description',
-						'compare' => 'EXISTS',
-					],
-					[
-						'key' => '_meta_keywords',
-						'compare' => 'EXISTS',
-					],
-				],
-				// phpcs:enable HM.Performance.SlowMetaQuery.dynamic_query
-			];
-			$posts = new WP_Query( $posts_query_args );
+				];
+				$posts = new WP_Query( $posts_query_args );
 
-			if ( $posts->found_posts > 0 ) {
-				$posts_query_args['posts_per_page'] = 100;
-				$posts_query_args['paged'] = 1;
+				if ( $posts->found_posts > 0 ) {
+					$posts_query_args['posts_per_page'] = 100;
+					$posts_query_args['paged'] = 1;
 
-				$progress = WP_CLI\Utils\make_progress_bar( 'Copying post meta data', $posts->found_posts );
+					$progress = WP_CLI\Utils\make_progress_bar( sprintf( 'Copying %s data', $meta_key ), $posts->found_posts );
 
-				while ( $posts_query_args['paged'] <= $posts->max_num_pages ) {
+					while ( $posts_query_args['paged'] <= $posts->max_num_pages ) {
 
-					$posts = new WP_Query( $posts_query_args );
-					$posts_query_args['paged']++;
+						$posts = new WP_Query( $posts_query_args );
+						$posts_query_args['paged']++;
 
-					foreach ( $posts->posts as $post_id ) {
-						foreach ( $meta_mapping as $old => $new ) {
-							// Copy post meta data over.
-							$value = get_post_meta( $post_id, $old, true );
-							// Handle keywords, Yoast only accepts 1 focus keyword by default so use the 1st.
-							if ( $old === '_meta_keywords' ) {
-								$value = explode( ',', $value );
-								$value = array_map( 'trim', $value );
-								$value = array_shift( $value );
+						foreach ( $posts->posts as $post_id ) {
+							foreach ( $meta_mapping as $old => $new ) {
+								// Copy post meta data over.
+								$value = get_post_meta( $post_id, $old, true );
+								// Handle keywords, Yoast only accepts 1 focus keyword by default so use the 1st.
+								if ( $old === '_meta_keywords' ) {
+									$value = explode( ',', $value );
+									$value = array_map( 'trim', $value );
+									$value = array_shift( $value );
+								}
+								// Update meta data if Yoast data not present.
+								if ( ! empty( $value ) && empty( get_post_meta( $post_id, $new, true ) ) ) {
+									update_post_meta( $post_id, $new, $value );
+								}
+								// Remove old meta data to prevent reprocessing.
+								delete_post_meta( $post_id, $old );
 							}
-							if ( ! empty( $value ) && empty( get_post_meta( $post_id, $new, true ) ) ) {
-								update_post_meta( $post_id, $new, $value );
-							}
-							// Remove old meta data to prevent reprocessing.
-							delete_post_meta( $post_id, $old );
+
+							$progress->tick();
 						}
 
-						$progress->tick();
+						// Prevent object cache consuming too much memory.
+						WP_CLI\Utils\wp_clear_object_cache();
 					}
 
-					// Prevent object cache consuming too much memory.
-					WP_CLI\Utils\wp_clear_object_cache();
+					$progress->finish();
 				}
-
-				$progress->finish();
 			}
 
 			restore_current_blog();

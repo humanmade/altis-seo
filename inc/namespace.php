@@ -60,7 +60,7 @@ function bootstrap( Module $module ) {
 	add_action( 'admin_init', __NAMESPACE__ . '\\remove_yoast_submenu_page' );
 
 	// Pretty print the JSON+LD schema output.
-	add_action( 'muplugins_loaded', __NAMESPACE__ . '\\enable_yoast_development_mode' );
+	add_action( 'muplugins_loaded', __NAMESPACE__ . '\\enable_yoast_debug_mode' );
 
 	// Remove Helpscout.
 	add_filter( 'wpseo_helpscout_show_beacon', '__return_false' );
@@ -340,13 +340,15 @@ function social_options_overridden_notice() {
 }
 
 /**
- * Enable Yoast Development Mode.
+ * Enable Yoast Debug Mode.
  *
- * Yoast development mode will pretty print the yoast-schema-graph HTML.
+ * Yoast debug mode will pretty print the yoast-schema-graph HTML.
  */
-function enable_yoast_development_mode() {
+function enable_yoast_debug_mode() {
 	if ( Altis\get_environment_type() !== 'production' ) {
-		define( 'YOAST_ENVIRONMENT', 'development' );
+		if ( ! defined( 'WPSEO_DEBUG' ) ) {
+			define( 'WPSEO_DEBUG', true );
+		}
 	}
 }
 

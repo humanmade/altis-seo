@@ -15,6 +15,11 @@ use WP_CLI;
 use WP_Query;
 use Yoast_Network_Admin;
 
+const YOAST_PLUGINS = [
+	'wordpress-seo/wp-seo.php',
+	'wordpress-seo-premium/wp-seo-premium.php'
+];
+
 /**
  * Bootstrap SEO Module.
  *
@@ -49,6 +54,10 @@ function bootstrap( Module $module ) {
 
 	// Load Yoast SEO.
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\load_wpseo', 9 );
+	if ( isset( $_SERVER['REQUEST_URI'] ) && strpos( $_SERVER['REQUEST_URI'], 'admin.php?page=wpseo_' ) !== false ) {
+		add_action( 'plugins_loaded', __NAMESPACE__ . '\\add_yoast_plugins', 5 );
+		add_filter( 'site_option_active_sitewide_plugins', __NAMESPACE__ . '\\active_yoast_plugins' );
+	}
 
 	// Patch network activated plugin bootstrapping manually.
 	add_action( 'wpseo_loaded', __NAMESPACE__ . '\\enable_yoast_network_admin' );
@@ -118,35 +127,82 @@ function is_yoast_premium() : bool {
  * Load Yoast SEO.
  */
 function load_wpseo() {
+	// Define Yoast Premium constants prior to loading the free/base version.
+	if ( is_yoast_premium() ) {
+		if ( ! defined( 'WPSEO_PREMIUM_FILE' ) ) {
+			define( 'WPSEO_PREMIUM_FILE', Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo-premium/wp-seo-premium.php' );
+		}
+
+		if ( ! defined( 'WPSEO_PREMIUM_PATH' ) ) {
+			define( 'WPSEO_PREMIUM_PATH', Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo-premium/' );
+		}
+
+		if ( ! defined( 'WPSEO_PREMIUM_BASENAME' ) ) {
+			define( 'WPSEO_PREMIUM_BASENAME', 'wordpress-seo-premium/wp-seo-premium.php' );
+		}
+
+		// Ensure we have the plugin data function, sometimes not loaded outside of admin contexts.
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			require_once Altis\ROOT_DIR . '/wordpress/wp-admin/includes/plugin.php';
+		}
+
+		$data = get_plugin_data( WPSEO_PREMIUM_FILE );
+
+		define( 'WPSEO_PREMIUM_VERSION', $data['Version'] );
+	}
+
+	// Load base version.
 	require_once Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo/wp-seo.php';
 
-	if ( ! is_yoast_premium() ) {
-		return;
+	// Bootstrap Yoast Premium if available.
+	if ( is_yoast_premium() ) {
+		require_once Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo-premium/src/functions.php';
+		YoastSEOPremium();
+	}
+}
+
+/**
+ * Allow Yoast to validate subscriptions by faking available plugins list.
+ *
+ * @return void
+ */
+function add_yoast_plugins() {
+	$plugins = get_plugins();
+	$updated_plugins = $plugins;
+	$available = array_keys( $plugins );
+
+	foreach ( YOAST_PLUGINS as $plugin_file ) {
+		$plugin_path = Altis\ROOT_DIR . '/vendor/yoast/' . $plugin_file;
+		if ( is_readable( $plugin_path ) && ! in_array( $plugin_file, $available, true ) ) {
+			$updated_plugins[ $plugin_file ] = get_plugin_data( $plugin_path, false, false );
+		}
 	}
 
-	if ( ! defined( 'WPSEO_PREMIUM_FILE' ) ) {
-		define( 'WPSEO_PREMIUM_FILE', Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo-premium/wp-seo-premium.php' );
+	// Append to the cached value.
+	if ( count( $plugins ) < count( $updated_plugins ) ) {
+		wp_cache_set( 'plugins', [ '' => $updated_plugins ], 'plugins' );
+	}
+}
+
+/**
+ * Filter Yoast plugins to appear active.
+ *
+ * @param array $active_plugins List of activated plugins.
+ * @return array
+ */
+function active_yoast_plugins( $active_plugins ) {
+	if ( ! is_array( $active_plugins ) ) {
+		return $active_plugins;
 	}
 
-	if ( ! defined( 'WPSEO_PREMIUM_PATH' ) ) {
-		define( 'WPSEO_PREMIUM_PATH', Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo-premium/' );
+	foreach ( YOAST_PLUGINS as $plugin_file ) {
+		$plugin_path = Altis\ROOT_DIR . '/vendor/yoast/' . $plugin_file;
+		if ( is_readable( $plugin_path ) ) {
+			$active_plugins[] = $plugin_file;
+		}
 	}
 
-	if ( ! defined( 'WPSEO_PREMIUM_BASENAME' ) ) {
-		define( 'WPSEO_PREMIUM_BASENAME', 'wordpress-seo-premium/wp-seo-premium.php' );
-	}
-
-	// Ensure we have the plugin data function, sometimes not loaded outside of admin contexts.
-	if ( ! function_exists( 'get_plugin_data' ) ) {
-		require_once Altis\ROOT_DIR . '/wordpress/wp-admin/includes/plugin.php';
-	}
-
-	$data = get_plugin_data( WPSEO_PREMIUM_FILE );
-
-	define( 'WPSEO_PREMIUM_VERSION', $data['Version'] );
-
-	require_once Altis\ROOT_DIR . '/vendor/yoast/wordpress-seo-premium/src/functions.php';
-	YoastSEOPremium();
+	return $active_plugins;
 }
 
 /**

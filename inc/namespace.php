@@ -17,7 +17,7 @@ use Yoast_Network_Admin;
 
 const YOAST_PLUGINS = [
 	'wordpress-seo/wp-seo.php',
-	'wordpress-seo-premium/wp-seo-premium.php'
+	'wordpress-seo-premium/wp-seo-premium.php',
 ];
 
 /**

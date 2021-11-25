@@ -19,7 +19,7 @@ class Author_Presenter extends Abstract_Indexable_Tag_Presenter {
 	 *
 	 * @var string
 	 */
-	protected $tag_format = '<meta property="og:article:author" content="%s" />';
+	protected $tag_format = '<meta property="article:author" content="%s" />';
 
 	/**
 	 * Returns the author posts url for the new author meta tag.

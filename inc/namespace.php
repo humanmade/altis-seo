@@ -530,7 +530,7 @@ function hide_yoast_premium_social_previews() {
  * @return void
  */
 function suggest_migrations() : void {
-	WP_CLI::line( WP_CLI::colorize( '%yTo migrate SEO data for Altis v7 or earlier to Yoast SEO run `wp altis migrate-seo`%n' ) );
+	WP_CLI::log( WP_CLI::colorize( '%yTo migrate SEO data for Altis v7 or earlier to Yoast SEO run `wp altis migrate-seo`%n' ) );
 }
 
 /**

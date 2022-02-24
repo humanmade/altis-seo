@@ -44,4 +44,51 @@ class MetaCest {
 
 		$I->seeElement( 'script.yoast-schema-graph' );
 	}
+
+	/**
+	 * Test robots.txt output.
+	 *
+	 * @param FunctionalTester $I Functional tester object.
+	 *
+	 * @return void
+	 */
+	public function test_robotstxt( FunctionalTester $I ) {
+		$I->amOnPage( '/robots.txt' );
+		$content = $I->grabPageSource();
+
+		$text = <<<EOL
+User-agent: *
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+EOL;
+
+		$I->assertEquals( trim( $text ), trim( $content ) );
+	}
+
+	/**
+	 * Test sitemaps output.
+	 *
+	 * @param FunctionalTester $I Functional tester object.
+	 *
+	 * @return void
+	 */
+	public function test_sitemaps( FunctionalTester $I ) {
+		$I->amOnPage( '/sitemap_index.xml' );
+		$content = $I->grabPageSource();
+		$xml = new SimpleXMLElement( $content );
+
+		$sitemaps = [];
+		foreach ( $xml->sitemap as $sitemap ) {
+			$sitemaps[] = parse_url( $sitemap->loc, PHP_URL_PATH );
+		}
+
+		$expected = [
+			'/post-sitemap.xml',
+			'/page-sitemap.xml',
+			'/category-sitemap.xml',
+			'/author-sitemap.xml',
+		];
+
+		$I->assertEquals( $expected, $sitemaps );
+	}
 }

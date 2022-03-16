@@ -198,7 +198,7 @@ function active_yoast_plugins( $active_plugins ) {
 	foreach ( YOAST_PLUGINS as $plugin_file ) {
 		$plugin_path = Altis\ROOT_DIR . '/vendor/yoast/' . $plugin_file;
 		if ( is_readable( $plugin_path ) ) {
-			$active_plugins[] = $plugin_file;
+			$active_plugins[ $plugin_file ] = time();
 		}
 	}
 

@@ -511,16 +511,6 @@ function hide_yoast_premium_social_previews() {
 		display: none;
 	}';
 
-	/**
-	 * Hide the Social tab in the Yoast Metabox.
-	 *
-	 * The Google preview is in the basic SEO tab and social previews
-	 * are only available for Yoast SEO Premium.
-	 */
-	$styles .= '.wpseo-metabox-menu .yoast-aria-tabs li:last-of-type {
-		display:none;
-	}';
-
 	echo "<style>$styles</style>"; // phpcs:ignore HM.Security.EscapeOutput.OutputNotEscaped
 }
 

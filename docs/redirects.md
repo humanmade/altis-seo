@@ -1,6 +1,13 @@
 # Redirects
 
 Redirects have many uses, not just for SEO and marketing but also for migrating sites or moving content around.
+Altis offers multiple solutions for redirects:
+
+1. To redirect HTTP requests that hit the web application, Altis incorporates the [HM-Redirects plugin](https://github.com/humanmade/hm-redirects) (this page). These are updatable within the CMS.
+2. To manage HTTP requests that would result in NGINX 404 pages, because they do not reach WordPress, additional webserver configuration is required. [More info](https://docs.altis-dxp.com/cloud/nginx-configuration/). 
+3. Requests to media assets are not affected by the above and cannot be redirected.
+
+## HM-Redirects
 
 The redirects component is architected for performance and scale by using indexed data in the CMS database. They can be exported and imported using standard WXR format files.
 

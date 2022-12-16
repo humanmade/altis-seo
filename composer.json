@@ -11,8 +11,7 @@
     ],
     "require": {
         "php": ">=7.1",
-        "humanmade/hm-redirects": "~0.7.1",
-        "yoast/wordpress-seo": "^18.9"
+        "humanmade/hm-redirects": "~0.7.1"
     },
     "autoload": {
         "files": [
@@ -26,9 +25,7 @@
     "extra": {
         "altis": {
             "install-overrides": [
-                "humanmade/hm-redirects",
-                "yoast/wordpress-seo",
-                "yoast/wordpress-seo-premium"
+                "humanmade/hm-redirects"
             ]
         }
     }

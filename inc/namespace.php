@@ -77,9 +77,6 @@ function bootstrap( Module $module ) {
 	// Hide the HUGE SEO ISSUE warning and disable admin bar menu.
 	add_filter( 'option_wpseo', __NAMESPACE__ . '\\override_yoast_seo_options', 20 );
 
-	// Add sitemap to robots.txt.
-	add_filter( 'robots_txt', __NAMESPACE__ . '\\add_sitemap_index_to_robots', 11, 2 );
-
 	// CSS overrides.
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_yoast_css_overrides', 11 );
 	add_action( 'wpseo_configuration_wizard_head', __NAMESPACE__ . '\\override_wizard_styles' );
@@ -403,22 +400,6 @@ function enable_yoast_debug_mode() {
 			define( 'WPSEO_DEBUG', true );
 		}
 	}
-}
-
-/**
- * Add the Yoast SEO sitemap index to the robots.txt file.
- *
- * @param string $output The original robots.txt content.
- * @param bool $public Whether the site is public.
- *
- * @return string The filtered robots.txt content.
- */
-function add_sitemap_index_to_robots( string $output, bool $public ) : string {
-	if ( $public ) {
-		$output .= sprintf( "Sitemap: %s\n", site_url( '/sitemap_index.xml' ) );
-	}
-
-	return $output;
 }
 
 /**

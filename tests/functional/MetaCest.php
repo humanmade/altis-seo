@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests for SEO module's meta tags and sitemap features.
+ * Tests for SEO module's meta tags.
  * phpcs:disable WordPress.Files, WordPress.NamingConventions, PSR1.Classes.ClassDeclaration.MissingNamespace, HM.Functions.NamespacedFunctions
  */
 
@@ -45,30 +45,4 @@ class MetaCest {
 		$I->seeElement( 'script.yoast-schema-graph' );
 	}
 
-	/**
-	 * Test sitemaps output.
-	 *
-	 * @param FunctionalTester $I Functional tester object.
-	 *
-	 * @return void
-	 */
-	public function test_sitemaps( FunctionalTester $I ) {
-		$I->amOnPage( '/sitemap_index.xml' );
-		$content = $I->grabPageSource();
-		$xml = new SimpleXMLElement( $content );
-
-		$sitemaps = [];
-		foreach ( $xml->sitemap as $sitemap ) {
-			$sitemaps[] = parse_url( $sitemap->loc, PHP_URL_PATH );
-		}
-
-		$expected = [
-			'/post-sitemap.xml',
-			'/page-sitemap.xml',
-			'/category-sitemap.xml',
-			'/author-sitemap.xml',
-		];
-
-		$I->assertEquals( $expected, $sitemaps );
-	}
 }

@@ -16,9 +16,6 @@
     "autoload": {
         "files": [
             "inc/namespace.php"
-        ],
-        "classmap": [
-            "inc/opengraph/"
         ]
     },
     "extra": {

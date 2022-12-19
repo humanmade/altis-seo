@@ -15,8 +15,7 @@
     },
     "autoload": {
         "files": [
-            "inc/namespace.php",
-            "inc/site_verification/namespace.php"
+            "inc/namespace.php"
         ],
         "classmap": [
             "inc/opengraph/"

@@ -11,24 +11,17 @@
     ],
     "require": {
         "php": ">=7.1",
-        "humanmade/hm-redirects": "~0.7.1",
-        "yoast/wordpress-seo": "^18.9"
+        "humanmade/hm-redirects": "~0.7.1"
     },
     "autoload": {
         "files": [
-            "inc/namespace.php",
-            "inc/site_verification/namespace.php"
-        ],
-        "classmap": [
-            "inc/opengraph/"
+            "inc/namespace.php"
         ]
     },
     "extra": {
         "altis": {
             "install-overrides": [
-                "humanmade/hm-redirects",
-                "yoast/wordpress-seo",
-                "yoast/wordpress-seo-premium"
+                "humanmade/hm-redirects"
             ]
         }
     }

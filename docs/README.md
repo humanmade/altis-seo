@@ -1,6 +1,6 @@
 # SEO
 
-![](./assets/banner-seo.png)
+![SEO banner](./assets/banner-seo.png)
 
 ## Configuration
 
@@ -8,16 +8,16 @@ The following JSON is the default configuration for the module and can be overri
 
 ```json
 {
-	"extra": {
-		"altis": {
-			"modules": {
-				"seo": {
-					"enabled": true
-					},
-					"redirects": true
-				}
-			}
-		}
-	}
+    "extra": {
+        "altis": {
+            "modules": {
+                "seo": {
+                    "enabled": true
+                    },
+                    "redirects": true
+                }
+            }
+        }
+    }
 }
 ```

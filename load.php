@@ -13,6 +13,7 @@ add_action( 'altis.modules.init', function () {
 	$default_settings = [
 		'enabled' => true,
 		'redirects' => true,
+		'index' => Altis\get_environment_type() === 'production',
 	];
 	$options = [
 		'defaults' => $default_settings,

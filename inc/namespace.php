@@ -23,8 +23,8 @@ function bootstrap( Module $module ) {
 		add_action( 'muplugins_loaded', __NAMESPACE__ . '\\load_redirects', 0 );
 	}
 
-	// Disallow indexing if the index setting is false.
-	if ( ! ( $settings['index'] ?? true ) ) {
+	// Disallow indexing if the allow_indexing setting is false.
+	if ( ! ( $settings['allow_indexing'] ?? true ) ) {
 		add_filter( 'robots_txt', __NAMESPACE__ . '\\disallow_indexing', 10, 2 );
 	}
 }

@@ -12,12 +12,18 @@ The following JSON is the default configuration for the module and can be overri
         "altis": {
             "modules": {
                 "seo": {
-                    "enabled": true
-                    },
-                    "redirects": true
+                    "enabled": true,
+                    "redirects": true,
+                    "allow_indexing": true
                 }
             }
         }
     }
 }
 ```
+
+### Configuration Options
+
+- **enabled** (bool): Enable or disable the SEO module. Default: `true`
+- **redirects** (bool): Enable or disable the redirects functionality. Default: `true`
+- **allow_indexing** (bool): Allow search engines to index the site. Default: `true` for production environments, `false` for all other environments (development, staging, etc.). When set to `false`, the robots.txt file will include directives to disallow indexing.
